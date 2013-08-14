@@ -44,11 +44,11 @@ if __name__=='__main__':
 ##Philosophy
 Lightweight - does one thing and does it well!
 
-Pure Python - as much a possible for webapps
+Pure Python - as much as possible for webapps
 
 Non oppinionated - plays well with others
 
-High performance
+High performance - Async, Websockets, CSS3 animations, etc.
 
 
 
