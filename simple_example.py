@@ -2,7 +2,6 @@
 # a simple example. Currently used for testing features
 #
 from tornado import gen
-import sys
 class my_app:    
     def __init__(self, rdoc):
         self.p= rdoc.create_element('p',txt='This is an empty document', )
