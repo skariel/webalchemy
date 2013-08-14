@@ -8,7 +8,7 @@ webalchemy represents a novel approach to webapp development obviously inspired 
 webapps made with webalchemy are highly dynamic: the browser and server frequently exchange messages over websockets. Only a minimal amount of static content is initially served, and from there on all page is rendered dynamically. This allows to keep fronend code simple as all complex logic is implemented on the server, using regular Python. In essense, with webalchemy you use Python to automate the frontend. Simple library calls generate the JS required on the frontend, and you program like you would a desktop app - not caring much about HTML, CSS, or JS.
 
 ####Example
-```
+```python
 from tornado import gen
 class my_app:    
     def __init__(self, rdoc):
