@@ -30,12 +30,14 @@ class my_app:
             self.i.stop()
             self.i2.stop()
         self.i.count+=1
-        p= rdoc.create_element('p',txt='New paragraph #'+str(self.i.count))
-        p.set_style_att('position','absolute')
-        p.set_style_att('left',str(50*self.i.count)+'px')
-        p.set_style_att('top',str(50*self.i.count)+'px')
+        try:
+            self.tp.remove()
+        except:
+            pass # nothing to remove
+        self.tp= rdoc.create_element('p',txt='New paragraph #'+str(self.i.count))
+        self.tp.set_style_att(position='absolute', left=str(50*self.i.count)+'px', top=str(50*self.i.count)+'px')
         self.p.set_text('there are now '+str(self.i.count+1)+' paragraphs')
-        rdoc.root_append(p)
+        rdoc.root_append(self.tp)
             
 if __name__=='__main__':
     import webalchemy.server

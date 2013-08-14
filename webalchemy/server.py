@@ -53,28 +53,28 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         log('Initiallizing new documet!')
         self.rdoc= remotedocument()        
         try:
-        	self.local_doc = local_doc(self.rdoc)
+            self.local_doc = local_doc(self.rdoc)
         except:
-	        log('Failed initializing. Exception:')
-	        traceback.print_exc(file=sys.stdout)
-	        sys.stdout.flush()
+            log('Failed initializing. Exception:')
+            traceback.print_exc(file=sys.stdout)
+            sys.stdout.flush()
         
     @gen.coroutine
     def open(self):
         log('WebSocket opened')
-       	yield self.flush_dom()
+        yield self.flush_dom()
 
     @gen.coroutine
     def on_message(self, message):
         log('message received:\n'+message)
         log('passing message to document...')
         try:
-        	yield self.local_doc.message(self.rdoc,message)
-        	yield self.flush_dom()
+            yield self.local_doc.message(self.rdoc,message)
+            yield self.flush_dom()
         except:
-	        log('Failed handling message. Exception:')
-	        traceback.print_exc(file=sys.stdout)
-	        sys.stdout.flush()
+            log('Failed handling message. Exception:')
+            traceback.print_exc(file=sys.stdout)
+            sys.stdout.flush()
       
     @gen.coroutine
     def flush_dom(self):
