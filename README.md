@@ -4,10 +4,10 @@ webalchemy is a light and Pythonic framework to build interactive webapps. It is
 webalchemy represents a novel approach to webapp development obviously inspired by [sqlalchemy](http://www.sqlalchemy.org/), the IPython [notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It let's you write server code as if it were running on the client Err.., In fact forget about client and server altogether. Develop like you would for the desktop.
 
 ##Develop a webapp like you would a desktop app
-
-webapps made with webalchemy are highly dynamic: the browser and server frequently exchange messages over websockets. Only a minimal amount of static content is initially served, and from there on all page is rendered dynamically. This allows to keep fronend code simple as all complex logic is implemented on the server, using regular Python. In essense, with webalchemy you use Python to automate the frontend. Simple library calls generate the JS required on the frontend, and you program like you would a desktop app - not caring much about HTML, CSS, or JS.
+webapps made with webalchemy are highly dynamic: the browser and server frequently exchange messages over websockets. Only a minimal amount of static content is initially served, and from there on all page is rendered dynamically. This allows to keep fronend code simple as all complex logic is implemented on the server, using regular Python. In essense, with webalchemy you use Python to automate the frontend. Simple library calls generate the JS required on the frontend, and you program like you would a desktop app - not caring much about HTML, CSS, or JS (they can still be used on demand, and nothing prevents usage of a templating engine).
 
 ####Example
+Below is the complete implementation of simple but dynamic application. The app creates 2 time intervals, one adding paragraphs to the DOM and the other communicating with the server. The server then responds and creates a new paragraph, and deletes the previous one. So there is communication between fronemd and backend, but ll the code is a single class, written in pure Python:
 ```python
 from tornado import gen
 class my_app:    
