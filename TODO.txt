@@ -1,0 +1,27 @@
+- interval currently receives a block or a statement. In JS it receives a function. Should this change? now if we pass a function it will be doubly encapsulated...
+
+- emit nicely indented code
+
+- blocks syntax: should we use the 'end' clause or have functions to consume blocks? should blocks be before or after the function (say with a function_do suffix)
+
+- Make remote document interface richer:
+	- Add a way to remove DOM elements
+	- CSS2 animations
+	- JS animations
+	- Function geenerators
+	- Event handlers
+	- etc.
+
+- Support for https://
+
+- Decide on testing strategy
+
+- On what browsers does this work? What features are required?
+
+- 
+
+
+
+
+
+
