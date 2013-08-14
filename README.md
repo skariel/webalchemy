@@ -1,5 +1,5 @@
 ##webalchemy
-webalchemy is a light and Pythonic framework to build interactive webapps. It is open source (MIT licensed) you can use it in commercial software. The library requires Python >= 3.3, and Tornado >= 3.1. Note it is currently in early stages of development, still far from being feature complete. webalchemy webapps require a modern browser implementing some feature from HTML5, websockets and CSS3.
+webalchemy is a light and Pythonic framework to build interactive webapps. It is open source (MIT licensed) you can use it in commercial software. The library requires Python >= 3.3, and Tornado >= 3.1. Note it is currently in early stages of development, still far from being feature complete. webalchemy webapps require a modern browser supporting some websockets.
 
 webalchemy represents a novel approach to webapp development obviously inspired by [sqlalchemy](http://www.sqlalchemy.org/), and the IPython [notebook](http://ipython.org/). It let's you write server code as if it were running on the client Err.., In fact forget about client and server altogether. Develop like you would for the desktop.
 
