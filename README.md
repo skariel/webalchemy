@@ -9,8 +9,11 @@ webapps made with webalchemy are highly dynamic: the application and server freq
 
 ##Philosophy
 Lightweight - does one thing and does it well!
+
 Pure Python - as much a possible for webapps
+
 Non oppinionated - plays well with others
+
 High performance
 
 
