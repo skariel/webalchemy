@@ -115,3 +115,8 @@ class remotedocument:
         end the code block
         '''
         self.__last_buff_len= self.__block_buff_len.popleft()
+
+    def set_title(self,txt):
+        self.inline('document.title='+txt+';\n');
+
+    
