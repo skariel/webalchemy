@@ -30,6 +30,7 @@ class remotedocument:
     def clear_buff(self):
         self.__buff=''
         self.__set_prev_buff_len()
+        self.__block_buff_len.clear()
 
     def get_buff(self):
         return self.__buff
@@ -119,4 +120,3 @@ class remotedocument:
     def set_title(self,txt):
         self.inline('document.title='+txt+';\n');
 
-    
