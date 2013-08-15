@@ -1,11 +1,13 @@
-##webalchemy: a realtime web framework for Python
-**webalchemy** is a lightweight and Pythonic framework for building realtime apps over websockets. It is MIT licensed, can be freely used for commercial products. **webalchemy** represents a novel approach to webapp development obviously inspired by [SqlAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It let's you write server code as if it were running on the client Err.., In fact forget about client and server altogether. Develop like you would for the desktop.
+##webalchemy: realtime, Pythonic web framework
+**webalchemy** takes a fresh approach on realtime web development inspired by [SqlAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It let's you write server code as if it were running on the client Err.., In fact forget about client and server altogether. Develop like you would for the desktop.
+
+**webalchemy** is MIT licensed, it can be freely used for commercial or open source products. 
 
 ##Develop a webapp like you would a desktop app
-webapps made with **webalchemy** are highly dynamic: the browser and server frequently exchange messages over websockets. Only a minimal amount of static content is initially served, and from there on all page is rendered dynamically. This allows to keep frontend code simple as all complex logic is implemented on the server, using regular Python. In essense, with **webalchemy** you use Python to automate the frontend. Simple library calls generate the JS required on the frontend, and you program like you would a desktop app with Python - not caring much about HTML, CSS, or JS (they can still be used on demand, and nothing prevents usage of a templating engine).
+webapps made with **webalchemy** are highly dynamic: the browser and server frequently exchange messages over websockets, in essense it allows you to automate the frontend using Python. Simple library calls generate the JS required on the frontend, and you program like you would for a desktop app - not caring much about HTML, CSS, or JS (these can still be used on demand, and nothing prevents usage of a templating engine).
 
 ####Example
-Below is the complete implementation of simple realtime application, demostrating a few important features: dynamically creation of content (a few paragraphs, styles, intervals, etc.), message exchanging between frontend and server, and messagin between different sessions. Note how **everything** fits in a single consice class:
+Below is the complete implementation of simple realtime application, demostrating some features: dynamically creating a few paragraphs, styles, intervals, etc., message exchanging between frontend and server, and messagin between different sessions. Note how __everything__ fits in a single class:
 ```python
 from tornado import gen
 class my_app:    
@@ -47,7 +49,7 @@ class my_app:
         self.rdoc.root_append(self.tp)
         self.p.set_text('there are now '+str(self.i.count+1)+' paragraphs')
 
-    # this method is called when a session messages everybody other session
+    # this method is called when a session messages every other session
     @gen.coroutine
     def outmessage(self, txt, sender):
         self.p_doc.set_text('total documents open:'+txt)
@@ -64,8 +66,10 @@ if __name__=='__main__':
 ```
 ##Requirements
 Python >= 3.3
+
 Tornado >= 3.1
-In addition, **webalchemy** webapps require a modern browser supporting websockets
+
+In addition, **webalchemy** webapps require a modern webbrowser supporting websockets
 
 ##Status
 The library is currently in early stages of development, still far from being feature complete
