@@ -10,6 +10,7 @@ class my_app:
         self.wsh= wshandler
         rdoc= self.rdoc # just an alias
         self.p= rdoc.create_element('p',txt='This is an empty document')
+        self.p.set_event(onmouseout=self.p.set_style_att(color='blue'),onmousemove=self.p.set_style_att(color='red'))
         rdoc.root_append(self.p)
         total_docs= str(len(wshandler.sharedhandlers))
         self.p_doc= rdoc.create_element('p',txt='total documents open:'+total_docs)

@@ -20,6 +20,7 @@ class remotedocument:
         return uid
 
     def __pop_last_code_block(self):
+        self.end()
         code= self.__buff[self.__last_buff_len:]
         self.__buff= self.__buff[:self.__last_buff_len]
         return code
@@ -45,18 +46,23 @@ class remotedocument:
                 self.parent= None
                 self.childs= []
                 self.rdoc= rdoc
-            def set_attribute(self,att_name,value):
-                self.rdoc.inline(self.uid+'.setAttribute("'+name+'","'+value+'");\n')
+            def set_attribute(self,name,value):
+                self.rdoc.inline(self.uid+".setAttribute('"+name+"','"+value+"');\n")
             def set_text(self,txt):
                 self.rdoc.inline(self.uid+'.textContent="'+txt+'";\n')
+                self.txt=txt
             def set_style_att(self,name=None,value=None,**kwargs):
                 if name is not None:
                     self.rdoc.inline(self.uid+'.style["'+name+'"]="'+value+'";\n')
                 else:
                     for name,value in kwargs.items():
                         self.rdoc.inline(self.uid+'.style["'+name+'"]="'+value+'";\n')
-
-
+            def set_event(self,**kwargs):
+                s=''
+                for k,v in kwargs.items():
+                    code= self.rdoc._remotedocument__pop_last_code_block()
+                    s+=self.uid+".setAttribute('"+k+"','"+code.rstrip('\n')+"');\n"
+                self.rdoc.inline(s)
             def remove(self):
                 self.rdoc.inline(self.uid+'.parentNode.removeChild('+self.uid+');\n')
 
@@ -93,7 +99,7 @@ class remotedocument:
         '''
         insert a code block (contained in 'txt' parameter)
         '''
-        self.__set_prev_buff_len()
+        self.begin()
         self.__buff+=txt
 
     def root_append(self,e):
