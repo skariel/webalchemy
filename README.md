@@ -1,17 +1,14 @@
 ##webalchemy: realtime, Pythonic web framework
-webalchemy takes a fresh approach on realtime web development inspired by [SqlAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It let's you write server code as if it were running on the client Err.., In fact forget about client and server altogether. Develop like you would for the desktop. webalchemy is MIT licensed, it can be freely used for commercial or open source products. 
-
-##Develop a webapp like you would a desktop app
-webapps made with webalchemy are highly dynamic: the browser and server frequently exchange messages over websockets, it allows you to automate the frontend using Python. Simple library calls generate the JS required on the frontend, and you program like you would for a desktop app - not caring much about HTML, CSS, or JS (these can still be used on demand, and nothing prevents usage of a templating engine).
+webalchemy is a fast, simple and lightweight realtime micro web-framework for Python, inspired by [SqlAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). With webalchemy you develop webapps like you would develop a desktop (or mobile) app. See example below to understand what I mean
 
 ####Example
-Below is a simple realtime application demostrating dynamically creation of paragraphs, styles, intervals, etc., message exchanging between frontend and server, messaging between parallel sessions, and events. Note how everything fits in a single class:
+Below is a simple realtime application demostrating dynamically creation of paragraphs, styles, intervals, etc., message exchanging between frontend and server, messaging between parallel sessions, and events. Note how everything fits in a single file and class:
 ```python
 from tornado import gen
 class my_app:    
     # this method is called when a new session starts
     @gen.coroutine
-    def initialize(self, remotedocument, wshandler):
+    def initialize(self, remotedocument, wshandler, message):
         self.rdoc= remotedocument # remember these for later use
         self.wsh= wshandler
         rdoc= self.rdoc # just an alias
@@ -23,11 +20,11 @@ class my_app:
         rdoc.root_append(self.p_doc)
         self.i= rdoc.create_interval(1000,rdoc.msg('interval!'))
         self.i.count=0
-        rdoc.begin()
+        rdoc.begin_block() #
         e=rdoc.create_element('p',txt=':)', )
+        e.set_style_att(color='green')
         rdoc.root_append(e)
-        rdoc.end()
-        self.i2= rdoc.create_interval(2500)
+        self.i2= rdoc.create_interval(2500) # consume previous code block
         wshandler.msg_in_proc(total_docs)
 
     # this method is called when the frontend sends the server a message
@@ -83,11 +80,14 @@ Non oppinionated - plays well with others
 
 High performance - Async, Websockets, CSS3 animations, etc.
 
+##License
+Code and documentation (yet to be written...) are available under the MIT license as detailed in the file [LICENSE.txt](LICENSE.txt)
 
-
-
-
-
-
-
+>The MIT License (MIT)
+>
+>Copyright (c) 2013 Ariel Keselman
+>
+>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+>
+>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

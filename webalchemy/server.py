@@ -55,25 +55,24 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.sharedhandlers= shared_wshandlers
         self.sharedhandlers.append(self)
         self.local_doc= None
-        try:
-            self.local_doc= local_doc()
-            yield self.local_doc.initialize(self.remotedocument,self)
-        except:
-            log('Failed initializing. Exception:')
-            traceback.print_exc(file=sys.stdout)
-            sys.stdout.flush()
+        self.local_doc= local_doc()
+        self.local_doc_initialized= False
         
     @gen.coroutine
     def open(self):
         log('WebSocket opened')
-        yield self.flush_dom()
 
     @gen.coroutine
     def on_message(self, message):
         log('message received:\n'+message)
-        log('passing message to document...')
         try:
-            yield self.local_doc.inmessage(message)
+            if not self.local_doc_initialized:
+                log('Initializing local document with message...')
+                yield self.local_doc.initialize(self.remotedocument,self, message)
+                self.local_doc_initialized= True
+            else:
+                log('passing message to document...')
+                yield self.local_doc.inmessage(message)
             yield self.flush_dom()
         except:
             log('Failed handling message. Exception:')
@@ -82,20 +81,21 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
       
     @gen.coroutine
     def flush_dom(self):
-        if self.remotedocument.get_buff()!='':
-            log('sending message:\n'+self.remotedocument.get_buff())
-            self.write_message(self.remotedocument.get_buff())
-            self.remotedocument.clear_buff()
+        code= self.remotedocument.pop_all_code()
+        if code!='':
+            log('sending message:\n'+code)
+            self.write_message(code)
+        else:
+            log('**NOTHING**')
         
     @gen.coroutine
     def msg_in_proc(self,msg,send_to_self=False):
-        log('sending message to all documents in process:')
+        log('sending message to all documents in process ('+str(len(self.sharedhandlers))+') of them:')
         log(msg)
         for h in self.sharedhandlers:
             if h.local_doc is not self.local_doc or send_to_self:
                 try:
                     yield h.local_doc.outmessage(msg,self.local_doc)
-                    yield h.flush_dom()
                 except:
                     log('Failed handling outmessage. Exception:')
                     traceback.print_exc(file=sys.stdout)

@@ -5,7 +5,7 @@ from tornado import gen
 class my_app:    
     # this method is called when a new session starts
     @gen.coroutine
-    def initialize(self, remotedocument, wshandler):
+    def initialize(self, remotedocument, wshandler, message):
         self.rdoc= remotedocument # remember these for later use
         self.wsh= wshandler
         rdoc= self.rdoc # just an alias
@@ -17,11 +17,11 @@ class my_app:
         rdoc.root_append(self.p_doc)
         self.i= rdoc.create_interval(1000,rdoc.msg('interval!'))
         self.i.count=0
-        rdoc.begin()
+        rdoc.begin_block() #
         e=rdoc.create_element('p',txt=':)', )
+        e.set_style_att(color='green')
         rdoc.root_append(e)
-        rdoc.end()
-        self.i2= rdoc.create_interval(2500)
+        self.i2= rdoc.create_interval(2500) # consume previous code block
         wshandler.msg_in_proc(total_docs)
 
     # this method is called when the frontend sends the server a message
