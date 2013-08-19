@@ -65,7 +65,7 @@ class remotedocument:
                     self.rdoc.inline(s)
             def set_event(self,**kwargs):
                 s=''
-                for k,v in kwargs.items():
+                for k,v in reversed(kwargs.items()):
                     code= self.rdoc._remotedocument__code_strings.pop()
                     s+=self.uid+".setAttribute('"+k+"','"+code.rstrip('\n')+"');\n"
                     self.attrs[k]=code

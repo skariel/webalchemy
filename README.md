@@ -68,20 +68,8 @@ Tornado >= 3.1
 
 In addition, webalchemy webapps require a modern webbrowser supporting websockets
 
-##Status
-The library is currently in early stages of development, still far from being feature complete
-
-##Philosophy
-Lightweight - does one thing and does it well!
-
-Pythonic - Explicit, magicless, easy to understand whats going on
-
-Non oppinionated - plays well with others
-
-High performance - Async, Websockets, CSS3 animations, etc.
-
 ##License
-Code and documentation (yet to be written...) are available under the MIT license as detailed in the file [LICENSE.txt](LICENSE.txt)
+Code and documentation (yet to be written...) are available under the MIT license:
 
 >The MIT License (MIT)
 >
