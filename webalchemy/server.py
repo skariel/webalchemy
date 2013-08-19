@@ -8,6 +8,8 @@ import sys
 import time
 import traceback
 
+
+
 main_html='''
 <!DOCTYPE html>
 <html>
@@ -33,31 +35,36 @@ ws.onmessage = function (evt) {
 </html> 
 '''
 
+
+
 def log(msg):
     print(msg)
     sys.stdout.flush()
-    
+  
+
+
+
 class MainHandler(tornado.web.RequestHandler):
     def initialize(self, port):
         log('Initiallizing new app!')
-        self.main_html= main_html.replace('PORT',str(port))
-        
+        self.main_html= main_html.replace('PORT',str(port))        
     @gen.coroutine
     def get(self):
         self.write(self.main_html)
+  
 
-        
+
+
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     @gen.coroutine
     def initialize(self, local_doc, shared_wshandlers):
         log('Initiallizing new documet!')
         self.remotedocument= remotedocument()
         self.sharedhandlers= shared_wshandlers
-        self.sharedhandlers.append(self)
-        self.local_doc= None
         self.local_doc= local_doc()
         self.local_doc_initialized= False
-        
+        self.sharedhandlers.append(self)
+
     @gen.coroutine
     def open(self):
         log('WebSocket opened')
@@ -77,8 +84,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         except:
             log('Failed handling message. Exception:')
             traceback.print_exc(file=sys.stdout)
-            sys.stdout.flush()
-      
+            sys.stdout.flush()      
     @gen.coroutine
     def flush_dom(self):
         code= self.remotedocument.pop_all_code()
@@ -87,20 +93,19 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.write_message(code)
         else:
             log('**NOTHING**')
-        
     @gen.coroutine
     def msg_in_proc(self,msg,send_to_self=False):
-        log('sending message to all documents in process ('+str(len(self.sharedhandlers))+') of them:')
+        log('sending message to all '+str(len(self.sharedhandlers))+' documents in process:')
         log(msg)
         for h in self.sharedhandlers:
             if h.local_doc is not self.local_doc or send_to_self:
                 try:
                     yield h.local_doc.outmessage(msg,self.local_doc)
+                    yield h.flush_dom()
                 except:
                     log('Failed handling outmessage. Exception:')
                     traceback.print_exc(file=sys.stdout)
                     sys.stdout.flush()
-
     @gen.coroutine
     def on_close(self):
         log('WebSocket closed')
@@ -116,9 +121,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 
 
+
 @gen.coroutine
 def async_delay(secs):
     yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
+
+
+
 
 def run(port,local_doc):
     shared_wshandlers= []

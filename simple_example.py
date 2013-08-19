@@ -6,24 +6,27 @@ class my_app:
     # this method is called when a new session starts
     @gen.coroutine
     def initialize(self, remotedocument, wshandler, message):
-        self.rdoc= remotedocument # remember these for later use
+        # remember these for later use
+        self.rdoc= remotedocument
         self.wsh= wshandler
-        rdoc= self.rdoc # just an alias
-        self.p= rdoc.create_element('p',txt='This is an empty document')
-        self.p.set_event(onmouseout=self.p.set_style_att(color='blue'),onmousemove=self.p.set_style_att(color='red'))
-        rdoc.root_append(self.p)
-        total_docs= str(len(wshandler.sharedhandlers))
-        self.p_doc= rdoc.create_element('p',txt='total documents open:'+total_docs)
-        rdoc.root_append(self.p_doc)
-        self.i= rdoc.create_interval(1000,rdoc.msg('interval!'))
-        self.i.count=0
-        rdoc.begin_block() #
-        e=rdoc.create_element('p',txt=':)', )
-        e.set_style_att(color='green')
-        rdoc.root_append(e)
-        self.i2= rdoc.create_interval(2500) # consume previous code block
-        wshandler.msg_in_proc(total_docs)
+        # setup a nice paragraph, with events
+        self.p= self.rdoc.element('p',text='This is an empty document')
+        self.p.att.onmouseout = lambda: self.p.att.style(color='blue')
+        self.p.att.onmousemove= lambda: self.p.att.style(color='red')
+        self.rdoc.body.append(self.p)
 
+        total_clients= str(len(wshandler.sharedhandlers))
+        self.p_doc= self.rdoc.element('p',text='total documents open: '+total_clients)
+        self.rdoc.body.append(self.p_doc)
+
+        self.i= self.rdoc.startinterval(1000, lambda: self.rdoc.msg('interval!'))
+        self.i.count= 0
+        self.rdoc.begin_block() #
+        e= self.rdoc.element('p',text=':)')
+        e.att.color='green'
+        self.rdoc.body.append(e)
+        self.i2= self.rdoc.startinterval(2500) # consume previous code block
+        self.wsh.msg_in_proc(total_clients)
     # this method is called when the frontend sends the server a message
     @gen.coroutine
     def inmessage(self, txt):
@@ -35,24 +38,24 @@ class my_app:
         self.i.count+=1
         try:
             self.tp.remove()
-        except:
+        except Exception as e:
             pass
-        self.tp= self.rdoc.create_element('p',txt='New paragraph #'+str(self.i.count))
-        self.tp.set_style_att(position='absolute', left=str(50*self.i.count)+'px', top=str(50*self.i.count)+'px')
-        self.rdoc.root_append(self.tp)
-        self.p.set_text('there are now '+str(self.i.count+1)+' paragraphs')
-
+        self.tp= self.rdoc.element('p',text='New paragraph #'+str(self.i.count))
+        self.tp.att.style(
+            position='absolute',
+            left=str(50*self.i.count)+'px',
+            top=str(50*self.i.count)+'px')
+        self.rdoc.body.append(self.tp)
+        self.p.text= 'there are now '+str(self.i.count+1)+' paragraphs'
     # this method is called when a session messages everybody other session
     @gen.coroutine
     def outmessage(self, txt, sender):
-        self.p_doc.set_text('total documents open:'+txt)
-
+        self.p_doc.text= 'total documents open: '+txt
     # this method is called when session is closed
     @gen.coroutine
     def onclose(self):
-        total_docs= str(len(self.wsh.sharedhandlers))
-        self.wsh.msg_in_proc(total_docs)
-
+        total_clients= str(len(self.wsh.sharedhandlers))
+        self.wsh.msg_in_proc(total_clients)
 
 if __name__=='__main__':
     import webalchemy.server
