@@ -17,11 +17,9 @@ class my_app:
         self.p.att.onmouseout = lambda: self.p.att.style(color='blue')
         self.p.att.onmousemove= lambda: self.p.att.style(color='red')
         self.rdoc.body.append(self.p)
-
         total_clients= str(len(wshandler.sharedhandlers))
         self.p_doc= self.rdoc.element('p',text='total documents open: '+total_clients)
         self.rdoc.body.append(self.p_doc)
-
         self.i= self.rdoc.startinterval(1000, lambda: self.rdoc.msg('interval!'))
         self.i.count= 0
         self.rdoc.begin_block() #
@@ -30,6 +28,7 @@ class my_app:
         self.rdoc.body.append(e)
         self.i2= self.rdoc.startinterval(2500) # consume previous code block
         self.wsh.msg_in_proc(total_clients)
+
     # this method is called when the frontend sends the server a message
     @gen.coroutine
     def inmessage(self, txt):
@@ -50,10 +49,12 @@ class my_app:
             top=str(50*self.i.count)+'px')
         self.rdoc.body.append(self.tp)
         self.p.text= 'there are now '+str(self.i.count+1)+' paragraphs'
-    # this method is called when a session messages everybody other session
+
+    # this method is called when a messages from other sessions arrive
     @gen.coroutine
     def outmessage(self, txt, sender):
         self.p_doc.text= 'total documents open: '+txt
+
     # this method is called when session is closed
     @gen.coroutine
     def onclose(self):
@@ -64,6 +65,9 @@ if __name__=='__main__':
     import webalchemy.server
     server.run(8083,my_app)
 ```
+##Philosophy and Roadmap
+Run relatively simple code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.
+
 ##Requirements
 Python >= 3.3
 
@@ -72,13 +76,11 @@ Tornado >= 3.1
 In addition, webalchemy webapps require a modern webbrowser supporting websockets
 
 ##License
-Code and documentation (yet to be written...) are available under the MIT license:
+The MIT License (MIT)
 
->The MIT License (MIT)
->
->Copyright (c) 2013 Ariel Keselman
->
->Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
->
->THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Copyright (c) 2013 Ariel Keselman
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
