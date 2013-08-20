@@ -4,9 +4,6 @@ webalchemy is a fast, simple and lightweight realtime micro web-framework for Py
 ####Example
 a simple application demostrating dynamically creation of paragraphs, inline styles, stylesheets, intervals, etc., and message exchanging between frontend and server, messaging between parallel sessions, and events. Note how everything fits in a single file and class:
 ```python
-#
-# a simple example. Currently used for feature testing
-#
 from tornado import gen
 class my_app:    
     # this method is called when a new session starts

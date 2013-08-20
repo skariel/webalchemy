@@ -88,9 +88,6 @@ class function:
 
 
 class stylesheet:
-    # TODO: allow to remove rules
-    # TODO: allow title, and general attrs?
-    # TODO: allow to remove stylesheets? is it like removing the element?
     def __init__(self,rdoc):
         self.rdoc=rdoc
         self.varname= rdoc.get_new_uid()
@@ -106,8 +103,6 @@ class stylesheet:
 
 
 class rule:
-    # TODO: allow to remove rules. Should this be done here or on the stylesheet?
-    # TODO: allow to pass rules as arguments
     def __init__(self,stylesheet,selector,text=None,**kwargs):
         self.stylesheet= stylesheet
         self.rdoc= self.stylesheet.rdoc
@@ -133,7 +128,6 @@ class rule:
 
 
 class remotedocument:
-    # TODO: consider general attrs access
     def __init__(self):
         self.varname='document'
         self.__uid_count= 0
@@ -219,7 +213,6 @@ class remotedocument:
                 else:
                     return str(value)
         class jsdict(dict):
-            # TODO: add functionality: delete attribute
             def __init__(self,ctx,isroot=None):
                 super().__setattr__('ctx',ctx)
                 if isroot:
@@ -257,7 +250,6 @@ class remotedocument:
                     super().__getattribute__('ctx').write(buff)
         return jsdict(writer(att_changed_callback), True)
     def stylesheet(self):
-        # TODO: allow to remove stylesheets. Shoudl this be done in rdoc, or in the stylesheet? and how to do this?
         return stylesheet(self)
 
 
