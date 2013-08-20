@@ -1,34 +1,28 @@
 #
-# a simple example. Currently used for feature testing
+# trying to reconstruct Meteor color application
 #
 from tornado import gen
-class my_app:    
+from webalchemy.widgets.basic.menu import menu
 
-    def create_item(self, name, likes):
-        p= self.rdoc.create_element('p',txt=str(likes)+' '+name)
-        p.set_style_att(width='100px')
-        p.set_event(onmouseout = p.set_style_att('background-color','white'),
-                    onmousemove= p.set_style_att('background-color','orange'))
-        self.rdoc.root_append(p)
-
+class colors_app:    
     # this method is called when a new session starts
     @gen.coroutine
     def initialize(self, remotedocument, wshandler, message):
-        self.rdoc= remotedocument # remember these for later use
+        # remember these for later use
+        self.rdoc= remotedocument
         self.wsh= wshandler
-        rdoc= self.rdoc # just an alias
 
-        self.items= [('red',0),('green',1),('blue',2)]
-
-        for item in self.items:
-            self.create_item(*item)
+        # setup a nice paragraph, with events
+        self.menu= menu(self.rdoc)
+        self.rdoc.body.append(self.menu.element)
+        self.menu.add_item('foo','bar','wowowowowo!!!','this is cool','WEBALCHEMY ROCKS')
 
     # this method is called when the frontend sends the server a message
     @gen.coroutine
     def inmessage(self, txt):
         pass
 
-    # this method is called when a session messages everybody other session
+    # this method is called on incomming messages from other sessions
     @gen.coroutine
     def outmessage(self, txt, sender):
         pass
@@ -38,7 +32,6 @@ class my_app:
     def onclose(self):
         pass
 
-
 if __name__=='__main__':
     import webalchemy.server
-    server.run(8083,my_app)
+    server.run(8083,colors_app) # the first parameter is the port...

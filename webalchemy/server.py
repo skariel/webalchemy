@@ -1,19 +1,23 @@
-import tornado
-import tornado.ioloop
-import tornado.web
-import tornado.websocket
-from tornado import gen
-from webalchemy.remotedocument import remotedocument
 import sys
 import time
 import traceback
+
+import tornado
+import tornado.web
+import tornado.ioloop
+import tornado.websocket
+from tornado import gen
+
+from webalchemy.remotedocument import remotedocument
+from webalchemy.utils import log
+
 
 
 
 main_html='''
 <!DOCTYPE html>
 <html>
-<body id="body">
+<body>
 <script>
 var ws = new WebSocket('ws://localhost:PORT/websocket');
 function message(s) {
@@ -35,11 +39,6 @@ ws.onmessage = function (evt) {
 </html> 
 '''
 
-
-
-def log(msg):
-    print(msg)
-    sys.stdout.flush()
   
 
 

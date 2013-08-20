@@ -15,10 +15,13 @@ class my_app:
         self.p.att.onmousemove= lambda: self.p.att.style(color='red')
         self.rdoc.body.append(self.p)
 
+        # communication with other sessions (see below for more)
         total_clients= str(len(wshandler.sharedhandlers))
         self.p_doc= self.rdoc.element('p',text='total documents open: '+total_clients)
         self.rdoc.body.append(self.p_doc)
+        self.wsh.msg_in_proc(total_clients)
 
+        # intervals, instantiated in two ways
         self.i= self.rdoc.startinterval(1000, lambda: self.rdoc.msg('interval!'))
         self.i.count= 0
         self.rdoc.begin_block() #
@@ -26,7 +29,12 @@ class my_app:
         e.att.color='green'
         self.rdoc.body.append(e)
         self.i2= self.rdoc.startinterval(2500) # consume previous code block
-        self.wsh.msg_in_proc(total_clients)
+
+        # some styling...
+        ss= self.rdoc.stylesheet()
+        ss.rule('p','font-size:2em;text-transform:uppercase;font-family:Arial, Verdana, Sans-serif;')
+        # (can also use r=ss.rule(...) and then r.att.style.color='green' etc.)
+
     # this method is called when the frontend sends the server a message
     @gen.coroutine
     def inmessage(self, txt):
@@ -47,10 +55,12 @@ class my_app:
             top=str(50*self.i.count)+'px')
         self.rdoc.body.append(self.tp)
         self.p.text= 'there are now '+str(self.i.count+1)+' paragraphs'
-    # this method is called when a session messages everybody other session
+
+    # this method is called on incomming messages from other sessions
     @gen.coroutine
     def outmessage(self, txt, sender):
         self.p_doc.text= 'total documents open: '+txt
+
     # this method is called when session is closed
     @gen.coroutine
     def onclose(self):
@@ -59,4 +69,4 @@ class my_app:
 
 if __name__=='__main__':
     import webalchemy.server
-    server.run(8083,my_app)
+    server.run(8083,my_app) # the first parameter is the port...
