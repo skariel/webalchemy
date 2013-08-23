@@ -13,6 +13,7 @@ class element:
         self.parent=None
         self.childs=[]
         js=self.varname+'=document.createElement("'+typ+'");\n'
+        js+=self.varname+'.app={};\n'
         if text is not None:
             self._text=text
             js+= self.varname+'.textContent="'+text+'";\n'
@@ -34,9 +35,11 @@ class element:
         self.rdoc.inline(s)
     @property
     def text(self):
-        return self._title
+        return self._text
     @text.setter
     def text(self, text):
+        self.set_text(text)
+    def set_text(self,text):
         self._text = text
         js= self.varname+'.textContent="'+text+'";\n'
         self.rdoc.inline(js)
@@ -67,7 +70,7 @@ class interval:
 
 
 class function:
-    def __init__(self,rdoc,exp=None):
+    def __init__(self,rdoc,exp=None,*varargs):
         self.rdoc= rdoc
         self.varname= rdoc.get_new_uid()
         if exp is None:
@@ -75,7 +78,8 @@ class function:
         else:
             exp()
             code= rdoc._remotedocument__code_strings.pop()
-        js='function '+self.varname+'(){\n'+code+'\n}\n'
+        args=','.join(varargs)
+        self.js=self.varname+'=function('+args+'){\n'+code+'\n}\n'
         rdoc.inline(self.js)
     def __call__(self):
         js=str(self)
@@ -151,8 +155,12 @@ class remotedocument:
         return element(self,typ,text)
     def startinterval(self,ms,exp=None):
         return interval(self,ms,exp)
-    def function(self,exp=None):
-        return function(self,exp)
+    def function(self,exp=None,*varargs):
+        return function(self,exp,*varargs)
+    def jsfunction(self,exp,*varargs):
+        self.begin_block()
+        self.inline(exp)
+        return self.function(None,*varargs)
     def get_new_uid(self):
         uid= '__v'+str(self.__uid_count)
         self.__uid_count+=1        
@@ -201,7 +209,9 @@ class remotedocument:
             def start_writing(self):
                 self.buff=''
             def stringify(self,value):
-                if callable(value):
+                if type(value) is function:
+                    js=value.varname+';\n'
+                elif callable(value):
                     # value() can change the buffer, so lets take care of that:
                     nonlocal rdoc
                     tmpbuff= self.buff
@@ -209,9 +219,9 @@ class remotedocument:
                     self.buff= tmpbuff
                     code= rdoc._remotedocument__code_strings.pop()
                     js='function(){\n'+code+'}\n'
-                    return js
                 else:
-                    return str(value)
+                    js= str(value)
+                return js
         class jsdict(dict):
             def __init__(self,ctx,isroot=None):
                 super().__setattr__('ctx',ctx)
@@ -251,6 +261,7 @@ class remotedocument:
         return jsdict(writer(att_changed_callback), True)
     def stylesheet(self):
         return stylesheet(self)
+
 
 
 
