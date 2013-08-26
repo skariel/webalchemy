@@ -32,6 +32,7 @@ class colors_app:
             }''')
 
         # this function will be applied to each item in the menu
+        # note the inline interpolation (implemented in jsfunction)
         self.onclick= self.rdoc.jsfunction('event','''
             message('evt: '+event.target.app.text);
             #{self.increase_count_by}(event.target,1);
@@ -100,11 +101,9 @@ if __name__=='__main__':
 Run relatively simple code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.
 
 ##Requirements
-Python >= 3.3
-
-Tornado >= 3.1
-
-In addition, webalchemy webapps require a modern webbrowser supporting websockets
+* Python >= 3.3
+* Tornado >= 3.1
+* webalchemy webapps require a modern webbrowser supporting websockets (too much web in this sentence)
 
 ##License (MIT)
 Copyright (c) 2013 Ariel Keselman

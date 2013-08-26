@@ -29,6 +29,7 @@ class colors_app:
             }''')
 
         # this function will be applied to each item in the menu
+        # note the inline interpolation (implemented in jsfunction)
         self.onclick= self.rdoc.jsfunction('event','''
             message('evt: '+event.target.app.text);
             #{self.increase_count_by}(event.target,1);
