@@ -89,6 +89,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         code= self.remotedocument.pop_all_code()
         if code!='':
             log('sending message:\n'+code)
+            # this is good to simulate latency
+            #yield async_delay(2)
             self.write_message(code)
         else:
             log('**NOTHING**')

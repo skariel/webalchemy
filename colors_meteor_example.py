@@ -5,6 +5,16 @@ from tornado import gen
 from webalchemy.widgets.basic.menu import menu
 
 class colors_app:    
+
+    # shared state between sessions
+    colors_count={
+        'foo'             :0,
+        'bar'             :0,
+        'wowowowowo!!!'   :0,
+        'this is cool'    :0,
+        'WEBALCHEMY ROCKS':0,
+    }
+
     # this method is called when a new session starts
     @gen.coroutine
     def initialize(self, remotedocument, wshandler, message):
@@ -12,21 +22,29 @@ class colors_app:
         self.rdoc= remotedocument
         self.wsh= wshandler
 
-        self.increase_count= self.rdoc.jsfunction('''
-            element.app.clickedcount++;
-            element.textContent= '('+element.app.clickedcount+') '+element.app.text;
-        ''','element')
+        self.increase_count_by= self.rdoc.jsfunction('''
+            element.app.clickedcount+= amount;
+            if (element.app.clickedcount>0.5) {
+                element.textContent= '('+element.app.clickedcount+') '+element.app.text;
+            }
+        ''','element','amount')
+
+        # this function will be applied to each item in the menu
         self.onclick= self.rdoc.jsfunction('''
-            element= event.target;
-            message('evt: '+element.app.text);\n'''+
-            self.increase_count.varname+'(element);','event')
-        def on_add(element,text):
+            message('evt: '+event.target.app.text);\n'''+
+            self.increase_count_by.varname+'(event.target,1);','event')
+
+        # do this for each element added to the menu
+        def on_add(element,color):
             nonlocal self
-            element.att.app.text= text
-            element.att.app.clickedcount= 0
+            element.att.app.text= color
+            element.att.app.clickedcount= colors_app.colors_count[color]
             element.att.onclick= self.onclick
+            self.rdoc.inline(self.increase_count_by.varname+'('+element.varname+',0);\n')
+
+        # the menu!
         self.menu= menu(self.rdoc, on_add)
-        # style the menu!
+        # style it...
         self.menu.rule_nav.att.style(display='table',margin='10px')
         self.menu.rule_navli.att.style(
             color='#000000',
@@ -46,33 +64,32 @@ class colors_app:
             paddingLeft='20px',
             webkitTransform='rotate(5deg)'
         )
+        # populate...
         self.rdoc.body.append(self.menu.element)
-        self.menu.add_item(
-            'foo',
-            'bar',
-            'wowowowowo!!!',
-            'this is cool',
-            'WEBALCHEMY ROCKS'
-        )
+        for color in colors_app.colors_count:
+            self.menu.add_item(color)
 
     # this method is called when the frontend sends the server a message
     @gen.coroutine
     def inmessage(self, text):
         if text.startswith('evt: '):
-            clicked_text= text[5:]
-            self.wsh.msg_in_proc(clicked_text)
+            color= text[5:]
+            colors_app.colors_count[color]+= 1
+            self.wsh.msg_in_proc(color)
 
     # this method is called on incomming messages from other sessions
     @gen.coroutine
     def outmessage(self, text, sender):
         for e in self.menu.element.childs:
             if e.text==text:
-                self.rdoc.inline(self.increase_count.varname+'('+e.varname+');\n')
+                self.rdoc.inline(self.increase_count_by.varname+'('+e.varname+',1);\n')
 
     # this method is called when session is closed
     @gen.coroutine
     def onclose(self):
         pass
+
+
 
 if __name__=='__main__':
     import webalchemy.server
