@@ -22,17 +22,17 @@ class colors_app:
         self.rdoc= remotedocument
         self.wsh= wshandler
 
-        self.increase_count_by= self.rdoc.jsfunction('''
+        self.increase_count_by= self.rdoc.jsfunction('element','amount','''
             element.app.clickedcount+= amount;
             if (element.app.clickedcount>0.5) {
                 element.textContent= '('+element.app.clickedcount+') '+element.app.text;
-            }
-        ''','element','amount')
+            }''')
 
         # this function will be applied to each item in the menu
-        self.onclick= self.rdoc.jsfunction('''
-            message('evt: '+event.target.app.text);\n'''+
-            self.increase_count_by.varname+'(event.target,1);','event')
+        self.onclick= self.rdoc.jsfunction('event','''
+            message('evt: '+event.target.app.text);
+            #{self.increase_count_by}(event.target,1);
+        ''')
 
         # do this for each element added to the menu
         def on_add(element,color):
@@ -42,9 +42,8 @@ class colors_app:
             element.att.onclick= self.onclick
             self.rdoc.inline(self.increase_count_by.varname+'('+element.varname+',0);\n')
 
-        # the menu!
+        # the menu, with some styling
         self.menu= menu(self.rdoc, on_add)
-        # style it...
         self.menu.rule_nav.att.style(display='table',margin='10px')
         self.menu.rule_navli.att.style(
             color='#000000',
@@ -82,7 +81,7 @@ class colors_app:
     def outmessage(self, text, sender):
         for e in self.menu.element.childs:
             if e.text==text:
-                self.rdoc.inline(self.increase_count_by.varname+'('+e.varname+',1);\n')
+                self.increase_count_by(e,1)
 
     # this method is called when session is closed
     @gen.coroutine

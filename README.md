@@ -2,78 +2,98 @@
 webalchemy is a fast, simple and lightweight realtime micro web-framework for Python, inspired by [SqlAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). With webalchemy you develop webapps like you would develop a desktop (or mobile) app
 
 ####Example
-a simple application demostrating dynamically creation of paragraphs, inline styles, stylesheets, intervals, etc., and message exchanging between frontend and server, messaging between parallel sessions, and events. Note how everything fits in a single file and class:
+We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
 ```python
 from tornado import gen
-class my_app:    
+from webalchemy.widgets.basic.menu import menu
+
+class colors_app:    
+
+    # shared state between sessions
+    colors_count={
+        'foo'             :0,
+        'bar'             :0,
+        'wowowowowo!!!'   :0,
+        'this is cool'    :0,
+        'WEBALCHEMY ROCKS':0,
+    }
+
     # this method is called when a new session starts
     @gen.coroutine
     def initialize(self, remotedocument, wshandler, message):
         # remember these for later use
         self.rdoc= remotedocument
         self.wsh= wshandler
-        # setup a nice paragraph, with events
-        self.p= self.rdoc.element('p',text='This is an empty document')
-        self.p.att.onmouseout = lambda: self.p.att.style(color='blue')
-        self.p.att.onmousemove= lambda: self.p.att.style(color='red')
-        self.rdoc.body.append(self.p)
 
-        # communication with other sessions (see below for more)
-        total_clients= str(len(wshandler.sharedhandlers))
-        self.p_doc= self.rdoc.element('p',text='total documents open: '+total_clients)
-        self.rdoc.body.append(self.p_doc)
-        self.wsh.msg_in_proc(total_clients)
+        self.increase_count_by= self.rdoc.jsfunction('element','amount','''
+            element.app.clickedcount+= amount;
+            if (element.app.clickedcount>0.5) {
+                element.textContent= '('+element.app.clickedcount+') '+element.app.text;
+            }''')
 
-        # intervals, instantiated in two ways
-        self.i= self.rdoc.startinterval(1000, lambda: self.rdoc.msg('interval!'))
-        self.i.count= 0
-        self.rdoc.begin_block() #
-        e= self.rdoc.element('p',text=':)')
-        e.att.color='green'
-        self.rdoc.body.append(e)
-        self.i2= self.rdoc.startinterval(2500) # consume previous code block
+        # this function will be applied to each item in the menu
+        self.onclick= self.rdoc.jsfunction('event','''
+            message('evt: '+event.target.app.text);
+            #{self.increase_count_by}(event.target,1);
+        ''')
 
-        # some styling...
-        ss= self.rdoc.stylesheet()
-        ss.rule('p','font-size:2em;text-transform:uppercase;font-family:Arial, Verdana, Sans-serif;')
-        # (can also use r=ss.rule(...) and then r.att.style.color='green' etc.)
+        # do this for each element added to the menu
+        def on_add(element,color):
+            nonlocal self
+            element.att.app.text= color
+            element.att.app.clickedcount= colors_app.colors_count[color]
+            element.att.onclick= self.onclick
+            self.rdoc.inline(self.increase_count_by.varname+'('+element.varname+',0);\n')
+
+        # the menu, with some styling
+        self.menu= menu(self.rdoc, on_add)
+        self.menu.rule_nav.att.style(display='table',margin='10px')
+        self.menu.rule_navli.att.style(
+            color='#000000',
+            fontSize='2em',
+            textTransform='uppercase',
+            fontFamily='Arial, Verdana, Sans-serif',
+            float='bottom',
+            padding='10px',
+            listStyle='none',
+            cursor='pointer',
+            webkitTransition='all 0.3s linear',
+            webkitUserSelect='none'
+        )
+        self.menu.rule_navlihover.att.style(
+            color='#ffffff',
+            background='#000000',
+            paddingLeft='20px',
+            webkitTransform='rotate(5deg)'
+        )
+        # populate...
+        self.rdoc.body.append(self.menu.element)
+        for color in colors_app.colors_count:
+            self.menu.add_item(color)
 
     # this method is called when the frontend sends the server a message
     @gen.coroutine
-    def inmessage(self, txt):
-        if txt!='interval!':
-            return
-        if self.i.count>5:
-            self.i.stop()
-            self.i2.stop()
-        self.i.count+=1
-        try:
-            self.tp.remove()
-        except Exception as e:
-            pass
-        self.tp= self.rdoc.element('p',text='New paragraph #'+str(self.i.count))
-        self.tp.att.style(
-            position='absolute',
-            left=str(50*self.i.count)+'px',
-            top=str(50*self.i.count)+'px')
-        self.rdoc.body.append(self.tp)
-        self.p.text= 'there are now '+str(self.i.count+1)+' paragraphs'
+    def inmessage(self, text):
+        if text.startswith('evt: '):
+            color= text[5:]
+            colors_app.colors_count[color]+= 1
+            self.wsh.msg_in_proc(color)
 
     # this method is called on incomming messages from other sessions
     @gen.coroutine
-    def outmessage(self, txt, sender):
-        self.p_doc.text= 'total documents open: '+txt
+    def outmessage(self, text, sender):
+        for e in self.menu.element.childs:
+            if e.text==text:
+                self.increase_count_by(e,1)
 
     # this method is called when session is closed
     @gen.coroutine
     def onclose(self):
-        total_clients= str(len(self.wsh.sharedhandlers))
-        self.wsh.msg_in_proc(total_clients)
+        pass
 
 if __name__=='__main__':
     import webalchemy.server
-    server.run(8083,my_app) # the first parameter is the port...
-
+    server.run(8083,colors_app) # the first parameter is the port...
 ```
 ##Philosophy and Roadmap
 Run relatively simple code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.

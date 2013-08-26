@@ -1,5 +1,7 @@
 
 
+import re
+import inspect
 from webalchemy.utils import log
 
 
@@ -43,6 +45,8 @@ class element:
         self._text = text
         js= self.varname+'.textContent="'+text+'";\n'
         self.rdoc.inline(js)
+    def __str__(self):
+        return self.varname
     
 
 
@@ -81,8 +85,8 @@ class function:
         args=','.join(varargs)
         self.js=self.varname+'=function('+args+'){\n'+code+'\n}\n'
         rdoc.inline(self.js)
-    def __call__(self):
-        js=str(self)
+    def __call__(self,*varargs):
+        js=self.varname+'('+','.join([str(v) for v in varargs])+');\n'
         self.rdoc.inline(js)
     def __str__(self):
         return self.varname+'();\n'
@@ -157,10 +161,20 @@ class remotedocument:
         return interval(self,ms,exp)
     def function(self,exp=None,*varargs):
         return function(self,exp,*varargs)
-    def jsfunction(self,exp,*varargs):
+    def jsfunction(self,*varargs):
         self.begin_block()
-        self.inline(exp)
-        return self.function(None,*varargs)
+        code=varargs[-1]
+
+        # inline interpolation...
+        prev_frame= inspect.getouterframes(inspect.currentframe())[1][0]
+        locals= prev_frame.f_locals
+        globals= prev_frame.f_globals
+        for item in re.findall(r'#\{([^}]*)\}', code):
+            code = code.replace('#{%s}' % item,
+                        eval(item+'.varname', globals, locals))
+
+        self.inline(code)
+        return self.function(None,*varargs[:-1])
     def get_new_uid(self):
         uid= '__v'+str(self.__uid_count)
         self.__uid_count+=1        
