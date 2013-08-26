@@ -43,7 +43,8 @@ class colors_app:
             element.att.app.text= color
             element.att.app.clickedcount= colors_app.colors_count[color]
             element.att.onclick= self.onclick
-            self.rdoc.inline(self.increase_count_by.varname+'('+element.varname+',0);\n')
+            # calling this just to update the count in the item text
+            self.increase_count_by(element,0)
 
         # the menu, with some styling
         self.menu= menu(self.rdoc, on_add)
