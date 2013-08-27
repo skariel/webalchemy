@@ -5,6 +5,7 @@ webalchemy is a fast, simple and lightweight realtime micro web-framework for Py
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
 ```python
 from tornado import gen
+from webalchemy import server
 from webalchemy.widgets.basic.menu import menu
 
 class colors_app:    
@@ -32,9 +33,10 @@ class colors_app:
             }''')
 
         # this function will be applied to each item in the menu
-        # note the inline interpolation (implemented in jsfunction)
+        # note the inline interpolation of increase_count_by,
+        # and the rpc call from js to Python for serverside_on_button_clicked
         self.onclick= self.rdoc.jsfunction('event','''
-            message('evt: '+event.target.app.text);
+            rpc('serverside_on_button_clicked', event.target.app.text);
             #{self.increase_count_by}(event.target,1);
         ''')
 
@@ -68,20 +70,25 @@ class colors_app:
             paddingLeft='20px',
             webkitTransform='rotate(5deg)'
         )
-        # populate...
+        # populate the menu...
         self.rdoc.body.append(self.menu.element)
         for color in colors_app.colors_count:
             self.menu.add_item(color)
 
-    # this method is called when the frontend sends the server a message
+    # register the method so we can call it from frontend js directly
+    # this could also be done by messaging - incomming messages are
+    # passed to the inmessage method
+    @server.rpc
     @gen.coroutine
-    def inmessage(self, text):
-        if text.startswith('evt: '):
-            color= text[5:]
-            colors_app.colors_count[color]+= 1
-            self.wsh.msg_in_proc(color)
+    def serverside_on_button_clicked(self, color):
+        colors_app.colors_count[color]+= 1
+        # notify all sessions about this click
+        # this message will be passed to the outmessage method
+        # an inter-session rpc is being developped, so this will be easier soon
+        # (it will simplify the outmessage method for complex sessions)
+        self.wsh.msg_in_proc(color)
 
-    # this method is called on incomming messages from other sessions
+    #this method is called on incomming messages from other sessions
     @gen.coroutine
     def outmessage(self, text, sender):
         for e in self.menu.element.childs:
@@ -94,7 +101,6 @@ class colors_app:
         pass
 
 if __name__=='__main__':
-    import webalchemy.server
     server.run(8083,colors_app) # the first parameter is the port...
 ```
 ##Philosophy and Roadmap

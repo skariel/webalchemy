@@ -1,3 +1,7 @@
+# TODO: inter session RPC
+# TODO: escape the RPC call in JS
+
+
 import sys
 import time
 import traceback
@@ -20,7 +24,7 @@ main_html='''
 <body>
 <script>
 var ws = new WebSocket('ws://localhost:PORT/websocket');
-function message(s) {
+message= function (s) {
     console.log('sending message:')
     console.log(s)
     ws.send(s)
@@ -34,12 +38,23 @@ ws.onmessage = function (evt) {
    eval(evt.data)
    message('done')
 };
+rpc= function () {
+    var s=''
+    s+= arguments.length
+    for (var i = 0; i < arguments.length; i++) {
+        var si= arguments[i].toString()
+        s+= ','+si.length
+    }
+    for (var i = 0; i < arguments.length; i++) {
+        var si= arguments[i].toString()
+        s+= ','+si
+    }
+    message('rpc: '+s)
+}    
 </script>
 </body>
 </html> 
 '''
-
-  
 
 
 
@@ -55,6 +70,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
+
     @gen.coroutine
     def initialize(self, local_doc, shared_wshandlers):
         log('Initiallizing new documet!')
@@ -77,8 +93,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 yield self.local_doc.initialize(self.remotedocument,self, message)
                 self.local_doc_initialized= True
             else:
-                log('passing message to document...')
-                yield self.local_doc.inmessage(message)
+                if message.startswith('rpc: '):
+                    yield self.handle_rpc_message(message)
+                elif message.startswith('msg: '):
+                    log('passing message to document...')
+                    yield self.local_doc.inmessage(message)
+                else:
+                    log('doing nothing with this message...')
             yield self.flush_dom()
         except:
             log('Failed handling message. Exception:')
@@ -119,6 +140,57 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             log('Failed handling local document onclose. Exception:')
             traceback.print_exc(file=sys.stdout)
             sys.stdout.flush()
+
+    @gen.coroutine
+    def handle_rpc_message(self,msg):
+        log('handling message as RPC call')
+        pnum, *etc= msg[5:].split(',')
+        pnum= int(pnum)
+        args_len= etc[:pnum]
+        args_txt= ''.join(etc[pnum:])
+        args=[]
+        curr_pos=0
+        for ln in args_len:
+            ln= int(ln)
+            args.append(args_txt[curr_pos:curr_pos+ln])
+            curr_pos+= ln
+        fname, *args= args
+        if fname not in rpcdict:
+            raise Exception('function not found in RPC table: '+fname)
+        log('function: '+fname)
+        log('args: '+str(args))
+        if rpcdict[fname]['is_method']:
+            yield rpcdict[fname]['f'](self.local_doc,*args)
+        else:
+            yield rpcdict[fname]['f'](*args)
+
+
+
+# this is the rpc decorator to register functions
+rpcdict={}
+def rpc_gen(is_method):
+    def dec(f):
+        if is_method:
+            log('registering method to js->py rpc: '+str(f))
+        else:
+            log('registering non-method to js->py rpc: '+str(f))
+        try:
+            if f.__name__ in rpcdict:
+                raise Exception('cannot decorate with rpc since name already exists: '+f.__name__)        
+            rpcdict[f.__name__]={}
+            rpcdict[f.__name__]['is_method']=is_method
+            rpcdict[f.__name__]['f']=f
+            return f
+        except:
+            traceback.print_exc(file=sys.stdout)
+            sys.stdout.flush()
+    return dec
+
+def rpc(*varargs,**kwargs):
+    if len(varargs)==1 and len(kwargs)==0:
+        return rpc_gen(True)(varargs[0])
+    else:
+        return rpc_gen(kwargs['is_method'])
 
 
 
