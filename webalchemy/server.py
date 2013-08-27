@@ -133,13 +133,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         log('WebSocket closed')
         log('Removing shared doc')
         self.sharedhandlers.remove(self)
-        log('Calling local document on_close:')
-        try:
-            yield self.local_doc.onclose()
-        except:
-            log('Failed handling local document onclose. Exception:')
-            traceback.print_exc(file=sys.stdout)
-            sys.stdout.flush()
+        if hasattr(self.local_doc,'on_close'):
+            log('Calling local document on_close:')
+            try:
+                yield self.local_doc.onclose()
+            except:
+                log('Failed handling local document onclose. Exception:')
+                traceback.print_exc(file=sys.stdout)
+                sys.stdout.flush()
 
     @gen.coroutine
     def handle_rpc_message(self,msg):

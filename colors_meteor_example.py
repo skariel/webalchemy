@@ -92,12 +92,6 @@ class colors_app:
             if e.text==text:
                 self.increase_count_by(e,1)
 
-    # this method is called when session is closed
-    @gen.coroutine
-    def onclose(self):
-        pass
-
-
 
 if __name__=='__main__':
     server.run(8083,colors_app) # the first parameter is the port...
