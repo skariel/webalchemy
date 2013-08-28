@@ -5,7 +5,6 @@ webalchemy is a fast, simple and lightweight realtime micro web-framework for Py
 - **Homepage:** <http://skariel.org/webalchemy/>
 - **Discussion:** <https://groups.google.com/forum/#!forum/webalchemy/>
 
-####Example
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
 ```python
 from tornado import gen
