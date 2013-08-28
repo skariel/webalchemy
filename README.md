@@ -32,7 +32,8 @@ class colors_app:
                 element.textContent= '('+element.app.clickedcount+') '+element.app.text;
             }''')
 
-        # do this for each element added to the menu
+        # This will be passed to the menu initializer
+        # so it is applied to each item when added to the menu
         def on_add(element,color):
             element.att.app.text= color
             element.att.app.clickedcount= colors_app.colors_count[color]
@@ -84,7 +85,7 @@ class colors_app:
                     self.increase_count_by(e,1)
 
 if __name__=='__main__':
-    server.run('localhost',8083,colors_app) # the first parameter is the port...
+    server.run('localhost',8083,colors_app)
 ```
 ##Philosophy and Roadmap
 Run relatively simple code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.
