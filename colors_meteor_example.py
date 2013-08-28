@@ -4,7 +4,6 @@
 from tornado import gen
 from webalchemy import server
 from webalchemy.widgets.basic.menu import menu
-from webalchemy.utils import log
 
 class colors_app:    
 
@@ -81,8 +80,9 @@ class colors_app:
     @server.rpc
     @gen.coroutine
     def serverside_on_button_clicked(self, sender_doc, color):
-        colors_app.colors_count[color]+= 1
-        if sender_doc is not self:
+        if sender_doc is self:        
+            colors_app.colors_count[color]+= 1
+        else:
             for e in self.menu.element.childs:
                 if e.text==color:
                     self.menu.increase_count_by(e,1)

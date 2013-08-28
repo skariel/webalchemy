@@ -1,5 +1,5 @@
 ##webalchemy: realtime, Pythonic web framework
-webalchemy is a fast, simple and lightweight realtime micro web-framework for Python, inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). Documentation is WIP, read a bit more on the [official homepage](http://skariel.org/webalchemy/)
+webalchemy is a fast, simple and lightweight realtime micro web-framework for Python, inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). Project is young, there is no documentation but it is on high priority. webalchemy [official homepage](http://skariel.org/webalchemy/)
 
 ####Example
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
@@ -83,8 +83,9 @@ class colors_app:
     @server.rpc
     @gen.coroutine
     def serverside_on_button_clicked(self, sender_doc, color):
-        colors_app.colors_count[color]+= 1
-        if sender_doc is not self:
+        if sender_doc is self:        
+            colors_app.colors_count[color]+= 1
+        else:
             for e in self.menu.element.childs:
                 if e.text==color:
                     self.menu.increase_count_by(e,1)
