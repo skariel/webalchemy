@@ -1,7 +1,7 @@
 ##webalchemy: realtime, Pythonic web framework
 webalchemy is a fast, simple and lightweight realtime micro web-framework for Python inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). The project is young, documentation is on high priority but still missing
 
-- **MIT License:** <LICENSE.txt>
+- **MIT License:** <./LICENSE.txt>
 - **Homepage:** <http://skariel.org/webalchemy/>
 - **Discussion:** <https://groups.google.com/forum/#!forum/webalchemy/>
 
