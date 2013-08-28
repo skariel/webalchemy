@@ -4,13 +4,9 @@ webalchemy is a fast, simple and lightweight realtime micro web-framework for Py
 ####Example
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
 ```python
-#
-# trying to reconstruct Meteor color application
-#
 from tornado import gen
 from webalchemy import server
 from webalchemy.widgets.basic.menu import menu
-from webalchemy.utils import log
 
 class colors_app:    
 
@@ -98,10 +94,4 @@ Run relatively simple code in the frontend, and structure this code so it is eas
 * Tornado >= 3.1
 * webalchemy webapps require a modern webbrowser supporting websockets (too much web in this sentence)
 
-##License (MIT)
-Copyright (c) 2013 Ariel Keselman
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+##License: MIT
