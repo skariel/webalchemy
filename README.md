@@ -1,5 +1,5 @@
 ##webalchemy: realtime, Pythonic web framework
-webalchemy is a fast, simple and lightweight realtime micro web-framework for Python, inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). Project is young, there is no documentation but it is on high priority. webalchemy [official homepage](http://skariel.org/webalchemy/)
+webalchemy is a fast, simple and lightweight realtime micro web-framework for Python inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). Project is young, there is no documentation but it is on high priority. webalchemy [official homepage](http://skariel.org/webalchemy/)
 
 ####Example
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
