@@ -1,5 +1,5 @@
 ##webalchemy: realtime, Pythonic web framework
-webalchemy is a fast, simple and lightweight realtime micro web-framework for Python, inspired by [SqlAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). With webalchemy you develop webapps like you would develop a desktop (or mobile) app
+webalchemy is a fast, simple and lightweight realtime micro web-framework for Python, inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). With webalchemy you develop webapps like you would develop a desktop (or mobile) app
 
 ####Example
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
@@ -48,8 +48,8 @@ class colors_app:
 
         # the menu, with some styling
         self.menu= menu(self.rdoc, on_add)
-        self.menu.rule_nav.att.style(display='table',margin='10px')
-        self.menu.rule_navli.att.style(
+        self.menu.rule_menu.att.style(display='table',margin='10px')
+        self.menu.rule_item.att.style(
             color='#000000',
             fontSize='2em',
             textTransform='uppercase',
@@ -61,7 +61,7 @@ class colors_app:
             webkitTransition='all 0.3s linear',
             webkitUserSelect='none'
         )
-        self.menu.rule_navlihover.att.style(
+        self.menu.rule_item_hover.att.style(
             color='#ffffff',
             background='#000000',
             paddingLeft='20px',
@@ -84,7 +84,7 @@ class colors_app:
                     self.increase_count_by(e,1)
 
 if __name__=='__main__':
-    server.run('localhost',8083,colors_app)
+    server.run('localhost',8083,colors_app) # the first parameter is the port...
 ```
 ##Philosophy and Roadmap
 Run relatively simple code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.

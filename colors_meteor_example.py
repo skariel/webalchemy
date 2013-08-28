@@ -46,8 +46,8 @@ class colors_app:
 
         # the menu, with some styling
         self.menu= menu(self.rdoc, on_add)
-        self.menu.rule_nav.att.style(display='table',margin='10px')
-        self.menu.rule_navli.att.style(
+        self.menu.rule_menu.att.style(display='table',margin='10px')
+        self.menu.rule_item.att.style(
             color='#000000',
             fontSize='2em',
             textTransform='uppercase',
@@ -59,7 +59,7 @@ class colors_app:
             webkitTransition='all 0.3s linear',
             webkitUserSelect='none'
         )
-        self.menu.rule_navlihover.att.style(
+        self.menu.rule_item_hover.att.style(
             color='#ffffff',
             background='#000000',
             paddingLeft='20px',

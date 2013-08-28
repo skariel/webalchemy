@@ -5,11 +5,11 @@ class menu:
         self.rdoc= rdoc
         self.element= rdoc.element('nav')
 
-        vn= 'nav.'+self.element.varname
+        vn= '#'+self.element.varname
         self.stylesheet= self.rdoc.stylesheet()
-        self.rule_nav= self.stylesheet.rule(vn)
-        self.rule_navli= self.stylesheet.rule(vn+' li')
-        self.rule_navlihover= self.stylesheet.rule(vn+' li:hover')
+        self.rule_menu= self.stylesheet.rule(vn)
+        self.rule_item= self.stylesheet.rule(vn+' > li')
+        self.rule_item_hover= self.stylesheet.rule(vn+' > li:hover')
         self.on_add= on_add
 
     def add_item(self,*varargs):
