@@ -17,6 +17,6 @@ class menu:
         for text in varargs:
             i= self.rdoc.element('li',text)
             if self.on_add:
-                self.on_add(i,text)
+                self.on_add(i)
             self.element.append(i)
 

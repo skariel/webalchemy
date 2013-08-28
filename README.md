@@ -34,18 +34,19 @@ class colors_app:
 
         # This will be passed to the menu initializer
         # so it is applied to each item when added to the menu
-        def on_add(element,color):
-            element.att.app.text= color
-            element.att.app.clickedcount= colors_app.colors_count[color]
+        def on_add(item):
+            color= item.text
+            item.att.app.text= color
+            item.att.app.clickedcount= colors_app.colors_count[color]
             # note below: inline interpolation of increase_count_by,
             # and rpc call from js to Python. It is called 'srpc'
             # since it goes for all sessions
-            element.att.onclick= self.rdoc.jsfunction('event','''
+            item.att.onclick= self.rdoc.jsfunction('event','''
                 srpc('serverside_on_button_clicked', event.target.app.text);
                 #{self.increase_count_by}(event.target,1);
             ''')
             # calling this just to update the count in the item text
-            self.increase_count_by(element,0)
+            self.increase_count_by(item,0)
 
         # the menu, with some styling
         self.menu= menu(self.rdoc, on_add)
