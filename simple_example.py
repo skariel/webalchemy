@@ -22,7 +22,7 @@ class my_app:
         self.wsh.msg_in_proc(total_clients)
 
         # intervals, instantiated in two ways
-        self.i= self.rdoc.startinterval(1000, lambda: self.rdoc.msg('interval!'))
+        self.i= self.rdoc.startinterval(1000, lambda: self.rdoc.msg('msg: interval!'))
         self.i.count= 0
         self.rdoc.begin_block() #
         e= self.rdoc.element('p',text=':)')
@@ -38,7 +38,7 @@ class my_app:
     # this method is called when the frontend sends the server a message
     @gen.coroutine
     def inmessage(self, txt):
-        if txt!='interval!':
+        if txt!='msg: interval!':
             return
         if self.i.count>5:
             self.i.stop()
@@ -69,4 +69,4 @@ class my_app:
 
 if __name__=='__main__':
     import webalchemy.server
-    server.run(8083,my_app) # the first parameter is the port...
+    server.run('localhost',8083,my_app) # the first parameter is the port...

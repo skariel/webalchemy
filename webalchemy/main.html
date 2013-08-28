@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+var ws = new WebSocket('ws://HOST:PORT/websocket');
+message= function (s) {
+    console.log('sending message:')
+    console.log(s)
+    ws.send(s)
+}
+ws.onopen = function() {
+   message('hi');
+};
+ws.onmessage = function (evt) {
+   console.log('message received:')
+   console.log(evt.data)
+   eval(evt.data)
+   message('done')
+};
+rpcfy= function () {
+    var s=''
+    s+= arguments.length
+    for (var i = 0; i < arguments.length; i++) {
+        var si= arguments[i].toString()
+        s+= ','+si.length
+    }
+    for (var i = 0; i < arguments.length; i++) {
+        var si= arguments[i].toString()
+        s+= ','+si
+    }
+    return s
+}    
+rpc= function () {
+    message('rpc: '+rpcfy.apply(this,arguments))
+}    
+srpc= function () {
+    message('srpc: '+rpcfy.apply(this,arguments))
+}    
+</script>
+</body>
+</html> 

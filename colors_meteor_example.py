@@ -4,6 +4,7 @@
 from tornado import gen
 from webalchemy import server
 from webalchemy.widgets.basic.menu import menu
+from webalchemy.utils import log
 
 class colors_app:    
 
@@ -29,20 +30,17 @@ class colors_app:
                 element.textContent= '('+element.app.clickedcount+') '+element.app.text;
             }''')
 
-        # this function will be applied to each item in the menu
-        # note the inline interpolation of increase_count_by,
-        # and the rpc call from js to Python for serverside_on_button_clicked
-        self.onclick= self.rdoc.jsfunction('event','''
-            rpc('serverside_on_button_clicked', event.target.app.text);
-            #{self.increase_count_by}(event.target,1);
-        ''')
-
         # do this for each element added to the menu
         def on_add(element,color):
-            nonlocal self
             element.att.app.text= color
             element.att.app.clickedcount= colors_app.colors_count[color]
-            element.att.onclick= self.onclick
+            # note below: inline interpolation of increase_count_by,
+            # and rpc call from js to Python. It is called 'srpc'
+            # since it goes for all sessions
+            element.att.onclick= self.rdoc.jsfunction('event','''
+                srpc('serverside_on_button_clicked', event.target.app.text);
+                #{self.increase_count_by}(event.target,1);
+            ''')
             # calling this just to update the count in the item text
             self.increase_count_by(element,0)
 
@@ -73,25 +71,15 @@ class colors_app:
             self.menu.add_item(color)
 
     # register the method so we can call it from frontend js directly
-    # this could also be done by messaging - incomming messages are
-    # passed to the inmessage method
+    # this could also be done by messaging, see in simple_examplee.py
     @server.rpc
     @gen.coroutine
-    def serverside_on_button_clicked(self, color):
+    def serverside_on_button_clicked(self, sender_doc, color):
         colors_app.colors_count[color]+= 1
-        # notify all sessions about this click
-        # this message will be passed to the outmessage method
-        # an inter-session rpc is being developped, so this will be easier soon
-        # (it will simplify the outmessage method for complex sessions)
-        self.wsh.msg_in_proc(color)
-
-    #this method is called on incomming messages from other sessions
-    @gen.coroutine
-    def outmessage(self, text, sender):
-        for e in self.menu.element.childs:
-            if e.text==text:
-                self.increase_count_by(e,1)
-
+        if sender_doc is not self:
+            for e in self.menu.element.childs:
+                if e.text==color:
+                    self.increase_count_by(e,1)
 
 if __name__=='__main__':
-    server.run(8083,colors_app) # the first parameter is the port...
+    server.run('localhost',8083,colors_app) # the first parameter is the port...
