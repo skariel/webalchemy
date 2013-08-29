@@ -2,7 +2,6 @@
 
 import re
 import inspect
-from webalchemy.utils import log
 
 
 

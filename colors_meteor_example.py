@@ -1,9 +1,14 @@
 #
 # trying to reconstruct Meteor color application
 #
+import logging
+
 from tornado import gen
 from webalchemy import server
 from webalchemy.widgets.basic.menu import menu
+
+log= logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 class colors_app:    
 
@@ -18,10 +23,13 @@ class colors_app:
 
     # this method is called when a new session starts
     @gen.coroutine
-    def initialize(self, remotedocument, wshandler, message):
+    def initialize(self, remotedocument, wshandler, session_id, message):
         # remember these for later use
         self.rdoc= remotedocument
         self.wsh= wshandler
+        self.id= session_id
+        log.info('New session openned, id='+self.id)
+
         # make page elements..
         self.menu= self.build_menu()
         # populate page
@@ -42,7 +50,7 @@ class colors_app:
             ''')
             # update the count in the item text
             m.increase_count_by(item,0)
-
+        
         # create a menu element with the above item initializer
         m= menu(self.rdoc, on_add)
         # style the menu
