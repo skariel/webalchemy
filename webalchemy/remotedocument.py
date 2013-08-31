@@ -2,6 +2,11 @@
 
 import re
 import inspect
+import logging
+
+
+# logger for internal purposes
+log= logging.getLogger(__name__)
 
 
 

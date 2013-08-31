@@ -1,4 +1,3 @@
-from webalchemy import remotedocument
 
 class menu:
     def __init__(self,rdoc,on_add=None):
