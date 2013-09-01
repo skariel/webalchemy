@@ -53,11 +53,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.sharedhandlers= shared_wshandlers
         self.local_doc= local_doc_class()
         self.local_doc_initialized= False
-        self.sharedhandlers.append(self)
+        self.id= generate_session_id()
+        self.sharedhandlers[self.id]= self
 
 
     @gen.coroutine
     def open(self):
+        self.closed=False
         log.info('WebSocket opened')
 
     @gen.coroutine
@@ -66,16 +68,11 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         try:
             if not self.local_doc_initialized:
                 log.info('Initializing local document with message...')
-                yield self.local_doc.initialize(self.remotedocument,self, generate_session_id(), message)
+                yield self.local_doc.initialize(self.remotedocument,self,message)
                 self.local_doc_initialized= True
             else:
                 if message.startswith('rpc: '):
                     yield self.handle_js_to_py_rpc_message(message)
-                elif message.startswith('srpc: '):
-                    for h in self.sharedhandlers:
-                        yield h.handle_js_to_py_rpc_message(message,srpc=True,sender_doc=self.local_doc)
-                        if h is not self:
-                            yield h.flush_dom()
                 elif message.startswith('msg: '):
                     log.info('Passing message to document inmessage...')
                     yield self.local_doc.inmessage(message)
@@ -95,21 +92,27 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         else:
             log.info('FLUSHING DOM: **NOTHING TO FLUSH**')
     @gen.coroutine
-    def msg_in_proc(self,msg,send_to_self=False):
-        log.info('sending message to all '+str(len(self.sharedhandlers))+' documents in process:')
-        log.info(msg)
-        for h in self.sharedhandlers:
+    def msg_to_sessions(self,msg,send_to_self=False,to_session_ids=None):
+        log.info('Sending message to sessions '+str(len(self.sharedhandlers))+' documents in process:')
+        log.info('Message: '+msg)
+        if not to_session_ids:
+            lst= self.sharedhandlers.keys()
+        else:
+            lst= to_session_ids
+        for k in lst:
+            h= self.sharedhandlers[k]
             if h is not self or send_to_self:
                 try:
-                    yield h.local_doc.outmessage(msg,self.local_doc)
+                    yield h.local_doc.outmessage(self.id,msg)
                     yield h.flush_dom()
                 except:
                     log.exception('Failed handling outmessage. Exception:')
     @gen.coroutine
     def on_close(self):
+        self.closed=True
         log.info('WebSocket closed')
         log.info('Removing shared doc')
-        self.sharedhandlers.remove(self)
+        del self.sharedhandlers[self.id]
         if hasattr(self.local_doc,'onclose'):
             log.info('Calling local document onclose:')
             try:
@@ -119,13 +122,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 log.exception('Failed handling local document onclose. Exception:')
 
     @gen.coroutine
-    def handle_js_to_py_rpc_message(self,msg,srpc=False,sender_doc=None):
-        if not srpc:
-            log.info('Handling message as js->py RPC call')
-            pnum, *etc= msg[5:].split(',')
-        else:
-            log.info('Handling message as js->py SRPC call')
-            pnum, *etc= msg[6:].split(',')
+    def handle_js_to_py_rpc_message(self,msg):
+        log.info('Handling message as js->py RPC call')
+        pnum, *etc= msg[5:].split(',')
         pnum= int(pnum)
         args_len= etc[:pnum]
         args_txt= ''.join(etc[pnum:])
@@ -139,48 +138,58 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         if fname not in js_to_py_rpcdict:
             raise Exception('Function not found in js->py RPC table: '+fname)
         log.info('Calling local function: '+fname)
-        log.info('with args: '+str(args))
+        log.info('With args: '+str(args))
         try:
-            if not srpc:
-                if js_to_py_rpcdict[fname]['is_method']:
-                    yield js_to_py_rpcdict[fname]['f'](self.local_doc,*args)
-                else:
-                    yield js_to_py_rpcdict[fname]['f'](*args)
-            else:
-                if js_to_py_rpcdict[fname]['is_method']:
-                    yield js_to_py_rpcdict[fname]['f'](self.local_doc,sender_doc,*args)
-                else:
-                    yield js_to_py_rpcdict[fname]['f'](sender_doc,*args)
+            yield js_to_py_rpcdict[fname](self.local_doc,self.id,*args)
         except:
-            log.exception('RPF call failed:')
+            log.exception('JS RPC call failed')
 
-
-
-# this is the rpc decorator to register functions
-js_to_py_rpcdict={}
-def rpc_gen(is_method):
-    def dec(f):
-        if is_method:
-            log.info('registering method to js->py rpc: '+str(f))
+    @gen.coroutine
+    def rpc(self,f,*varargs,send_to_self=False,to_session_ids=None,**kwargs):
+        log.info('Sending py->py rpc: '+f.__name__)
+        log.info('PARAMS: varargs: '+str(varargs)+' kwargs: '+str(kwargs))
+        if not to_session_ids:
+            lst= self.sharedhandlers.keys()
         else:
-            log.info('registering non-method to js->py rpc: '+str(f))
-        try:
-            if f.__name__ in js_to_py_rpcdict:
-                raise Exception('cannot decorate with rpc since name already exists: '+f.__name__)        
-            js_to_py_rpcdict[f.__name__]={}
-            js_to_py_rpcdict[f.__name__]['is_method']=is_method
-            js_to_py_rpcdict[f.__name__]['f']=f
-            return f
-        except:
-            log.exception('Failed registering RPC function')
-    return dec
+            lst= to_session_ids
+        log.info('lst='+str(lst))
+        log.info('self.id='+self.id)
+        for k in lst:
+            h= self.sharedhandlers[k]
+            if h is not self or send_to_self:
+                try:
+                    yield js_to_py_rpcdict[f.__name__](h.local_doc,self.id,*varargs,**kwargs)
+                    yield h.flush_dom()
+                except:
+                    log.exception('PY RPC call failed for target session: '+k)
 
-def rpc(*varargs,**kwargs):
-    if len(varargs)==1 and len(kwargs)==0:
-        return rpc_gen(True)(varargs[0])
-    else:
-        return rpc_gen(kwargs['is_method'])
 
+
+
+
+# decorator to register functions for js->py rpc
+js_to_py_rpcdict={}
+def jsrpc(f):
+    log.info('registering function to js->py rpc: '+f.__name__)
+    try:
+        if f.__name__ in js_to_py_rpcdict:
+            raise Exception('cannot decorate with js->py rpc since name already exists: '+f.__name__)
+        js_to_py_rpcdict[f.__name__]=f
+        return f
+    except:
+        log.exception('Failed registering js->py RPC function')
+
+# decorator to register functions for py->py rpc
+py_to_py_rpcdict={}
+def pyrpc(f):
+    log.info('registering function to py->py rpc: '+f.__name__)
+    try:
+        if f.__name__ in py_to_py_rpcdict:
+            raise Exception('cannot decorate with py->py rpc since name already exists: '+f.__name__)
+        py_to_py_rpcdict[f.__name__]=f
+        return f
+    except:
+        log.exception('Failed registering py->py RPC function')
 
 
 
@@ -192,7 +201,7 @@ def async_delay(secs):
 
 
 def run(host,port,local_doc_class):
-    shared_wshandlers= []
+    shared_wshandlers= {}
     application = tornado.web.Application([
         (r'/', MainHandler, dict(host=host, port=port)),
         (r'/websocket', WebSocketHandler, dict(local_doc_class=local_doc_class, shared_wshandlers=shared_wshandlers)),

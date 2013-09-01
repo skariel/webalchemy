@@ -11,10 +11,12 @@ class menu:
         self.rule_item_selected= self.stylesheet.rule(vn+' > li.selected')
         self.rule_item_selected_hover= self.stylesheet.rule(vn+' > li.selected:hover')
         self.on_add= on_add
+        self.id_dict={}
 
     def add_item(self,*varargs):
         for text in varargs:
             i= self.rdoc.element('li',text)
+            self.id_dict[i.att.id]= i
             self.element.append(i)
             if self.on_add:
                 self.on_add(i)

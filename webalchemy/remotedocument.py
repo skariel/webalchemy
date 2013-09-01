@@ -243,16 +243,19 @@ class remotedocument:
         class jsdict(dict):
             def __init__(self,ctx,isroot=None):
                 super().__setattr__('ctx',ctx)
-                if isroot:
-                    ctx.start_writing()
+                super().__setattr__('isroot',isroot)
             def __getattr__(self,name):
                 if name in self:
                     return self[name]
+                if super().__getattribute__('isroot'):
+                    super().__getattribute__('ctx').start_writing()
                 super().__getattribute__('ctx').write('["'+name+'"]')
                 n=jsdict(super().__getattribute__('ctx'),False)
                 super().__setitem__(name, n)
                 return n
             def __getitem__(self,name):
+                if super().__getattribute__('isroot'):
+                    super().__getattribute__('ctx').start_writing()
                 super().__getattribute__('ctx').write('["'+name+'"]')
                 if name not in self:
                     super().__setitem__(name,jsdict(super().__getattribute__('ctx'),False))
@@ -260,6 +263,8 @@ class remotedocument:
             def __setattr__(self,name,value):
                 self[name]=value
             def __setitem__(self,name,value):
+                if super().__getattribute__('isroot'):
+                    super().__getattribute__('ctx').start_writing()
                 if type(value) is str:
                     q= '"'+value+'"'
                 else:

@@ -1,6 +1,13 @@
 #
 # a simple example. Currently used for feature testing
 #
+from webalchemy import server
+import logging
+
+log= logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+server.log.setLevel(logging.INFO)
+
 from tornado import gen
 class my_app:    
     # this method is called when a new session starts
@@ -19,7 +26,8 @@ class my_app:
         total_clients= str(len(wshandler.sharedhandlers))
         self.p_doc= self.rdoc.element('p',text='total documents open: '+total_clients)
         self.rdoc.body.append(self.p_doc)
-        self.wsh.msg_in_proc(total_clients)
+
+        self.wsh.msg_to_sessions(total_clients)
 
         # intervals, instantiated in two ways
         self.i= self.rdoc.startinterval(1000, lambda: self.rdoc.msg('msg: interval!'))
@@ -58,15 +66,14 @@ class my_app:
 
     # this method is called on incomming messages from other sessions
     @gen.coroutine
-    def outmessage(self, txt, sender):
+    def outmessage(self, sender_id, txt):
         self.p_doc.text= 'total documents open: '+txt
 
     # this method is called when session is closed
     @gen.coroutine
     def onclose(self):
         total_clients= str(len(self.wsh.sharedhandlers))
-        self.wsh.msg_in_proc(total_clients)
+        self.wsh.msg_to_sessions(total_clients)
 
 if __name__=='__main__':
-    import webalchemy.server
     server.run('localhost',8083,my_app) # the first parameter is the port...
