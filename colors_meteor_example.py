@@ -54,20 +54,21 @@ class colors_app:
         def on_add(item):
             nonlocal m
             color= item.text
-            item.att.app.color= color
-            item.att.app.clickedcount= colors_app.colors_count[color]
+            item.app.color= color
+            item.app.clickedcount= colors_app.colors_count[color]
             # note below inline interpolation and rpc call
-            item.att.onclick= self.rdoc.jsfunction('event','''
-                rpc('button_clicked', event.target.id, event.target.app.color);
+            item.events.add(click= self.rdoc.jsfunction('event','''
+                att= event.target.app;
+                rpc('button_clicked', event.target.id, att.color);
                 #{m.increase_count_by}(event.target,1);
-            ''')
+            '''))
             # update the count in the item text
             m.increase_count_by(item,0)
         # create a menu element with the above item initializer
         m= menu(self.rdoc, on_add)
         # style the menu
-        m.rule_menu.att.style(display='table',margin='10px')
-        m.rule_item.att.style(
+        m.rule_menu.style(display='table',margin='10px')
+        m.rule_item.style(
             color='#000000',
             fontSize='2em',
             textTransform='uppercase',
@@ -79,7 +80,7 @@ class colors_app:
             webkitTransition='all 0.3s linear',
             webkitUserSelect='none'
         )
-        m.rule_item_hover.att.style(
+        m.rule_item_hover.style(
             color='#ffffff',
             background='#000000',
             paddingLeft='20px',
@@ -87,9 +88,10 @@ class colors_app:
         )
         # function to increase the count in front-end
         m.increase_count_by= self.rdoc.jsfunction('element','amount','''
-            element.app.clickedcount+= amount;
-            if (element.app.clickedcount>0.5) {
-                element.textContent= '('+element.app.clickedcount+') '+element.app.color;
+            att= element.app;
+            att.clickedcount+= amount;
+            if (att.clickedcount>0.5) {
+                element.textContent= '('+att.clickedcount+') '+att.color;
             }''')
         # populate the menu with shared colors dict
         for color in colors_app.colors_count:

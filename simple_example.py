@@ -18,8 +18,8 @@ class my_app:
         self.wsh= wshandler
         # setup a nice paragraph, with events
         self.p= self.rdoc.element('p',text='This is an empty document')
-        self.p.att.onmouseout = lambda: self.p.att.style(color='blue')
-        self.p.att.onmousemove= lambda: self.p.att.style(color='red')
+        self.p.events.add(mouseout = lambda: self.p.style(color='blue'))
+        self.p.events.add(mousemove= lambda: self.p.style(color='red'))
         self.rdoc.body.append(self.p)
 
         # communication with other sessions (see below for more)
@@ -57,7 +57,7 @@ class my_app:
         except Exception as e:
             pass
         self.tp= self.rdoc.element('p',text='New paragraph #'+str(self.i.count))
-        self.tp.att.style(
+        self.tp.style(
             position='absolute',
             left=str(50*self.i.count)+'px',
             top=str(50*self.i.count)+'px')

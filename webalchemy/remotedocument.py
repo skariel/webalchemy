@@ -5,15 +5,167 @@ import inspect
 import logging
 
 
+
+
 # logger for internal purposes
 log= logging.getLogger(__name__)
+
+
+
+
+
+class style_att:
+    def __init__(self, rdoc, varname):
+        super().__setattr__('rdoc', rdoc)
+        super().__setattr__('varname', varname)
+        super().__setattr__('d', {})
+    def __setitem__(self,item,val):
+        js= self.varname+'.style["'+item+'"]="'+str(val)+'";\n'
+        self.rdoc.inline(js)
+        self.d[item]=val
+    def __setattr__(self,attr,val):
+        self[attr]=val
+    def __getitem__(self,item):
+        js= self.varname+'.style["'+item+'"];\n'
+        self.rdoc.inline(js)
+        return self.d[item]
+    def __getattr__(self,name):
+        return self[name]
+    def __delitem__(self,item):
+        js= self.varname+'.removeProperty("'+item+'");\n'
+        self.rdoc.inline(js)
+        del self.d[item]
+    def __delattr__(self,name):
+        del self[name]
+    def __call__(self,**kwargs):
+        for k,v in kwargs.items():
+            self[k]= v
+
+
+
+
+class class_att:
+    def __init__(self, rdoc, varname):
+        self.rdoc= rdoc
+        self.varname= varname
+        self.lst=[]
+    def append(self,name):
+        js= self.varname+'.classList.add("'+name+'");\n'
+        self.rdoc.inline(js)
+        self.lst.append(name)
+    def extend(self,name_list):
+        for name in name_list:
+            self.append(name)
+    def remove(self,name):
+        js= self.varname+'.classList.remove("'+name+'");\n'
+        self.rdoc.inline(js)
+        self.lst.remove(name)        
+    def replace(old_name, new_name):
+        self.remove(old_name)
+        self.append(new_name)
+    def __delitem__(self,name):
+        self.remove(name)
+
+
+
+
+class simple_att:
+    def __init__(self, rdoc, varname):
+        super().__setattr__('rdoc', rdoc)
+        super().__setattr__('varname', varname)
+        super().__setattr__('d', {})
+    def __setitem__(self,item,val):
+        js= self.varname+'.setAttribute("'+item+'","'+str(val)+'");\n'
+        self.rdoc.inline(js)
+        self.d[item]=val
+    def __setattr__(self,attr,val):
+        self[attr]=val
+    def __getitem__(self,item):
+        js= self.varname+'.getAttribute("'+item+'");\n'
+        self.rdoc.inline(js)
+        return self.d[item]
+    def __getattr__(self,name):
+        return self[name]
+    def __delitem__(self,item):
+        js= self.varname+'.removeAttribute("'+item+'");\n'
+        self.rdoc.inline(js)
+        del self.d[item]
+    def __delattr__(self,name):
+        del self[name]
+    def __call__(self,**kwargs):
+        for k,v in kwargs.items():
+            self[k]= v
+
+
+
+
+
+
+class event_listener:
+    def __init__(self, rdoc, varname):
+        super().__setattr__('rdoc', rdoc)
+        super().__setattr__('varname', varname)
+    def add(self,**kwargs):
+        for event,listener in kwargs.items():
+            if hasattr(listener,'varname'):
+                l= listener.varname
+            elif type(listener) is str:
+                l= listener
+            else:
+                self.rdoc.begin_block()
+                l= listener()
+                if not l:
+                    l= self.rdoc.pop_block()
+                    l= 'function(){'+l.rstrip('\n').rstrip(';')+'}'
+                else:
+                    self.rdoc.cancel_block()
+            js= self.varname+'.addEventListener("'+event+'",'+l+',false);\n'
+            self.rdoc.inline(js)
+    def remove(self,event,listener):
+        js= self.varname+'.removeEventListener("'+event+'",'+listener+');\n'
+        self.rdoc.inline(js)
+
+
+
+
+
+class simple_prop:
+    def __init__(self, rdoc, varname, namespace):
+        super().__setattr__('rdoc', rdoc)
+        super().__setattr__('varname', varname+'.'+namespace)
+        super().__setattr__('d', {})
+    def __setitem__(self,item,val):
+        if type(val) is str:
+            v='"'+val+'"'
+        else:
+            v= str(val)
+        js= self.varname+'["'+item+'"]='+v+';\n'
+        self.rdoc.inline(js)
+        self.d[item]=val
+    def __setattr__(self,attr,val):
+        self[attr]=val
+    def __getitem__(self,item):
+        js= self.varname+'["'+item+'"];\n'
+        self.rdoc.inline(js)
+        return self.d[item]
+    def __getattr__(self,name):
+        return self[name]
+    def __delitem__(self,item):
+        js= 'delete '+self.varname+'["'+item+'"];\n'
+        self.rdoc.inline(js)
+        del self.d[item]
+    def __delattr__(self,name):
+        del self[name]
+    def __call__(self,**kwargs):
+        for k,v in kwargs.items():
+            self[k]= v
+
 
 
 
 class element:
     def __init__(self,rdoc,typ,text=None):
         self.varname= rdoc.get_new_uid()
-        self.att= rdoc.jsdict(self.__attr_changed)
         self.rdoc= rdoc
         self.typ= typ
         self.parent=None
@@ -24,11 +176,15 @@ class element:
             self._text=text
             js+= self.varname+'.textContent="'+text+'";\n'
         rdoc.inline(js)
+
+        self.cls= class_att(rdoc, self.varname)
+        self.att= simple_att(rdoc, self.varname)
+        self.style= style_att(rdoc, self.varname)
+        self.events= event_listener(rdoc, self.varname)
+        self.app= simple_prop(rdoc, self.varname, 'app')
+
         self.att.id= self.varname
-        self.att.className= self.varname
-    def __attr_changed(self,text):
-        js= self.varname+text
-        self.rdoc.inline(js)
+        self.cls.append(self.varname)
     def remove(self):
         s=self.varname+'.parentNode.removeChild('+self.varname+');\n'
         self.rdoc.inline(s)
@@ -55,6 +211,7 @@ class element:
 
 
 
+
 class interval:
     def __init__(self,rdoc,ms,exp=None):
         self.rdoc= rdoc
@@ -62,7 +219,7 @@ class interval:
         self.ms= ms
         self.is_running= True
         if exp is None:
-            code= rdoc._remotedocument__pop_block()
+            code= rdoc.pop_block()
         else:
             exp()
             code= rdoc._remotedocument__code_strings.pop()
@@ -82,7 +239,7 @@ class function:
         self.rdoc= rdoc
         self.varname= rdoc.get_new_uid()
         if exp is None:
-            code= rdoc._remotedocument__pop_block()
+            code= rdoc.pop_block()
         else:
             exp()
             code= rdoc._remotedocument__code_strings.pop()
@@ -114,6 +271,7 @@ class stylesheet:
 
 
 
+
 class rule:
     def __init__(self,stylesheet,selector,text=None,**kwargs):
         self.stylesheet= stylesheet
@@ -130,10 +288,7 @@ class rule:
         js = ssn+'.addRule("'+selector+'","'+props+'");\n'
         js+= self.varname+'='+ssn+'.rules['+ssn+'.rules.length-1];\n'
         self.rdoc.inline(js)
-        self.att= self.rdoc.jsdict(self.__attr_changed)
-    def __attr_changed(self,text):
-        js= self.varname+text
-        self.rdoc.inline(js)
+        self.style= style_att(self.rdoc, self.varname)
 
 
 
@@ -149,16 +304,6 @@ class remotedocument:
         self.body.varname='document.body'
         self.pop_all_code() # body is special, it's created by static content
         self.title=''
-        self.__code_buff_list=[]
-        self.__block_buff_list=[]
-    def push_buff(self):
-        self.__code_buff_list.append(self.__code_strings)
-        self.__block_buff_list.append(self.__block_ixs)
-        self.__code_strings=[]
-        self.__block_ixs=[]
-    def pop_buff(self):
-        self.__code_strings= self.__code_buff_list.pop()
-        self.__block_strings= self.__block_buff_list.pop()
     def element(self,typ,text=None):
         return element(self,typ,text)
     def startinterval(self,ms,exp=None):
@@ -185,7 +330,9 @@ class remotedocument:
         return uid
     def begin_block(self):
         self.__block_ixs.append(len(self.__code_strings))
-    def __pop_block(self):
+    def cancel_block(self):
+        self.__block_ixs.pop()
+    def pop_block(self):
         ix= self.__block_ixs.pop()
         code=''
         for i in range(len(self.__code_strings)-ix):
@@ -211,77 +358,6 @@ class remotedocument:
         self._title = text
         js= self.varname+'.title="'+text+'";\n'
         self.inline(js)
-    def jsdict(self,att_changed_callback,stringify=None):
-        rdoc=self
-        class writer:
-            def __init__(self,att_changed_callback):
-                self.buff=''
-                self.att_changed_callback=att_changed_callback
-            def write(self,text):
-                self.buff+=text
-            def done_writing(self):
-                if self.buff[-1]!='\n':
-                    self.buff+=';\n'
-                self.att_changed_callback(self.buff)
-                self.buff=''
-            def start_writing(self):
-                self.buff=''
-            def stringify(self,value):
-                if type(value) is function:
-                    js=value.varname+';\n'
-                elif callable(value):
-                    # value() can change the buffer, so lets take care of that:
-                    nonlocal rdoc
-                    tmpbuff= self.buff
-                    value()
-                    self.buff= tmpbuff
-                    code= rdoc._remotedocument__code_strings.pop()
-                    js='function(){\n'+code+'}\n'
-                else:
-                    js= str(value)
-                return js
-        class jsdict(dict):
-            def __init__(self,ctx,isroot=None):
-                super().__setattr__('ctx',ctx)
-                super().__setattr__('isroot',isroot)
-            def __getattr__(self,name):
-                if name in self:
-                    return self[name]
-                if super().__getattribute__('isroot'):
-                    super().__getattribute__('ctx').start_writing()
-                super().__getattribute__('ctx').write('["'+name+'"]')
-                n=jsdict(super().__getattribute__('ctx'),False)
-                super().__setitem__(name, n)
-                return n
-            def __getitem__(self,name):
-                if super().__getattribute__('isroot'):
-                    super().__getattribute__('ctx').start_writing()
-                super().__getattribute__('ctx').write('["'+name+'"]')
-                if name not in self:
-                    super().__setitem__(name,jsdict(super().__getattribute__('ctx'),False))
-                return super().__getitem__(name)
-            def __setattr__(self,name,value):
-                self[name]=value
-            def __setitem__(self,name,value):
-                if super().__getattribute__('isroot'):
-                    super().__getattribute__('ctx').start_writing()
-                if type(value) is str:
-                    q= '"'+value+'"'
-                else:
-                    nonlocal stringify
-                    if not stringify:
-                        q=super().__getattribute__('ctx').stringify(value)        
-                    else:
-                        q=stringity(value)
-                super().__getattribute__('ctx').write('["'+name+'"]='+q)
-                super().__setitem__(name,value)
-                super().__getattribute__('ctx').done_writing()
-            def __call__(self,**kwargs):
-                for k,v in kwargs.items():
-                    buff= super().__getattribute__('ctx').buff
-                    self[k]=v
-                    super().__getattribute__('ctx').write(buff)
-        return jsdict(writer(att_changed_callback), True)
     def stylesheet(self):
         return stylesheet(self)
 
