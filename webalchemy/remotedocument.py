@@ -162,6 +162,21 @@ class simple_prop:
 
 
 
+# List of namespaces
+unique_ns= {
+    'ww3/svg':'http://www.w3.org/2000/svg',
+}
+
+# Namespace in which to create items of type 'typ'
+ns_typ_dict= {
+    'svg':unique_ns['ww3/svg'],
+    'line':unique_ns['ww3/svg'],
+}
+
+# additional attributes that elements of type 'typ' should have
+add_attr_typ_dict= {
+    'svg': {'xmlns':'http://www.w3.org/2000/svg'},
+}
 
 class element:
     def __init__(self,rdoc,typ,text=None):
@@ -170,7 +185,11 @@ class element:
         self.typ= typ
         self.parent=None
         self.childs=[]
-        js=self.varname+'=document.createElement("'+typ+'");\n'
+        global ns_typ_dict
+        if typ in ns_typ_dict:
+            js=self.varname+'=document.createElementNS("'+ns_typ_dict[typ]+'","'+typ+'");\n'
+        else:
+            js=self.varname+'=document.createElement("'+typ+'");\n'
         js+=self.varname+'.app={};\n'
         if text is not None:
             self._text=text
@@ -185,6 +204,10 @@ class element:
 
         self.att.id= self.varname
         self.cls.append(self.varname)
+
+        if typ in add_attr_typ_dict:
+            self.att(**add_attr_typ_dict[typ])
+
     def remove(self):
         s=self.varname+'.parentNode.removeChild('+self.varname+');\n'
         self.rdoc.inline(s)

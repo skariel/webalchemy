@@ -5,7 +5,6 @@ import logging
 
 from tornado import gen
 from webalchemy import server
-from webalchemy.widgets.basic.menu import menu
 
 log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -17,15 +16,23 @@ class board:
         self.rdoc= rdoc
         self.px= 300
 
-
         self.svg= rdoc.element('svg')
         self.svg.att.viewBox='0 0 '+str(self.px)+' '+str(self.px)
 
         self.stylesheet= self.rdoc.stylesheet()
         vn= '#'+self.svg.varname
-        self.rule_svg= self.stylesheet.rule(vn,position='absolute')
+        self.rule_svg= self.stylesheet.rule(vn)#,position='absolute')
         self.rule_lines= self.stylesheet.rule(vn+' > line',)
-        self.rule_hover= self.stylesheet.rule(vn+' > li:hover')
+        self.rule_hover= self.stylesheet.rule(vn+' > line:hover')
+
+        self.rule_lines.style(
+            stroke='purple',
+            strokeWidth=3
+            )
+        self.rule_hover.style(
+            stroke='yellow',
+            strokeWidth=3
+            )
 
         dx= int(self.px/n)
         for xi in range(1,n):
@@ -43,6 +50,7 @@ class board:
             self.svg.append(l)
 
 
+
 class tictactoe:    
 
     @gen.coroutine
@@ -51,9 +59,13 @@ class tictactoe:
         self.rdoc= remotedocument
         self.wsh= wshandler
         log.info('New session openned, id='+self.wsh.id)
-        # insert a menu into the page
+
+        self.div= self.rdoc.element('div')
+        self.div.style.width='300px'
+        self.div.style.height='300px'
         self.board= board(self.rdoc, 7)
-        self.rdoc.body.append(self.board.svg)
+        self.div.append(self.board.svg)
+        self.rdoc.body.append(self.div)
 
 
 
