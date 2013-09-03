@@ -26,6 +26,10 @@ class board:
         self.rule_lines= self.stylesheet.rule(vn+' > line',)
         self.rule_rect= self.stylesheet.rule(vn+' > rect')
         self.rule_rect_hover= self.stylesheet.rule(vn+' > rect:hover')
+        self.rule_circle= self.stylesheet.rule(vn+' > circle')
+        self.rule_circle_hover= self.stylesheet.rule(vn+' > circle:hover')
+        self.rule_x= self.stylesheet.rule(vn+' > .x')
+        self.rule_x_hover= self.stylesheet.rule(vn+' > .x:hover')
 
         self.rule_lines.style(
             stroke='black',
@@ -39,30 +43,47 @@ class board:
         self.rule_rect_hover.style(
             fill='rgb(0,255,0)',
             )
+        self.rule_circle.style(
+            stroke='black',
+            strokeWidth=5
+            )
 
         dx= self.px/n
+
+        self.rdoc.begin_block()
+        c= self.rdoc.element('circle')
+        c.att.cx=self.rdoc.rawjs('parseInt('+str(dx)+'*event.target.app.xi+'+str(dx/2)+')')
+        c.att.cy=self.rdoc.rawjs('parseInt('+str(dx)+'*event.target.app.yi+'+str(dx/2)+')')
+        c.att.r=self.rdoc.rawjs('parseInt('+str(dx/2)+'-5)')
+        self.svg.append(c)
+        self.draw_circle= self.rdoc.jsfunction('event')
+
+
         rng= range(n)
         # draw rectangles
         for xi,yi in product(rng,rng):
             r= self.rdoc.element('rect')
-            r.att.x= str(int(dx*xi))
-            r.att.y= str(int(dx*yi))
+            r.att.x= int(dx*xi)
+            r.att.y= int(dx*yi)
             r.att.width= dx
             r.att.height= dx
+            r.app.xi=xi
+            r.app.yi=yi
+            r.events.add(click=self.draw_circle)
             self.svg.append(r)
         # draw vertical lines
         for xi in rng[1:]:
             l= self.rdoc.element('line')
-            l.att.x1= l.att.x2= str(int(dx*xi))
+            l.att.x1= l.att.x2= int(dx*xi)
             l.att.y1= str(0)
             l.att.y2= str(self.px)
             self.svg.append(l)
         # draw horizontal lines
         for yi in rng[1:]:
             l= self.rdoc.element('line')
-            l.att.y1= l.att.y2= str(int(dx*yi))
-            l.att.x1= str(0)
-            l.att.x2= str(self.px)
+            l.att.y1= l.att.y2= int(dx*yi)
+            l.att.x1= 0
+            l.att.x2= self.px
             self.svg.append(l)
 
 

@@ -14,13 +14,14 @@ log= logging.getLogger(__name__)
 
 
 
+
 class style_att:
     def __init__(self, rdoc, varname):
         super().__setattr__('rdoc', rdoc)
         super().__setattr__('varname', varname)
         super().__setattr__('d', {})
     def __setitem__(self,item,val):
-        js= self.varname+'.style["'+item+'"]="'+str(val)+'";\n'
+        js= self.varname+'.style["'+item+'"]='+self.rdoc.stringify(val)+';\n'
         self.rdoc.inline(js)
         self.d[item]=val
     def __setattr__(self,attr,val):
@@ -75,7 +76,7 @@ class simple_att:
         super().__setattr__('varname', varname)
         super().__setattr__('d', {})
     def __setitem__(self,item,val):
-        js= self.varname+'.setAttribute("'+item+'","'+str(val)+'");\n'
+        js= self.varname+'.setAttribute("'+item+'",'+self.rdoc.stringify(val)+');\n'
         self.rdoc.inline(js)
         self.d[item]=val
     def __setattr__(self,attr,val):
@@ -162,6 +163,14 @@ class simple_prop:
 
 
 
+class rawjs:
+    def __init__(self,js):
+        self.js=js
+    def __str__(self):
+        return self.js
+
+
+
 # List of namespaces
 unique_ns= {
     'ww3/svg':'http://www.w3.org/2000/svg',
@@ -241,19 +250,30 @@ class element:
 
 
 
+def inline(code,level=1):
+    # inline interpolation...
+    prev_frame= inspect.getouterframes(inspect.currentframe())[level][0]
+    locals= prev_frame.f_locals
+    globals= prev_frame.f_globals
+    for item in re.findall(r'#\{([^}]*)\}', code):
+        code = code.replace('#{%s}' % item,
+                    eval(item+'.varname', globals, locals))
+    return code
 
+
+
+# TODO: this is not intended to use outside RDOC, because of level it will fail otherwise
+# so-...
 class interval:
     def __init__(self,rdoc,ms,exp=None):
         self.rdoc= rdoc
         self.varname= rdoc.get_new_uid()
         self.ms= ms
         self.is_running= True
-        if exp is None:
-            code= rdoc.pop_block()
-        else:
-            exp()
-            code= rdoc._remotedocument__code_strings.pop()
-        js= self.varname+'=setInterval(function(){'+code+'},'+str(ms)+');\n'
+        code= self.rdoc.stringify(exp)
+        code= inline(code,level=3)
+        code= 'function(){'+code+'}'
+        js= self.varname+'=setInterval('+code+','+str(ms)+');\n'
         rdoc.inline(js)
     def stop(self):
         self.is_running=False
@@ -263,16 +283,15 @@ class interval:
 
 
 
-
-class function:
-    def __init__(self,rdoc,exp=None,*varargs):
+# TODO: this is not intended to use outside RDOC, because of level it will fail otherwise
+# so-...
+class jsfunction:
+    def __init__(self,rdoc,*varargs,body=None):
         self.rdoc= rdoc
         self.varname= rdoc.get_new_uid()
-        if exp is None:
-            code= rdoc.pop_block()
-        else:
-            exp()
-            code= rdoc._remotedocument__code_strings.pop()
+        code= self.rdoc.stringify(body,encapsulate_strings=False)
+        code= inline(code,level=3)
+        code= code.rstrip(';\n')
         args=','.join(varargs)
         self.js=self.varname+'=function('+args+'){\n'+code+'\n}\n'
         rdoc.inline(self.js)
@@ -338,22 +357,8 @@ class remotedocument:
         return element(self,typ,text)
     def startinterval(self,ms,exp=None):
         return interval(self,ms,exp)
-    def function(self,exp=None,*varargs):
-        return function(self,exp,*varargs)
-    def jsfunction(self,*varargs):
-        self.begin_block()
-        code=varargs[-1]
-
-        # inline interpolation...
-        prev_frame= inspect.getouterframes(inspect.currentframe())[1][0]
-        locals= prev_frame.f_locals
-        globals= prev_frame.f_globals
-        for item in re.findall(r'#\{([^}]*)\}', code):
-            code = code.replace('#{%s}' % item,
-                        eval(item+'.varname', globals, locals))
-
-        self.inline(code)
-        return self.function(None,*varargs[:-1])
+    def jsfunction(self,*varargs,body=None):
+        return jsfunction(self,*varargs,body=body)
     def get_new_uid(self):
         uid= '__v'+str(self.__uid_count)
         self.__uid_count+=1        
@@ -378,6 +383,8 @@ class remotedocument:
         insert a code block (contained in 'text' parameter)
         '''
         self.__code_strings.append(text)
+    def rawjs(self,js):
+        return rawjs(js)
     def msg(self,text):
         self.inline('message("'+text+'");')
     @property
@@ -390,6 +397,26 @@ class remotedocument:
         self.inline(js)
     def stylesheet(self):
         return stylesheet(self)
+    def stringify(self,val=None,custom_stringify=None,encapsulate_strings=True):
+        if hasattr(val,'varname'):
+            return val.varname
+        if type(val) is str:
+            if encapsulate_strings:
+                return '"'+str(val)+'"'
+            return val
+        if callable(val):
+            self.begin_block()
+            tmp= val()
+            if tmp:
+                self.cancel_block()
+            else:
+                return self.pop_block()
+            return 'function(){'+tmp+'}'                
+        if val is None:
+            return self.pop_block()
+        if custom_stringify:
+            return custom_stringify(val)
+        return str(val)
 
 
 

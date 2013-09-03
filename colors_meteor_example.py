@@ -57,7 +57,7 @@ class colors_app:
             item.app.color= color
             item.app.clickedcount= colors_app.colors_count[color]
             # note below inline interpolation and rpc call
-            item.events.add(click= self.rdoc.jsfunction('event','''
+            item.events.add(click= self.rdoc.jsfunction('event',body='''
                 att= event.target.app;
                 rpc('button_clicked', event.target.id, att.color);
                 #{m.increase_count_by}(event.target,1);
@@ -87,7 +87,7 @@ class colors_app:
             webkitTransform='rotate(5deg)'
         )
         # function to increase the count in front-end
-        m.increase_count_by= self.rdoc.jsfunction('element','amount','''
+        m.increase_count_by= self.rdoc.jsfunction('element','amount',body='''
             att= element.app;
             att.clickedcount+= amount;
             if (att.clickedcount>0.5) {
