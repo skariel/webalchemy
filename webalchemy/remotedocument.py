@@ -262,16 +262,15 @@ def inline(code,level=1):
 
 
 
-# TODO: this is not intended to use outside RDOC, because of level it will fail otherwise
-# so-...
+
 class interval:
-    def __init__(self,rdoc,ms,exp=None):
+    def __init__(self,rdoc,ms,exp=None,level=2):
         self.rdoc= rdoc
         self.varname= rdoc.get_new_uid()
         self.ms= ms
         self.is_running= True
         code= self.rdoc.stringify(exp)
-        code= inline(code,level=3)
+        code= inline(code,level=level)
         code= 'function(){'+code+'}'
         js= self.varname+'=setInterval('+code+','+str(ms)+');\n'
         rdoc.inline(js)
@@ -283,14 +282,13 @@ class interval:
 
 
 
-# TODO: this is not intended to use outside RDOC, because of level it will fail otherwise
-# so-...
+
 class jsfunction:
-    def __init__(self,rdoc,*varargs,body=None):
+    def __init__(self,rdoc,*varargs,body=None,level=2):
         self.rdoc= rdoc
         self.varname= rdoc.get_new_uid()
         code= self.rdoc.stringify(body,encapsulate_strings=False)
-        code= inline(code,level=3)
+        code= inline(code,level=level)
         code= code.rstrip(';\n')
         args=','.join(varargs)
         self.js=self.varname+'=function('+args+'){\n'+code+'\n}\n'
@@ -356,9 +354,9 @@ class remotedocument:
     def element(self,typ,text=None):
         return element(self,typ,text)
     def startinterval(self,ms,exp=None):
-        return interval(self,ms,exp)
+        return interval(self,ms,exp,level=3)
     def jsfunction(self,*varargs,body=None):
-        return jsfunction(self,*varargs,body=body)
+        return jsfunction(self,*varargs,body=body,level=3)
     def get_new_uid(self):
         uid= '__v'+str(self.__uid_count)
         self.__uid_count+=1        
