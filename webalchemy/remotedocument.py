@@ -169,8 +169,14 @@ unique_ns= {
 
 # Namespace in which to create items of type 'typ'
 ns_typ_dict= {
-    'svg':unique_ns['ww3/svg'],
-    'line':unique_ns['ww3/svg'],
+    'svg':'ww3/svg',
+    'line':'ww3/svg',
+    'rect':'ww3/svg',
+    'circle':'ww3/svg',
+    'ellipse':'ww3/svg',
+    'polyline':'ww3/svg',
+    'polygon':'ww3/svg',
+    'path':'ww3/svg',
 }
 
 # additional attributes that elements of type 'typ' should have
@@ -187,7 +193,8 @@ class element:
         self.childs=[]
         global ns_typ_dict
         if typ in ns_typ_dict:
-            js=self.varname+'=document.createElementNS("'+ns_typ_dict[typ]+'","'+typ+'");\n'
+            ns=unique_ns[ns_typ_dict[typ]]
+            js=self.varname+'=document.createElementNS("'+ns+'","'+typ+'");\n'
         else:
             js=self.varname+'=document.createElement("'+typ+'");\n'
         js+=self.varname+'.app={};\n'
