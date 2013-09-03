@@ -120,6 +120,7 @@ class event_listener:
                     l= 'function(){'+l.rstrip('\n').rstrip(';')+'}'
                 else:
                     self.rdoc.cancel_block()
+
             js= self.varname+'.addEventListener("'+event+'",'+l+',false);\n'
             self.rdoc.inline(js)
     def remove(self,event,listener):
@@ -133,13 +134,13 @@ class event_listener:
 class simple_prop:
     def __init__(self, rdoc, varname, namespace):
         super().__setattr__('rdoc', rdoc)
-        super().__setattr__('varname', varname+'.'+namespace)
+        if namespace:
+            super().__setattr__('varname', varname+'.'+namespace)
+        else:
+            super().__setattr__('varname', varname)
         super().__setattr__('d', {})
     def __setitem__(self,item,val):
-        if type(val) is str:
-            v='"'+val+'"'
-        else:
-            v= str(val)
+        v= self.rdoc.stringify(val)
         js= self.varname+'["'+item+'"]='+v+';\n'
         self.rdoc.inline(js)
         self.d[item]=val
@@ -163,13 +164,6 @@ class simple_prop:
 
 
 
-class rawjs:
-    def __init__(self,js):
-        self.js=js
-    def __str__(self):
-        return self.js
-
-
 
 # List of namespaces
 unique_ns= {
@@ -186,6 +180,7 @@ ns_typ_dict= {
     'polyline':'ww3/svg',
     'polygon':'ww3/svg',
     'path':'ww3/svg',
+    'g':'ww3/svg',
 }
 
 # additional attributes that elements of type 'typ' should have
@@ -269,9 +264,10 @@ class interval:
         self.varname= rdoc.get_new_uid()
         self.ms= ms
         self.is_running= True
-        code= self.rdoc.stringify(exp)
+        code= self.rdoc.stringify(exp,pop_line=False)
         code= inline(code,level=level)
-        code= 'function(){'+code+'}'
+        if not callable(exp):
+            code= 'function(){'+code+'}'
         js= self.varname+'=setInterval('+code+','+str(ms)+');\n'
         rdoc.inline(js)
     def stop(self):
@@ -287,7 +283,7 @@ class jsfunction:
     def __init__(self,rdoc,*varargs,body=None,level=2):
         self.rdoc= rdoc
         self.varname= rdoc.get_new_uid()
-        code= self.rdoc.stringify(body,encapsulate_strings=False)
+        code= self.rdoc.stringify(body,encapsulate_strings=False,pop_line=False)
         code= inline(code,level=level)
         code= code.rstrip(';\n')
         args=','.join(varargs)
@@ -350,7 +346,9 @@ class remotedocument:
         self.body= self.element('body','')
         self.body.varname='document.body'
         self.pop_all_code() # body is special, it's created by static content
-        self.title=''
+        self.inline('document.app={};\n')
+        self.app= simple_prop(self, 'document', 'app')        
+        self.props= simple_prop(self, 'document', None)
     def element(self,typ,text=None):
         return element(self,typ,text)
     def startinterval(self,ms,exp=None):
@@ -376,26 +374,27 @@ class remotedocument:
         self.__code_strings.clear()
         self.__block_ixs.clear()
         return code
+    def pop_line(self):
+        return self.__code_strings.pop()
     def inline(self,text):
         '''
         insert a code block (contained in 'text' parameter)
         '''
+        if text.endswith(';'):
+            text= text+'\n'
         self.__code_strings.append(text)
     def rawjs(self,js):
         return rawjs(js)
     def msg(self,text):
         self.inline('message("'+text+'");')
-    @property
-    def title(self):
-        return self._title
-    @title.setter
-    def title(self, text):
-        self._title = text
-        js= self.varname+'.title="'+text+'";\n'
-        self.inline(js)
     def stylesheet(self):
         return stylesheet(self)
-    def stringify(self,val=None,custom_stringify=None,encapsulate_strings=True):
+    def stringify(self,val=None,custom_stringify=None,encapsulate_strings=True,pop_line=True):
+        if type(val) is bool:
+            if val:
+                return 'true'
+            else:
+                return 'false'
         if hasattr(val,'varname'):
             return val.varname
         if type(val) is str:
@@ -408,9 +407,11 @@ class remotedocument:
             if tmp:
                 self.cancel_block()
             else:
-                return self.pop_block()
+                tmp= self.pop_block()
             return 'function(){'+tmp+'}'                
         if val is None:
+            if pop_line:
+                return self.pop_line()
             return self.pop_block()
         if custom_stringify:
             return custom_stringify(val)

@@ -16,6 +16,8 @@ class board:
 
         self.rdoc= rdoc
         self.px= 600
+        rdoc.props.title='TicTacToe!'
+        rdoc.app.circle_turn=True
 
         self.svg= rdoc.element('svg')
         self.svg.att.viewBox='0 0 '+str(self.px)+' '+str(self.px)
@@ -28,36 +30,76 @@ class board:
         self.rule_rect_hover= self.stylesheet.rule(vn+' > rect:hover')
         self.rule_circle= self.stylesheet.rule(vn+' > circle')
         self.rule_circle_hover= self.stylesheet.rule(vn+' > circle:hover')
-        self.rule_x= self.stylesheet.rule(vn+' > .x')
-        self.rule_x_hover= self.stylesheet.rule(vn+' > .x:hover')
+        self.rule_x= self.stylesheet.rule(vn+' > g > line')
+        self.rule_x_hover= self.stylesheet.rule(vn+' > g:hover > line')
 
         self.rule_lines.style(
             stroke='black',
-            strokeWidth=1
+            strokeWidth=3
             )
         self.rule_rect.style(
-            fill='rgb(255,0,0)',
+            fill='white',
             strokeWidth=0,
             webkitTransition='all 0.3s linear',
             )
         self.rule_rect_hover.style(
-            fill='rgb(0,255,0)',
+            fill='rgb(200,200,200)',
             )
         self.rule_circle.style(
-            stroke='black',
-            strokeWidth=5
+            stroke='red',
+            fill='white',
+            strokeWidth=5,
+            webkitTransition='all 0.3s linear',
+            )
+        self.rule_circle_hover.style(
+            strokeWidth=15
+            )
+        self.rule_x.style(
+            stroke='green',
+            strokeWidth=5,
+            webkitTransition='all 0.3s linear',
+            )
+        self.rule_x_hover.style(
+            stroke='green',
+            strokeWidth=15
             )
 
         dx= self.px/n
 
+
+        il= self.rdoc.inline
         self.rdoc.begin_block()
+        il('if ((event.target.app.marked)||(!document.app.circle_turn)) return;')
+        il('event.target.app.marked=true;')
+        il('document.app.circle_turn=false;')
         c= self.rdoc.element('circle')
-        c.att.cx=self.rdoc.rawjs('parseInt('+str(dx)+'*event.target.app.xi+'+str(dx/2)+')')
-        c.att.cy=self.rdoc.rawjs('parseInt('+str(dx)+'*event.target.app.yi+'+str(dx/2)+')')
-        c.att.r=self.rdoc.rawjs('parseInt('+str(dx/2)+'-5)')
+        c.att.cx=il(str(dx)+'*event.target.app.xi+'+str(dx/2))
+        c.att.cy=il(str(dx)+'*event.target.app.yi+'+str(dx/2))
+        c.att.r=il(str(dx/2)+'-5')
         self.svg.append(c)
         self.draw_circle= self.rdoc.jsfunction('event')
 
+        self.rdoc.begin_block()
+        il('if ((event.target.app.marked)||(document.app.circle_turn)) return;')
+        il('event.target.app.marked=true;')
+        il('document.app.circle_turn=true;')
+        g= self.rdoc.element('g')
+        l1= self.rdoc.element('line')
+        l1.cls.append('x')
+        l1.att.x1=il(str(dx)+'*event.target.app.xi+5')
+        l1.att.y1=il(str(dx)+'*event.target.app.yi+5')
+        l1.att.x2=il(str(dx)+'*(event.target.app.xi+1.0)-5')
+        l1.att.y2=il(str(dx)+'*(event.target.app.yi+1.0)-5')
+        g.append(l1)
+        l2= self.rdoc.element('line')
+        l2.cls.append('x')
+        l2.att.x1=il(str(dx)+'*(event.target.app.xi+1.0)-5')
+        l2.att.y1=il(str(dx)+'*event.target.app.yi+5')
+        l2.att.x2=il(str(dx)+'*event.target.app.xi+5')
+        l2.att.y2=il(str(dx)+'*(event.target.app.yi+1.0)-5')
+        g.append(l2)
+        self.svg.append(g)
+        self.draw_x= self.rdoc.jsfunction('event')
 
         rng= range(n)
         # draw rectangles
@@ -69,7 +111,9 @@ class board:
             r.att.height= dx
             r.app.xi=xi
             r.app.yi=yi
+            r.app.marked=False
             r.events.add(click=self.draw_circle)
+            r.events.add(click=self.draw_x)
             self.svg.append(r)
         # draw vertical lines
         for xi in rng[1:]:
@@ -98,9 +142,9 @@ class tictactoe:
         log.info('New session openned, id='+self.wsh.id)
 
         self.div= self.rdoc.element('div')
-        self.div.style.width='200px'
-        self.div.style.height='200px'
-        self.board= board(self.rdoc, 7)
+        self.div.style.width='600px'
+        self.div.style.height='600px'
+        self.board= board(self.rdoc, 17)
         self.div.append(self.board.svg)
         self.rdoc.body.append(self.div)
 
