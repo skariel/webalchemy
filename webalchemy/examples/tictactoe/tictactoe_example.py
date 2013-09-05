@@ -9,7 +9,6 @@ from webalchemy.examples.tictactoe.board import board
 log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-
 class tictactoe_app:    
 
     @gen.coroutine
