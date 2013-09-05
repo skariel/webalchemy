@@ -9,9 +9,8 @@ from webalchemy.widgets.basic.menu import menu
 
 log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
-server.log.setLevel(logging.INFO)
 
-class colors_app:    
+class colors_meteor_app:    
 
     # shared state between sessions in process
     colors_count={
@@ -41,7 +40,7 @@ class colors_app:
     def button_clicked(self, sender_id, item_id, color):
         if sender_id==self.wsh.id:
             # button clicked on this session
-            colors_app.colors_count[color]+= 1
+            colors_meteor_app.colors_count[color]+= 1
             self.wsh.rpc(self.button_clicked, item_id, color)
         else:
             # button clicked by other session
@@ -55,17 +54,22 @@ class colors_app:
             nonlocal m
             color= item.text
             item.app.color= color
-            item.app.clickedcount= colors_app.colors_count[color]
-            # note below inline interpolation and rpc call
-            item.events.add(click= self.rdoc.jsfunction('event',body='''
-                att= event.target.app;
-                rpc('button_clicked', event.target.id, att.color);
-                #{m.increase_count_by}(event.target,1);
-            '''))
-            # update the count in the item text
+            item.app.clickedcount= colors_meteor_app.colors_count[color]
             m.increase_count_by(item,0)
         # create a menu element with the above item initializer
         m= menu(self.rdoc, on_add)
+        # function to increase the count in front-end
+        m.increase_count_by= self.rdoc.jsfunction('element','amount',body='''
+            att= element.app;
+            att.clickedcount+= amount;
+            if (att.clickedcount>0.5) {
+                element.textContent= '('+att.clickedcount+') '+att.color;
+            }''')
+        m.element.events.add(click= self.rdoc.jsfunction('event',body='''
+            att= event.target.app;
+            rpc('button_clicked', event.target.id, att.color);
+            #{m.increase_count_by}(event.target,1);
+        '''))
         # style the menu
         m.rule_menu.style(display='table',margin='10px')
         m.rule_item.style(
@@ -86,19 +90,8 @@ class colors_app:
             paddingLeft='20px',
             webkitTransform='rotate(5deg)'
         )
-        # function to increase the count in front-end
-        m.increase_count_by= self.rdoc.jsfunction('element','amount',body='''
-            att= element.app;
-            att.clickedcount+= amount;
-            if (att.clickedcount>0.5) {
-                element.textContent= '('+att.clickedcount+') '+att.color;
-            }''')
         # populate the menu with shared colors dict
-        for color in colors_app.colors_count:
+        for color in colors_meteor_app.colors_count:
             m.add_item(color)
         return m
 
-
-
-if __name__=='__main__':
-    server.run('localhost',8083,colors_app)

@@ -6,10 +6,9 @@ import logging
 
 log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
-server.log.setLevel(logging.INFO)
 
 from tornado import gen
-class my_app:    
+class simple_app:    
     # this method is called when a new session starts
     @gen.coroutine
     def initialize(self, remotedocument, wshandler, message):
@@ -75,5 +74,3 @@ class my_app:
         total_clients= str(len(self.wsh.sharedhandlers))
         self.wsh.msg_to_sessions(total_clients)
 
-if __name__=='__main__':
-    server.run('localhost',8083,my_app) # the first parameter is the port...

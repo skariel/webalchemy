@@ -1,15 +1,8 @@
-#
-# a massive multiplayer tictactoe server
-#
 import logging
 from itertools import product
 
-from tornado import gen
-from webalchemy import server
-
 log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
-server.log.setLevel(logging.INFO)
 
 class board:
     def __init__(self, rdoc, n):
@@ -101,6 +94,9 @@ class board:
         self.svg.append(g)
         self.draw_x= self.rdoc.jsfunction('event')
 
+        self.svg.events.add(click=self.draw_circle)
+        self.svg.events.add(click=self.draw_x)
+
         rng= range(n)
         # draw rectangles
         for xi,yi in product(rng,rng):
@@ -112,8 +108,6 @@ class board:
             r.app.xi=xi
             r.app.yi=yi
             r.app.marked=False
-            r.events.add(click=self.draw_circle)
-            r.events.add(click=self.draw_x)
             self.svg.append(r)
         # draw vertical lines
         for xi in rng[1:]:
@@ -130,25 +124,3 @@ class board:
             l.att.x2= self.px
             self.svg.append(l)
 
-
-
-class tictactoe:    
-
-    @gen.coroutine
-    def initialize(self, remotedocument, wshandler, message):
-        # remember these for later use
-        self.rdoc= remotedocument
-        self.wsh= wshandler
-        log.info('New session openned, id='+self.wsh.id)
-
-        self.div= self.rdoc.element('div')
-        self.div.style.width='600px'
-        self.div.style.height='600px'
-        self.board= board(self.rdoc, 17)
-        self.div.append(self.board.svg)
-        self.rdoc.body.append(self.div)
-
-
-
-if __name__=='__main__':
-    server.run('localhost',8083,tictactoe)
