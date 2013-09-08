@@ -5,20 +5,21 @@ log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 class board:
-    def __init__(self, rdoc, n):
+    def __init__(self, rdoc, n, px):
         self.rdoc= rdoc
         self.n= n
         rdoc.props.title='TicTacToe!'
         self.svg= rdoc.element('svg')
-        self.px= 600.0
+        self.px= px
         self.dx= self.px/self.n
-        self.svg.att.viewBox='0 0 '+str(self.px)+' '+str(self.px)
         self.svg.app.actual_cursorx=0
         self.svg.app.actual_cursory=0
         self.svg.app.cursorx_index=0
         self.svg.app.cursory_index=0
         self.svg.app.n= self.n
         self.svg.app.checked={}
+        self.svg.att.width=px
+        self.svg.att.height=px
 
         self.__create_styles()
         self.__style()
@@ -83,7 +84,7 @@ class board:
         c= self.rdoc.element('circle')
         c.att.cx=il('#{self.svg}.app.cursorx_index*#{self.dx}+'+str(dx/2))
         c.att.cy=il('#{self.svg}.app.cursory_index*#{self.dx}+'+str(dx/2))
-        c.att.r=il(str(dx/2)+'-5')
+        c.att.r=il(str(dx/2)+'-9')
         self.svg.append(c)
         self.draw_circle= self.rdoc.jsfunction('event')
         self.svg.events.add(click=self.draw_circle)

@@ -1,3 +1,4 @@
+import imp
 import sys
 import time
 import logging
@@ -49,6 +50,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     @gen.coroutine
     def initialize(self, local_doc_class, shared_wshandlers):
         log.info('Initiallizing new documet!')
+        log.info('Reloading code if necessary...')
         self.remotedocument= remotedocument()
         self.sharedhandlers= shared_wshandlers
         self.local_doc= local_doc_class()
@@ -91,6 +93,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.write_message(code)
         else:
             log.info('FLUSHING DOM: **NOTHING TO FLUSH**')
+    @gen.coroutine
+    def please_reload(self):
+        self.write_message('location.reload();\n')
     @gen.coroutine
     def msg_to_sessions(self,msg,send_to_self=False,to_session_ids=None):
         log.info('Sending message to sessions '+str(len(self.sharedhandlers))+' documents in process:')
@@ -193,9 +198,53 @@ def pyrpc(f):
 
 
 
+def clean_rpc():
+    global js_to_py_rpcdict
+    global py_to_py_rpcdict
+    js_to_py_rpcdict={}
+    py_to_py_rpcdict={}
+
+
+
+
 @gen.coroutine
 def async_delay(secs):
     yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
+
+
+
+
+
+def update_class(app,cls,shared_wshandlers):
+    mdl= sys.modules[cls.__module__]
+    mdl_fn= mdl.__file__
+    last_time_modified= os.stat(mdl_fn).st_mtime
+    def func():
+        nonlocal app
+        nonlocal mdl
+        nonlocal mdl_fn
+        nonlocal shared_wshandlers
+        nonlocal last_time_modified
+        current_time_modified= os.stat(mdl_fn).st_mtime
+        if current_time_modified == last_time_modified:
+            return
+        log.info('Reloading document!')
+        last_time_modified= current_time_modified
+        clean_rpc()
+        if hasattr(cls,'prepare_for_general_reload'):
+            has_data= True
+            data= cls.prepare_for_general_reload()
+        else:
+            has_data= False
+        mdl= imp.reload(mdl)
+        tmp_cls= getattr(mdl, cls.__name__)
+        if hasattr(tmp_cls,'recover_from_general_reload') and has_data:
+            tmp_cls.recover_from_general_reload(data)
+        app.handlers[0][1][1].kwargs['local_doc_class']= tmp_cls
+        log.info('wsh='+str(shared_wshandlers))
+        for wsh in shared_wshandlers.values():
+            wsh.please_reload()
+    return func
 
 
 
@@ -207,6 +256,7 @@ def run(host,port,local_doc_class):
         (r'/websocket', WebSocketHandler, dict(local_doc_class=local_doc_class, shared_wshandlers=shared_wshandlers)),
     ])
     application.listen(port)
-    log.info('in run!')
+    tornado.ioloop.PeriodicCallback(update_class(application, local_doc_class, shared_wshandlers), 1500).start()
+    log.info('starting Tornado event loop')
     tornado.ioloop.IOLoop.instance().start()
  

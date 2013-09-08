@@ -21,6 +21,16 @@ class colors_meteor_app:
         'WEBALCHEMY ROCKS':0,
     }
 
+    @staticmethod
+    def prepare_for_general_reload():
+        return colors_meteor_app.colors_count
+
+    @staticmethod
+    def recover_from_general_reload(colors_count):
+        for color in colors_meteor_app.colors_count.keys():
+            if color in colors_count:
+                colors_meteor_app.colors_count[color]= colors_count[color]
+
     # this method is called when a new session starts
     @gen.coroutine
     def initialize(self, remotedocument, wshandler, message):

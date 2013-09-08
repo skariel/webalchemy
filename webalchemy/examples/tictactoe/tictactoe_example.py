@@ -5,6 +5,7 @@ import logging
 from tornado import gen
 
 from webalchemy.examples.tictactoe.board import board
+from webalchemy.widgets.basic.menu import menu
 
 log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -18,12 +19,8 @@ class tictactoe_app:
         self.wsh= wshandler
         log.info('New session opened, id='+self.wsh.id)
 
-        self.div= self.rdoc.element('div')
-        self.div.style.width='600px'
-        self.div.style.height='600px'
-        self.board= board(self.rdoc, 17)
-        self.div.append(self.board.svg)
-        self.rdoc.body.append(self.div)
+        self.board= board(self.rdoc, 3, 300.0)
+        self.rdoc.body.append(self.board.svg)
 
 
 
