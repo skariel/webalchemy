@@ -1,5 +1,5 @@
 ##webalchemy: realtime, Pythonic web framework
-webalchemy is a minimalist, realtime web-framework for Python inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). We do not aim to replace Javascript, but just to keep it simple by automating it with Python. The project is young, documentation is high priority but still missing
+webalchemy is a minimalist, realtime web-framework for Python. It is currently built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), it is inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). We do not aim to replace Javascript, but just to keep it simple by automating it with Python. The project is young, documentation is high priority but still missing
 
 - **Homepage:** <http://skariel.org/webalchemy/>
 - **Discussion:** <https://groups.google.com/forum/#!forum/webalchemy/>

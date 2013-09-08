@@ -251,8 +251,12 @@ def inline(code,level=1):
     locals= prev_frame.f_locals
     globals= prev_frame.f_globals
     for item in re.findall(r'#\{([^}]*)\}', code):
-        code = code.replace('#{%s}' % item,
-                    eval(item+'.varname', globals, locals))
+        rep= eval(item, globals, locals)
+        if hasattr(rep,'varname'):
+            rep= rep.varname
+        else:
+            rep=str(rep)
+        code = code.replace('#{%s}' % item, rep)
     return code
 
 
@@ -376,12 +380,12 @@ class remotedocument:
         return code
     def pop_line(self):
         return self.__code_strings.pop()
-    def inline(self,text):
+    def inline(self,text,*varargs):
         '''
         insert a code block (contained in 'text' parameter)
         '''
-        if text.endswith(';'):
-            text= text+'\n'
+        if varargs:
+            text= text.format(*(v.varname for v in varargs))
         self.__code_strings.append(text)
     def rawjs(self,js):
         return rawjs(js)
@@ -390,6 +394,10 @@ class remotedocument:
     def stylesheet(self):
         return stylesheet(self)
     def stringify(self,val=None,custom_stringify=None,encapsulate_strings=True,pop_line=True):
+        if type(val) is list:
+            return '[]'
+        if type(val) is dict:
+            return '{}'
         if type(val) is bool:
             if val:
                 return 'true'

@@ -10,9 +10,15 @@ class board:
         self.n= n
         rdoc.props.title='TicTacToe!'
         self.svg= rdoc.element('svg')
-        self.px= 600
-        self.svg.att.viewBox='0 0 '+str(self.px)+' '+str(self.px)
+        self.px= 600.0
         self.dx= self.px/self.n
+        self.svg.att.viewBox='0 0 '+str(self.px)+' '+str(self.px)
+        self.svg.app.actual_cursorx=0
+        self.svg.app.actual_cursory=0
+        self.svg.app.cursorx_index=0
+        self.svg.app.cursory_index=0
+        self.svg.app.n= self.n
+        self.svg.app.checked={}
 
         self.__create_styles()
         self.__style()
@@ -22,70 +28,91 @@ class board:
     def __draw_board(self):
         dx= self.dx
         rng= range(self.n)
-        # draw rectangles
-        for xi,yi in product(rng,rng):
-            r= self.rdoc.element('rect')
-            r.att.x= int(dx*xi)
-            r.att.y= int(dx*yi)
-            r.att.width= dx
-            r.att.height= dx
-            r.app.xi=xi
-            r.app.yi=yi
-            r.app.marked=False
-            self.svg.append(r)
         # draw vertical lines
         for xi in rng[1:]:
             l= self.rdoc.element('line')
-            l.att.x1= l.att.x2= int(dx*xi)
-            l.att.y1= str(0)
-            l.att.y2= str(self.px)
+            l.att.x1= l.att.x2= dx*xi
+            l.att.y1= 0
+            l.att.y2= self.px
             self.svg.append(l)
         # draw horizontal lines
         for yi in rng[1:]:
             l= self.rdoc.element('line')
-            l.att.y1= l.att.y2= int(dx*yi)
+            l.att.y1= l.att.y2= dx*yi
             l.att.x1= 0
             l.att.x2= self.px
             self.svg.append(l)
+        # draw cursor
+        self.cursor= self.rdoc.element('rect')
+        self.cursor.att.x= 0
+        self.cursor.att.y= 0
+        self.cursor.att.width= dx
+        self.cursor.att.height= dx
+        self.svg.append(self.cursor)
 
     def __set_events(self):
+        self.mouse_move_event_handler= self.rdoc.jsfunction('e',body='''
+            var mx= e.pageX-#{self.svg}.offsetLeft;
+            var my= e.pageY-#{self.svg}.offsetTop;
+            #{self.svg}.app.cursorx_index= ~~ (mx / #{self.dx});
+            #{self.svg}.app.cursory_index= ~~ (my / #{self.dx});
+            ''')
+        self.svg.events.add(mousemove=self.mouse_move_event_handler)
+        self.update_cursor_position= self.rdoc.jsfunction(body='''
+            var truncated_cursorx= #{self.svg}.app.cursorx_index*#{self.dx};
+            var truncated_cursory= #{self.svg}.app.cursory_index*#{self.dx};
+            var dx= (truncated_cursorx - #{self.svg}.app.actual_cursorx) / 3.0;
+            if ((dx>0.01)||(dx<-0.01)) {
+                #{self.svg}.app.actual_cursorx+= dx;
+                #{self.cursor}.setAttribute('x',#{self.svg}.app.actual_cursorx)
+            }
+            var dy= (truncated_cursory - #{self.svg}.app.actual_cursory) / 3.0;
+            if ((dy>0.01)||(dy<-0.01)) {
+                #{self.svg}.app.actual_cursory+= dy;
+                #{self.cursor}.setAttribute('y',#{self.svg}.app.actual_cursory)
+            }
+            ''')
+        self.rdoc.startinterval(20, self.update_cursor_position)
+
         dx= self.dx
-        self.rdoc.app.circle_turn=True        
         il= self.rdoc.inline
         self.rdoc.begin_block()
-        il('if ((event.target.app.marked)||(!document.app.circle_turn)) return;')
-        il('event.target.app.marked=true;')
-        il('document.app.circle_turn=false;')
+        il('var inx= #{self.svg}.app.cursory_index*#{self.svg}.app.n+#{self.svg}.app.cursorx_index;')
+        il('if (inx in #{self.svg}.app.checked) return;')
+        il('#{self.svg}.app.checked[inx]="o";')
         c= self.rdoc.element('circle')
-        c.att.cx=il(str(dx)+'*event.target.app.xi+'+str(dx/2))
-        c.att.cy=il(str(dx)+'*event.target.app.yi+'+str(dx/2))
+        c.att.cx=il('#{self.svg}.app.cursorx_index*#{self.dx}+'+str(dx/2))
+        c.att.cy=il('#{self.svg}.app.cursory_index*#{self.dx}+'+str(dx/2))
         c.att.r=il(str(dx/2)+'-5')
         self.svg.append(c)
         self.draw_circle= self.rdoc.jsfunction('event')
+        self.svg.events.add(click=self.draw_circle)
 
         self.rdoc.begin_block()
-        il('if ((event.target.app.marked)||(document.app.circle_turn)) return;')
-        il('event.target.app.marked=true;')
-        il('document.app.circle_turn=true;')
+        il('var inx= #{self.svg}.app.cursory_index*#{self.svg}.app.n+#{self.svg}.app.cursorx_index;')
+        il('if (inx in #{self.svg}.app.checked) return;')
+        il('#{self.svg}.app.checked[inx]="x";')
         g= self.rdoc.element('g')
         l1= self.rdoc.element('line')
         l1.cls.append('x')
-        l1.att.x1=il(str(dx)+'*event.target.app.xi+5')
-        l1.att.y1=il(str(dx)+'*event.target.app.yi+5')
-        l1.att.x2=il(str(dx)+'*(event.target.app.xi+1.0)-5')
-        l1.att.y2=il(str(dx)+'*(event.target.app.yi+1.0)-5')
+        il('var xl= #{self.svg}.app.cursorx_index*#{self.dx}+7;')
+        il('var xr= xl+#{self.dx}-14;')
+        il('var yt= #{self.svg}.app.cursory_index*#{self.dx}+7;')
+        il('var yb= yt+#{self.dx}-14;')
+        l1.att.x1=il('xl')
+        l1.att.y1=il('yt')
+        l1.att.x2=il('xr')
+        l1.att.y2=il('yb')
         g.append(l1)
         l2= self.rdoc.element('line')
         l2.cls.append('x')
-        l2.att.x1=il(str(dx)+'*(event.target.app.xi+1.0)-5')
-        l2.att.y1=il(str(dx)+'*event.target.app.yi+5')
-        l2.att.x2=il(str(dx)+'*event.target.app.xi+5')
-        l2.att.y2=il(str(dx)+'*(event.target.app.yi+1.0)-5')
+        l2.att.x1=il('xr')
+        l2.att.y1=il('yt')
+        l2.att.x2=il('xl')
+        l2.att.y2=il('yb')
         g.append(l2)
         self.svg.append(g)
         self.draw_x= self.rdoc.jsfunction('event')
-
-        self.svg.events.add(click=self.draw_circle)
         self.svg.events.add(click=self.draw_x)
 
 
@@ -93,9 +120,8 @@ class board:
         self.stylesheet= self.rdoc.stylesheet()
         vn= '#'+self.svg.varname
         self.rule_svg= self.stylesheet.rule(vn)
-        self.rule_lines= self.stylesheet.rule(vn+' > line',)
+        self.rule_lines= self.stylesheet.rule(vn+' > line')
         self.rule_rect= self.stylesheet.rule(vn+' > rect')
-        self.rule_rect_hover= self.stylesheet.rule(vn+' > rect:hover')
         self.rule_circle= self.stylesheet.rule(vn+' > circle')
         self.rule_circle_hover= self.stylesheet.rule(vn+' > circle:hover')
         self.rule_x= self.stylesheet.rule(vn+' > g > line')
@@ -107,16 +133,13 @@ class board:
             strokeWidth=3
             )
         self.rule_rect.style(
-            fill='white',
+            fill='grey',
+            fillOpacity=0.8,
             strokeWidth=0,
-            webkitTransition='all 0.3s linear',
-            )
-        self.rule_rect_hover.style(
-            fill='rgb(200,200,200)',
             )
         self.rule_circle.style(
             stroke='red',
-            fill='white',
+            fillOpacity=0.0,
             strokeWidth=5,
             webkitTransition='all 0.3s linear',
             )
@@ -132,3 +155,4 @@ class board:
             stroke='green',
             strokeWidth=15
             )
+

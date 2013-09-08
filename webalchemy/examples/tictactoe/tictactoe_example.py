@@ -16,7 +16,7 @@ class tictactoe_app:
         # remember these for later use
         self.rdoc= remotedocument
         self.wsh= wshandler
-        log.info('New session openned, id='+self.wsh.id)
+        log.info('New session opened, id='+self.wsh.id)
 
         self.div= self.rdoc.element('div')
         self.div.style.width='600px'
