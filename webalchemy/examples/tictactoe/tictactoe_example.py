@@ -19,7 +19,7 @@ class tictactoe_app:
         self.wsh= wshandler
         log.info('New session opened, id='+self.wsh.id)
 
-        self.board= board(self.rdoc, 3, 300.0)
+        self.board= board(self.rdoc, 13, 500.0)
         self.rdoc.body.append(self.board.svg)
 
 

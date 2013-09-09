@@ -16,6 +16,7 @@ from tornado import gen
 from webalchemy.remotedocument import remotedocument
 
 
+
 # logger for internal purposes
 log= logging.getLogger(__name__)
 
@@ -69,8 +70,18 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         log.info('Message received:\n'+message)
         try:
             if not self.local_doc_initialized:
-                log.info('Initializing local document with message...')
-                yield self.local_doc.initialize(self.remotedocument,self,message)
+                log.info('Initializing local document...')
+                self.sessionid= message.split(':')[1]
+                if self.sessionid=='null':
+                    log.info('initializing new session...')
+                    self.sessionid= self.id
+                    self.remotedocument.inline('set_cookie("webalchemy","'+self.sessionid+'",3);\n')
+                self.tabid= message.split(':')[3]
+                if self.tabid=='':
+                    log.info('initializing new tab...')
+                    self.tabid= self.id
+                    self.remotedocument.inline('window.name="'+self.tabid+'";\n')
+                yield self.local_doc.initialize(self.remotedocument,self,self.sessionid,self.tabid)
                 self.local_doc_initialized= True
             else:
                 if message.startswith('rpc: '):
@@ -93,9 +104,11 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.write_message(code)
         else:
             log.info('FLUSHING DOM: **NOTHING TO FLUSH**')
+
     @gen.coroutine
     def please_reload(self):
         self.write_message('location.reload();\n')
+
     @gen.coroutine
     def msg_to_sessions(self,msg,send_to_self=False,to_session_ids=None):
         log.info('Sending message to sessions '+str(len(self.sharedhandlers))+' documents in process:')
@@ -125,6 +138,12 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 yield sys.stdout.flush()
             except:
                 log.exception('Failed handling local document onclose. Exception:')
+
+    @gen.coroutine
+    def prepare_session_for_general_reload(self):
+        if hasattr(self.local_doc,'prepare_session_for_general_reload'):
+            log.info('preparing session for reload...')
+            yield self.local_doc.prepare_session_for_general_reload()
 
     @gen.coroutine
     def handle_js_to_py_rpc_message(self,msg):
@@ -231,18 +250,19 @@ def update_class(app,cls,shared_wshandlers):
         log.info('Reloading document!')
         last_time_modified= current_time_modified
         clean_rpc()
-        if hasattr(cls,'prepare_for_general_reload'):
+        if hasattr(cls,'prepare_app_for_general_reload'):
             has_data= True
-            data= cls.prepare_for_general_reload()
+            data= cls.prepare_app_for_general_reload()
         else:
             has_data= False
         mdl= imp.reload(mdl)
         tmp_cls= getattr(mdl, cls.__name__)
-        if hasattr(tmp_cls,'recover_from_general_reload') and has_data:
-            tmp_cls.recover_from_general_reload(data)
+        if hasattr(tmp_cls,'recover_app_from_general_reload') and has_data:
+            tmp_cls.recover_app_from_general_reload(data)
         app.handlers[0][1][1].kwargs['local_doc_class']= tmp_cls
         log.info('wsh='+str(shared_wshandlers))
         for wsh in shared_wshandlers.values():
+            wsh.prepare_session_for_general_reload()
             wsh.please_reload()
     return func
 
@@ -253,7 +273,7 @@ def run(host,port,local_doc_class):
     shared_wshandlers= {}
     application = tornado.web.Application([
         (r'/', MainHandler, dict(host=host, port=port)),
-        (r'/websocket', WebSocketHandler, dict(local_doc_class=local_doc_class, shared_wshandlers=shared_wshandlers)),
+        (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class, shared_wshandlers=shared_wshandlers)),
     ])
     application.listen(port)
     tornado.ioloop.PeriodicCallback(update_class(application, local_doc_class, shared_wshandlers), 1500).start()

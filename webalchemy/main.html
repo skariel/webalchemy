@@ -2,6 +2,28 @@
 <html>
 <body>
 <script>
+set_cookie= function (c_name,value,exdays) {
+  var exdate=new Date();
+  exdate.setDate(exdate.getDate() + exdays);
+  var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+  document.cookie=c_name + "=" + c_value;
+}
+get_cookie= function (c_name) {
+  var c_value = document.cookie;
+  var c_start = c_value.indexOf(" " + c_name + "=");
+  if (c_start == -1) c_start = c_value.indexOf(c_name + "=");
+  if (c_start == -1) c_value = null;
+  else {
+    c_start = c_value.indexOf("=", c_start) + 1;
+    var c_end = c_value.indexOf(";", c_start);
+    if (c_end == -1) c_end = c_value.length;
+    c_value = unescape(c_value.substring(c_start,c_end));
+  }
+  return c_value;
+}
+
+
+
 var ws = new WebSocket('ws://HOST:PORT/websocket');
 message= function (s) {
     console.log('sending message:')
@@ -9,7 +31,7 @@ message= function (s) {
     ws.send(s)
 }
 ws.onopen = function() {
-   message('hi');
+   message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name);
 };
 ws.onmessage = function (evt) {
    console.log('message received:')
@@ -17,6 +39,9 @@ ws.onmessage = function (evt) {
    eval(evt.data)
    message('done')
 };
+
+
+
 rpcfy= function () {
     var s=''
     s+= arguments.length
