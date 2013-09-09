@@ -5,7 +5,7 @@ webalchemy is a minimalist, realtime web-framework for Python. It is currently b
 - **Discussion:** <https://groups.google.com/forum/#!forum/webalchemy/>
 - **License (MIT):** [LICENSE.txt](LICENSE.txt)
 
-We "translated" Meteor colors app to webalchemy. The app below (an older version) can be seen in action [here](https://vimeo.com/73073766) and the Meteor original [here](http://www.meteor.com/screencast)
+We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast)
 ```python
 import logging
 
