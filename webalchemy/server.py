@@ -41,6 +41,7 @@ class MainHandler(tornado.web.RequestHandler):
             self.main_html= f.read().replace('PORT',str(port)).replace('HOST',host)
     @gen.coroutine
     def get(self):
+        self.add_header('X-UA-Compatible', 'IE=edge')
         self.write(self.main_html)
   
 

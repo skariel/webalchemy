@@ -64,7 +64,7 @@ class colors_meteor_app:
 
         # insert a menu
         self.menu= self.build_menu()
-        self.menu.element.style(marginLeft='50px',marginBottom='30px',width='400px',borderWidth='2')
+        self.menu.element.style(marginLeft='50px',marginBottom='30px',width='400px',borderWidth='2px')
         self.rdoc.body.append(self.menu.element)
 
         # insert a button
@@ -190,11 +190,26 @@ class colors_meteor_app:
             m.add_item(color)
         m.sort()
         return m
-
+        
 
 if __name__=='__main__':
     server.run('localhost',8084,colors_meteor_app)
 ```
+##Getting started
+###Installation
+* Install latest [tornado](http://www.tornadoweb.org/en/stable/#installation)
+* copy the webalchemy directory to your project root directory (yeah, poorman's install, never fails!)
+###Run the example
+from your project root:
+```python
+from webalchemy import server
+import logging
+server.log.setLevel(logging.INFO)
+from webalchemy.examples.colors_meteor_example import colors_meteor_app
+server.run('127.0.0.1',8083,colors_meteor_app) 
+```
+now set your browser to http://127.0.0.1:8083
+
 ##Philosophy and Roadmap
 Run relatively simple Javascript code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.
 

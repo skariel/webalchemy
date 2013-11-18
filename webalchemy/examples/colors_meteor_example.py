@@ -58,7 +58,7 @@ class colors_meteor_app:
 
         # insert a menu
         self.menu= self.build_menu()
-        self.menu.element.style(marginLeft='50px',marginBottom='30px',width='400px',borderWidth='2')
+        self.menu.element.style(marginLeft='50px',marginBottom='30px',width='400px',borderWidth='2px')
         self.rdoc.body.append(self.menu.element)
 
         # insert a button

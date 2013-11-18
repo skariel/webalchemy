@@ -332,8 +332,8 @@ class rule:
             if props[-1]!=';':
                 props+=';'
         ssn= self.stylesheet.varname
-        js = ssn+'.addRule("'+selector+'","'+props+'");\n'
-        js+= self.varname+'='+ssn+'.rules['+ssn+'.rules.length-1];\n'
+        js = ssn+'.insertRule("'+selector+'{'+props+'}",'+ssn+'.cssRules.length);\n'
+        js+= self.varname+'='+ssn+'.cssRules['+ssn+'.cssRules.length-1];\n'
         self.rdoc.inline(js)
         self.style= style_att(self.rdoc, self.varname)
 
