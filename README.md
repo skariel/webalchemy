@@ -202,6 +202,7 @@ if __name__=='__main__':
 
 ###Run the example
 from your project root:
+
 ```python
 from webalchemy import server
 import logging
@@ -209,12 +210,14 @@ server.log.setLevel(logging.INFO)
 from webalchemy.examples.colors_meteor_example import colors_meteor_app
 server.run('127.0.0.1',8083,colors_meteor_app) 
 ```
+
 now set your browser to http://127.0.0.1:8083
+
+###Requirements
+* Python >= 3.3
+* Tornado >= 3.1
+* webalchemy webapps require a modern webbrowser supporting websockets (too much web in this sentence)
 
 ##Philosophy and Roadmap
 Run relatively simple Javascript code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.
 
-##Requirements
-* Python >= 3.3
-* Tornado >= 3.1
-* webalchemy webapps require a modern webbrowser supporting websockets (too much web in this sentence)
