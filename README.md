@@ -221,3 +221,9 @@ now set your browser to http://127.0.0.1:8083
 ##Philosophy and Roadmap
 Run relatively simple Javascript code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.
 
+A few key points I'll try to adhere to:
+* use pure Python, move to Tulip (in Python 3.4)
+* stay minimalistic
+
+
+
