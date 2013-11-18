@@ -190,7 +190,7 @@ class colors_meteor_app:
             m.add_item(color)
         m.sort()
         return m
-        
+
 
 if __name__=='__main__':
     server.run('localhost',8084,colors_meteor_app)
@@ -199,6 +199,7 @@ if __name__=='__main__':
 ###Installation
 * Install latest [tornado](http://www.tornadoweb.org/en/stable/#installation)
 * copy the webalchemy directory to your project root directory (yeah, poorman's install, never fails!)
+
 ###Run the example
 from your project root:
 ```python
