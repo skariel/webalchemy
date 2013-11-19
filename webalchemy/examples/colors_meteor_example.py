@@ -53,8 +53,9 @@ class colors_meteor_app:
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='3.5em',
             )
-
         self.rdoc.body.append(self.title)
+        self.rdoc.props.title='colors app!'
+
 
         # insert a menu
         self.menu= self.build_menu()

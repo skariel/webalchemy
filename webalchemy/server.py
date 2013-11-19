@@ -47,6 +47,8 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 
+
+
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     @gen.coroutine
@@ -270,12 +272,21 @@ def update_class(app,cls,shared_wshandlers):
 
 
 
-def run(host,port,local_doc_class):
+def run(host,port,local_doc_class,static_path_from_local_doc_base='static'):
+    static_path=None
+    if static_path_from_local_doc_base:
+        mdl= sys.modules[local_doc_class.__module__]
+        mdl_fn= mdl.__file__
+        static_path=os.path.realpath(mdl_fn)
+        static_path=os.path.dirname(static_path)
+        static_path=os.path.join(static_path,static_path_from_local_doc_base) 
+        log.info('static_path: '+static_path)
+
     shared_wshandlers= {}
     application = tornado.web.Application([
         (r'/', MainHandler, dict(host=host, port=port)),
         (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class, shared_wshandlers=shared_wshandlers)),
-    ])
+    ], static_path=static_path)
     application.listen(port)
     tornado.ioloop.PeriodicCallback(update_class(application, local_doc_class, shared_wshandlers), 1500).start()
     log.info('starting Tornado event loop')
