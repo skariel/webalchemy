@@ -1,7 +1,7 @@
-import imp
 import sys
 import time
 import logging
+import imp
 
 import os
 import os.path
@@ -54,7 +54,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     @gen.coroutine
     def initialize(self, local_doc_class, shared_wshandlers):
         log.info('Initiallizing new documet!')
-        log.info('Reloading code if necessary...')
         self.remotedocument= remotedocument()
         self.sharedhandlers= shared_wshandlers
         self.local_doc= local_doc_class()
@@ -237,7 +236,7 @@ def async_delay(secs):
 
 
 
-def update_class(app,cls,shared_wshandlers):
+def update_class(app,cls,shared_wshandlers,hn):
     mdl= sys.modules[cls.__module__]
     mdl_fn= mdl.__file__
     last_time_modified= os.stat(mdl_fn).st_mtime
@@ -258,11 +257,12 @@ def update_class(app,cls,shared_wshandlers):
             data= cls.prepare_app_for_general_reload()
         else:
             has_data= False
+        tmp_cls= getattr(mdl, cls.__name__)
         mdl= imp.reload(mdl)
         tmp_cls= getattr(mdl, cls.__name__)
         if hasattr(tmp_cls,'recover_app_from_general_reload') and has_data:
             tmp_cls.recover_app_from_general_reload(data)
-        app.handlers[0][1][1].kwargs['local_doc_class']= tmp_cls
+        app.handlers[0][1][hn].kwargs['local_doc_class']= tmp_cls
         log.info('wsh='+str(shared_wshandlers))
         for wsh in shared_wshandlers.values():
             wsh.prepare_session_for_general_reload()
@@ -274,6 +274,7 @@ def update_class(app,cls,shared_wshandlers):
 
 def run(host,port,local_doc_class,static_path_from_local_doc_base='static'):
     static_path=None
+    hn=1
     if static_path_from_local_doc_base:
         mdl= sys.modules[local_doc_class.__module__]
         mdl_fn= mdl.__file__
@@ -281,14 +282,15 @@ def run(host,port,local_doc_class,static_path_from_local_doc_base='static'):
         static_path=os.path.dirname(static_path)
         static_path=os.path.join(static_path,static_path_from_local_doc_base) 
         log.info('static_path: '+static_path)
+        hn=4
 
     shared_wshandlers= {}
     application = tornado.web.Application([
         (r'/', MainHandler, dict(host=host, port=port)),
         (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class, shared_wshandlers=shared_wshandlers)),
     ], static_path=static_path)
+    tornado.ioloop.PeriodicCallback(update_class(application, local_doc_class, shared_wshandlers,hn), 1500).start()
     application.listen(port)
-    tornado.ioloop.PeriodicCallback(update_class(application, local_doc_class, shared_wshandlers), 1500).start()
     log.info('starting Tornado event loop')
     tornado.ioloop.IOLoop.instance().start()
  

@@ -11,7 +11,6 @@ log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 class colors_meteor_app:    
-
     # shared state between sessions in process
     colors_count={
         'foo'             :0,

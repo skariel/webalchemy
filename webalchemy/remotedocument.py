@@ -205,6 +205,8 @@ class element:
         if text is not None:
             self._text=text
             js+= self.varname+'.textContent="'+text+'";\n'
+        else:
+            self._text=''
         rdoc.inline(js)
 
         self.cls= class_att(rdoc, self.varname)
@@ -212,7 +214,6 @@ class element:
         self.style= style_att(rdoc, self.varname)
         self.events= event_listener(rdoc, self.varname)
         self.app= simple_prop(rdoc, self.varname, 'app')
-
         self.att.id= self.varname
         self.cls.append(self.varname)
 
@@ -353,7 +354,8 @@ class remotedocument:
         self.inline('document.app={};\n')
         self.app= simple_prop(self, 'document', 'app')        
         self.props= simple_prop(self, 'document', None)
-    def element(self,typ,text=None):
+        self.stylesheet= stylesheet(self)
+    def element(self,typ,text=None):        
         return element(self,typ,text)
     def startinterval(self,ms,exp=None):
         return interval(self,ms,exp,level=3)
@@ -394,10 +396,6 @@ class remotedocument:
     def stylesheet(self):
         return stylesheet(self)
     def stringify(self,val=None,custom_stringify=None,encapsulate_strings=True,pop_line=True):
-        if type(val) is list:
-            return '[]'
-        if type(val) is dict:
-            return '{}'
         if type(val) is bool:
             if val:
                 return 'true'
