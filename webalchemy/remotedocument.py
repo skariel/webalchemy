@@ -12,18 +12,38 @@ log= logging.getLogger(__name__)
 
 
 
-
-
+# TODO: complete this list...
+style_atts_requiring_vendor=['transition','transform']
 
 class style_att:
     def __init__(self, rdoc, varname):
         super().__setattr__('rdoc', rdoc)
         super().__setattr__('varname', varname)
         super().__setattr__('d', {})
-    def __setitem__(self,item,val):
-        js= self.varname+'.style["'+item+'"]='+self.rdoc.stringify(val)+';\n'
-        self.rdoc.inline(js)
-        self.d[item]=val
+    def __setitem__(self,item,val): 
+        swv=False
+        isinvlist=False
+        if item.startswith('vendor'):
+            swv=True
+            real_item_cap=item[6:]
+            real_item_uncap= real_item_cap[:1].lower() + real_item_cap[1:]
+        elif item in style_atts_requiring_vendor:
+            isinvlist=True
+            real_item_cap=item.capitalize()
+            real_item_uncap= item
+        if swv or isinvlist:
+            vendors= [v+real_item_cap for v in ['o','moz','webkit']]
+            vendors.append(real_item_uncap)
+            for item in vendors:
+                js= self.varname+'.style["'+item+'"]='+self.rdoc.stringify(val)+';\n'
+                self.rdoc.inline(js)
+                self.d[item]=val
+        else:
+            if item=='float':
+                item='cssFloat'
+            js= self.varname+'.style["'+item+'"]='+self.rdoc.stringify(val)+';\n'
+            self.rdoc.inline(js)
+            self.d[item]=val
     def __setattr__(self,attr,val):
         self[attr]=val
     def __getitem__(self,item):
@@ -307,8 +327,8 @@ class jsfunction:
 class stylesheet:
     def __init__(self,rdoc):
         self.rdoc=rdoc
-        self.varname= rdoc.get_new_uid()
         self.element= rdoc.element('style')
+        self.varname= self.element.varname
         self.element.att.type='text/css'
         self.rdoc.body.append(self.element)
         js= self.varname+'=document.styleSheets[0];\n'

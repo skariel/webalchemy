@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<body>
+<body onload="init_communication()">
 </body>
 <script>
 
@@ -196,7 +196,6 @@ get_cookie= function (c_name) {
 
 
 
-var ws = new ReconnectingWebSocket('ws://HOST:PORT/websocket');
 var overlay = document.createElement('div');
 var overlay_shown = false;
 overlay.style.position = 'fixed';
@@ -206,29 +205,36 @@ overlay.style.top = '0px';
 overlay.style.bottom = '0px';
 overlay.style.zIndex= 2;
 overlay.style.background= 'rgba(0,0,0,0.7)';
-ws.onclose = function() {
-  if (!overlay_shown) {
-    document.body.appendChild(overlay);
-    overlay_shown = true;
-  }  
-}
-ws.onopen = function() {
-   if (overlay_shown) {
-    document.body.innerHTML='';
-    overlay_shown = false;
-   }
-   message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name);
-};
-ws.onmessage = function (evt) {
-   console.log('message received:')
-   console.log(evt.data)
-   eval(evt.data)
-   message('done')
-};
-message= function (s) {
-    console.log('sending message:')
-    console.log(s)
-    ws.send(s)
+
+
+
+init_communication=function() {
+    ws = new ReconnectingWebSocket('ws://HOST:PORT/websocket');
+    ws.onopen = function() {
+       if (overlay_shown) {
+        document.body.innerHTML='';
+        overlay_shown = false;
+       }
+       message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name);
+    };
+    ws.onclose = function() {
+      if (!overlay_shown) {
+        document.body.appendChild(overlay);
+        overlay_shown = true;
+      }  
+    }
+    ws.onmessage = function (evt) {
+       console.log('message received:')
+       console.log(evt.data)
+       eval(evt.data)
+       message('done')
+    };
+
+    message= function (s) {
+        console.log('sending message:')
+        console.log(s)
+        ws.send(s)
+    }
 }
 
 
@@ -251,3 +257,6 @@ rpc= function () {
 }    
 </script>
 </html> 
+
+
+

@@ -1,11 +1,12 @@
-##webalchemy: realtime, Pythonic web framework
-webalchemy is a minimalist, realtime web-framework for Python. It is currently built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), and it is inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). We do not aim to replace Javascript, but just to keep it simple by automating it with Python. The project is young, documentation is high priority but still missing
+##webalchemy: realtime web framework for Python
+Built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). Helps keep JS simple by automating it with Python through a websocket connection. The project is young, documentation is high priority but still missing. Currently tested on recent version of Chrome, Firefox, Opera, and Explorer.
 
 - **Homepage:** <http://skariel.org/webalchemy/>
 - **Discussion:** <https://groups.google.com/forum/#!forum/webalchemy/>
 - **License (MIT):** [LICENSE.txt](LICENSE.txt)
 
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast)
+
 ```python
 import logging
 
@@ -17,7 +18,6 @@ log= logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 class colors_meteor_app:    
-
     # shared state between sessions in process
     colors_count={
         'foo'             :0,
@@ -59,8 +59,9 @@ class colors_meteor_app:
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='3.5em',
             )
-
         self.rdoc.body.append(self.title)
+        self.rdoc.props.title='colors app!'
+
 
         # insert a menu
         self.menu= self.build_menu()
@@ -171,8 +172,9 @@ class colors_meteor_app:
             padding='10px',
             listStyle='none',
             cursor='pointer',
-            webkitTransition='all 0.3s linear',
-            webkitUserSelect='none'
+            # webalchemy automatically adds vendor prefix here...
+            transition='all 0.3s linear',
+            userSelect='none'
         )
         m.rule_item_hover.style(
             color='#ffffff',
@@ -183,7 +185,7 @@ class colors_meteor_app:
             padding='10px',
             background='#FF0000',
             color='#000000',
-            webkitTransform='rotate(3deg)'
+            transform='rotate(3deg)'
         )
         # populate the menu with shared colors dict
         for color in sorted(colors_meteor_app.colors_count.keys()):
@@ -195,6 +197,7 @@ class colors_meteor_app:
 if __name__=='__main__':
     server.run('localhost',8084,colors_meteor_app)
 ```
+
 ##Getting started
 ###Installation
 * Install latest [tornado](http://www.tornadoweb.org/en/stable/#installation)

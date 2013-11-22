@@ -165,8 +165,8 @@ class colors_meteor_app:
             padding='10px',
             listStyle='none',
             cursor='pointer',
-            webkitTransition='all 0.3s linear',
-            webkitUserSelect='none'
+            transition='all 0.3s linear',
+            userSelect='none'
         )
         m.rule_item_hover.style(
             color='#ffffff',
@@ -177,7 +177,7 @@ class colors_meteor_app:
             padding='10px',
             background='#FF0000',
             color='#000000',
-            webkitTransform='rotate(3deg)'
+            transform='rotate(3deg)'
         )
         # populate the menu with shared colors dict
         for color in sorted(colors_meteor_app.colors_count.keys()):
