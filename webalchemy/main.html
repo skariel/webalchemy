@@ -212,8 +212,8 @@ init_communication=function() {
     ws = new ReconnectingWebSocket('ws://HOST:PORT/websocket');
     ws.onopen = function() {
        if (overlay_shown) {
-        document.body.innerHTML='';
         overlay_shown = false;
+        document.body.innerHTML='';
        }
        message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name);
     };

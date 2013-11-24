@@ -14,6 +14,7 @@ log= logging.getLogger(__name__)
 
 # TODO: complete this list...
 style_atts_requiring_vendor=['transition','transform']
+vendor_prefixes=['o','moz','webkit']
 
 class style_att:
     def __init__(self, rdoc, varname):
@@ -32,7 +33,7 @@ class style_att:
             real_item_cap=item.capitalize()
             real_item_uncap= item
         if swv or isinvlist:
-            vendors= [v+real_item_cap for v in ['o','moz','webkit']]
+            vendors= [v+real_item_cap for v in vendor_prefixes]
             vendors.append(real_item_uncap)
             for item in vendors:
                 js= self.varname+'.style["'+item+'"]='+self.rdoc.stringify(val)+';\n'

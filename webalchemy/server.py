@@ -1,10 +1,11 @@
+import os
+import imp
 import sys
 import time
 import logging
-import imp
-
-import os
 import os.path
+
+from types import ModuleType
 
 import tornado
 import tornado.web
@@ -235,44 +236,87 @@ def async_delay(secs):
 
 
 
+def dreload(module,dreload_blacklist_starting_with):
+    _s= {module.__name__}
+    _base_file=os.path.realpath(module.__file__)
+    _base_path=os.path.dirname(_base_file)
+    _reloaded_files=[]
 
-def update_class(app,cls,shared_wshandlers,hn):
-    mdl= sys.modules[cls.__module__]
-    mdl_fn= mdl.__file__
-    last_time_modified= os.stat(mdl_fn).st_mtime
-    def func():
-        nonlocal app
-        nonlocal mdl
-        nonlocal mdl_fn
-        nonlocal shared_wshandlers
-        nonlocal last_time_modified
-        current_time_modified= os.stat(mdl_fn).st_mtime
-        if current_time_modified == last_time_modified:
+    def _dreload(module):
+        """Recursively reload modules."""    
+        nonlocal _s
+        nonlocal _base_path
+        nonlocal _reloaded_files
+
+        for name in dir(module):
+            mm= getattr(module,name)
+            if type(mm) is not ModuleType:
+                if hasattr(mm,'__module__') and\
+                   mm.__module__ is not None:
+                    mm= sys.modules[mm.__module__]
+
+            if not hasattr(mm,'__file__') or\
+               not os.path.realpath(mm.__file__).startswith(_base_path) or\
+               mm.__name__[0]=='_' or\
+               '._' in mm.__name__ or\
+               mm.__name__ in _s or\
+               any(mm.__name__.startswith(bln) for bln in dreload_blacklist_starting_with):
+                continue
+
+            _s.add(mm.__name__)
+            _dreload(mm)
+        _reloaded_files.append(os.path.realpath(module.__file__))
+        log.info('reloading: '+str(module.__name__))
+
+        imp.reload(module)
+
+    _dreload(module)
+    return _reloaded_files
+
+
+
+class app_updater:
+    def __init__(self,app,cls,shared_wshandlers,hn,dreload_blacklist_starting_with):
+        self.app= app
+        self.cls= cls
+        self.shared_wshandlers= shared_wshandlers
+        self.hn= hn
+        self.dreload_blacklist_starting_with= dreload_blacklist_starting_with
+        self.mdl= sys.modules[self.cls.__module__]
+        self.mdl_fn= self.mdl.__file__
+        self.monitored_files= dreload(self.mdl,self.dreload_blacklist_starting_with)
+        log.info('monitored files: '+str(self.monitored_files))
+        self.last_time_modified={
+            fn:os.stat(fn).st_mtime for fn in self.monitored_files
+        }
+    def update_app(self):
+        if not any([os.stat(fn).st_mtime != self.last_time_modified[fn] for fn in self.monitored_files]):
             return
         log.info('Reloading document!')
-        last_time_modified= current_time_modified
+        self.last_time_modified={
+            fn:os.stat(fn).st_mtime for fn in self.monitored_files
+        }
         clean_rpc()
-        if hasattr(cls,'prepare_app_for_general_reload'):
+        if hasattr(self.cls,'prepare_app_for_general_reload'):
             has_data= True
-            data= cls.prepare_app_for_general_reload()
+            data= self.cls.prepare_app_for_general_reload()
         else:
             has_data= False
-        tmp_cls= getattr(mdl, cls.__name__)
-        mdl= imp.reload(mdl)
-        tmp_cls= getattr(mdl, cls.__name__)
+        tmp_cls= getattr(self.mdl, self.cls.__name__)
+        dreload(self.mdl,self.dreload_blacklist_starting_with)
+        tmp_cls= getattr(self.mdl, self.cls.__name__)
         if hasattr(tmp_cls,'recover_app_from_general_reload') and has_data:
             tmp_cls.recover_app_from_general_reload(data)
-        app.handlers[0][1][hn].kwargs['local_doc_class']= tmp_cls
-        log.info('wsh='+str(shared_wshandlers))
-        for wsh in shared_wshandlers.values():
+        self.app.handlers[0][1][self.hn].kwargs['local_doc_class']= tmp_cls
+        log.info('wsh='+str(self.shared_wshandlers))
+        for wsh in self.shared_wshandlers.values():
             wsh.prepare_session_for_general_reload()
             wsh.please_reload()
-    return func
 
 
 
 
-def run(host,port,local_doc_class,static_path_from_local_doc_base='static'):
+def run(host,port,local_doc_class,static_path_from_local_doc_base='static',dreload_blacklist_starting_with=['webalchemy']):
     static_path=None
     hn=1
     if static_path_from_local_doc_base:
@@ -289,8 +333,11 @@ def run(host,port,local_doc_class,static_path_from_local_doc_base='static'):
         (r'/', MainHandler, dict(host=host, port=port)),
         (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class, shared_wshandlers=shared_wshandlers)),
     ], static_path=static_path)
-    tornado.ioloop.PeriodicCallback(update_class(application, local_doc_class, shared_wshandlers,hn), 1500).start()
+    au= app_updater(application, local_doc_class, shared_wshandlers,hn,dreload_blacklist_starting_with)
+    tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     application.listen(port)
     log.info('starting Tornado event loop')
     tornado.ioloop.IOLoop.instance().start()
+ 
+
  
