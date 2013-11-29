@@ -47,12 +47,11 @@ class colors_meteor_app:
         self.wsh= wshandler
 
         # insert a title
-        self.title= self.rdoc.element('h1','COLORS I REALLY LIKE :)')
+        self.title= self.rdoc.body.element('h1','COLORS I REALLY LIKE :)')
         self.title.style(
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='3.5em',
             )
-        self.rdoc.body.append(self.title)
         self.rdoc.props.title='colors app!'
 
 
@@ -62,7 +61,7 @@ class colors_meteor_app:
         self.rdoc.body.append(self.menu.element)
 
         # insert a button
-        self.button= self.rdoc.element('button','Like!')
+        self.button= self.rdoc.body.element('button','Like!')
         self.button.style(
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='1.5em',
@@ -72,10 +71,9 @@ class colors_meteor_app:
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,1);
             rpc('color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, 1);
         '''))        
-        self.rdoc.body.append(self.button)
 
         # insert another button !!
-        self.button2= self.rdoc.element('button','UNLike!')
+        self.button2= self.rdoc.body.element('button','UNLike!')
         self.button2.style(
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='1.5em',
@@ -85,7 +83,6 @@ class colors_meteor_app:
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,-1);
             rpc('color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1);
         '''))        
-        self.rdoc.body.append(self.button2)
 
         if tabid in colors_meteor_app.colors_selected:
             for i in self.menu.id_dict.values():

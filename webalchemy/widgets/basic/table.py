@@ -2,6 +2,8 @@
 class table:
     def __init__(self,rdoc,rows,cols,has_header=True,has_index=True,on_add_row=None,on_add_data_cell=None,on_add_header_cell=None):
         self.rdoc= rdoc
+        self.rowsc=rows
+        self.colsc=cols
         self.element= rdoc.element('table')
         vn= '#'+self.element.varname
         self.rule_table= rdoc.stylesheet.rule(vn)
@@ -37,11 +39,11 @@ class table:
                 if has_header and row_ix==0:
                     cell= self.rdoc.element('th','empty!!')
                     if on_add_header_cell:
-                        on_add_header_cell(cell,row_ix,cell_ix)
+                        on_add_header_cell(cell,row_ix,cell_ix,self.colsc)
                 else:
                     cell= self.rdoc.element('td','empty!')
                     if on_add_data_cell:
-                        on_add_data_cell(cell,row_ix,col_ix)
+                        on_add_data_cell(cell,row_ix,col_ix,self.rows,self.colsc)
                 if col_ix==0 and has_index:
                     cell.cls.append('index')
                 row.append(cell)

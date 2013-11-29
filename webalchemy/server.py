@@ -17,22 +17,20 @@ from tornado import gen
 from webalchemy.remotedocument import remotedocument
 
 
-
 # logger for internal purposes
-log= logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
+curr_session_counter = 0
 
-curr_session_counter=0
 def generate_session_id():
     global curr_session_counter
-    curr_session_counter+=1
+    curr_session_counter += 1
     return 's'+str(curr_session_counter)+'p'+str(os.getpid())
 
 
-
-
 class MainHandler(tornado.web.RequestHandler):
+
     def initialize(self, port, host):
         log.info('Initiallizing new app!')
         ffn=os.path.realpath(__file__)
@@ -40,15 +38,12 @@ class MainHandler(tornado.web.RequestHandler):
         ffn=os.path.join(ffn,'main.html') 
         with open(ffn,'r') as f:
             self.main_html= f.read().replace('PORT',str(port)).replace('HOST',host)
+
     @gen.coroutine
     def get(self):
         self.add_header('X-UA-Compatible', 'IE=edge')
         self.write(self.main_html)
   
-
-
-
-
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
@@ -61,7 +56,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.local_doc_initialized= False
         self.id= generate_session_id()
         self.sharedhandlers[self.id]= self
-
 
     @gen.coroutine
     def open(self):
@@ -84,6 +78,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     log.info('initializing new tab...')
                     self.tabid= self.id
                     self.remotedocument.inline('window.name="'+self.tabid+'";\n')
+                self.vendor_type= message.split(':')[-1]
+                self.remotedocument.set_vendor_prefix(self.vendor_type)
                 yield self.local_doc.initialize(self.remotedocument,self,self.sessionid,self.tabid)
                 self.local_doc_initialized= True
             else:
@@ -97,6 +93,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             yield self.flush_dom()
         except:
             log.exception('Failed handling message:')
+
     @gen.coroutine
     def flush_dom(self):
         code= self.remotedocument.pop_all_code()
@@ -128,6 +125,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     yield h.flush_dom()
                 except:
                     log.exception('Failed handling outmessage. Exception:')
+
     @gen.coroutine
     def on_close(self):
         self.closed=True
@@ -185,17 +183,15 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             h= self.sharedhandlers[k]
             if h is not self or send_to_self:
                 try:
-                    yield js_to_py_rpcdict[f.__name__](h.local_doc,self.id,*varargs,**kwargs)
+                    yield py_to_py_rpcdict[f.__name__](h.local_doc,self.id,*varargs,**kwargs)
                     yield h.flush_dom()
                 except:
                     log.exception('PY RPC call failed for target session: '+k)
 
-
-
-
-
 # decorator to register functions for js->py rpc
 js_to_py_rpcdict={}
+
+
 def jsrpc(f):
     log.info('registering function to js->py rpc: '+f.__name__)
     try:
@@ -208,6 +204,8 @@ def jsrpc(f):
 
 # decorator to register functions for py->py rpc
 py_to_py_rpcdict={}
+
+
 def pyrpc(f):
     log.info('registering function to py->py rpc: '+f.__name__)
     try:
@@ -219,7 +217,6 @@ def pyrpc(f):
         log.exception('Failed registering py->py RPC function')
 
 
-
 def clean_rpc():
     global js_to_py_rpcdict
     global py_to_py_rpcdict
@@ -227,16 +224,12 @@ def clean_rpc():
     py_to_py_rpcdict={}
 
 
-
-
 @gen.coroutine
 def async_delay(secs):
     yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
 
 
-
-
-def dreload(module,dreload_blacklist_starting_with):
+def dreload(module,dreload_blacklist_starting_with,just_visit=False):
     _s= {module.__name__}
     _base_file=os.path.realpath(module.__file__)
     _base_path=os.path.dirname(_base_file)
@@ -266,16 +259,18 @@ def dreload(module,dreload_blacklist_starting_with):
             _s.add(mm.__name__)
             _dreload(mm)
         _reloaded_files.append(os.path.realpath(module.__file__))
-        log.info('reloading: '+str(module.__name__))
-
-        imp.reload(module)
+        if not just_visit:
+            log.info('reloading: '+str(module.__name__))
+            imp.reload(module)
+        else:
+            log.info('visiting: '+str(module.__name__))
 
     _dreload(module)
     return _reloaded_files
 
 
-
 class app_updater:
+
     def __init__(self,app,cls,shared_wshandlers,hn,dreload_blacklist_starting_with):
         self.app= app
         self.cls= cls
@@ -284,17 +279,18 @@ class app_updater:
         self.dreload_blacklist_starting_with= dreload_blacklist_starting_with
         self.mdl= sys.modules[self.cls.__module__]
         self.mdl_fn= self.mdl.__file__
-        self.monitored_files= dreload(self.mdl,self.dreload_blacklist_starting_with)
+        self.monitored_files= dreload(self.mdl,self.dreload_blacklist_starting_with,just_visit=True)
         log.info('monitored files: '+str(self.monitored_files))
         self.last_time_modified={
             fn:os.stat(fn).st_mtime for fn in self.monitored_files
         }
+
     def update_app(self):
         if not any([os.stat(fn).st_mtime != self.last_time_modified[fn] for fn in self.monitored_files]):
             return
         log.info('Reloading document!')
         self.last_time_modified={
-            fn:os.stat(fn).st_mtime for fn in self.monitored_files
+            fn: os.stat(fn).st_mtime for fn in self.monitored_files
         }
         clean_rpc()
         if hasattr(self.cls,'prepare_app_for_general_reload'):
@@ -302,7 +298,6 @@ class app_updater:
             data= self.cls.prepare_app_for_general_reload()
         else:
             has_data= False
-        tmp_cls= getattr(self.mdl, self.cls.__name__)
         dreload(self.mdl,self.dreload_blacklist_starting_with)
         tmp_cls= getattr(self.mdl, self.cls.__name__)
         if hasattr(tmp_cls,'recover_app_from_general_reload') and has_data:
@@ -314,9 +309,7 @@ class app_updater:
             wsh.please_reload()
 
 
-
-
-def run(host,port,local_doc_class,static_path_from_local_doc_base='static',dreload_blacklist_starting_with=['webalchemy']):
+def run(host, port, local_doc_class, static_path_from_local_doc_base='static', dreload_blacklist_starting_with=('webalchemy')):
     static_path=None
     hn=1
     if static_path_from_local_doc_base:
@@ -338,6 +331,3 @@ def run(host,port,local_doc_class,static_path_from_local_doc_base='static',drelo
     application.listen(port)
     log.info('starting Tornado event loop')
     tornado.ioloop.IOLoop.instance().start()
- 
-
- 

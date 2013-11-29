@@ -13,7 +13,7 @@ log.setLevel(logging.INFO)
 class tictactoe_app:    
 
     @gen.coroutine
-    def initialize(self, remotedocument, wshandler, message):
+    def initialize(self, remotedocument, wshandler, sessionid, tabid):
         # remember these for later use
         self.rdoc= remotedocument
         self.wsh= wshandler

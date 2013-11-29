@@ -118,7 +118,7 @@ class board:
 
 
     def __create_styles(self):
-        self.stylesheet= self.rdoc.stylesheet()
+        self.stylesheet= self.rdoc.stylesheet
         vn= '#'+self.svg.varname
         self.rule_svg= self.stylesheet.rule(vn)
         self.rule_lines= self.stylesheet.rule(vn+' > line')
