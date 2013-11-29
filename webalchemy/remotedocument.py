@@ -38,13 +38,13 @@ class style_att:
 
     def __setitem__(self, item, val):
         if isinstance(val, type({})):
-            strval='{'
+            strval='"{'
             for k, v in val.items():
-                strv = ': '+self.rdoc.stringify(v) + ';\n'
+                strv = ': '+self.rdoc.stringify(v, encapsulate_strings=False) + ';\n'
                 for ki in vendorize(self.rdoc.vendor_prefix, k):
                     strval += ki
                     strval += strv
-            strval += '}'
+            strval += '}"'
         else:
             strval = self.rdoc.stringify(val)
         for vi in vendorize(self.rdoc.vendor_prefix, item):
