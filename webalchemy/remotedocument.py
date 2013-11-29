@@ -391,7 +391,7 @@ class rule:
         self.selector = selector
         # TODO: what if we want to change the selector?!
         ssn = self.stylesheet.varname
-        js = ssn+'.insertRule("'+selector+'{}",'+ssn+'.cssRules.length);\n'
+        js = ssn+'.insertRule("'+selector+' {}",'+ssn+'.cssRules.length);\n'
         js += self.varname+'='+ssn+'.cssRules['+ssn+'.cssRules.length-1];\n'
         self.rdoc.inline(js)
         self.style = style_att(self.rdoc, self.varname)
