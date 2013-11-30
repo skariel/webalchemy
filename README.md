@@ -193,7 +193,7 @@ class ColorsMeteorApp:
 
 
 if __name__=='__main__':
-    server.run('localhost',8084,colors_meteor_app)
+    server.run('localhost', 8080, ColorsMeteorApp)
 ```
 
 ##Getting started
