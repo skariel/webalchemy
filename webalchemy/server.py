@@ -6,6 +6,7 @@ import logging
 import os.path
 
 from types import ModuleType
+from collections import OrderedDict
 
 import tornado
 import tornado.web
@@ -50,17 +51,23 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     @gen.coroutine
     def initialize(self, **kwargs):
-        log.info('Initiallizing new websocket handler!')
-        self.id = generate_session_id()
-        self.remotedocument = RemoteDocument()
-        self.closed = True
-        self.sessionid = None
-        self.tabid = None
-        self.vendor_type = None
-        self.local_doc = kwargs['local_doc_class']()
-        self.local_doc_initialized = False
-        self.sharedhandlers = kwargs['shared_wshandlers']
-        self.sharedhandlers[self.id] = self
+        log.info('Initiallizing a websocket handler!')
+        try:
+            self.id = generate_session_id()
+            self.remotedocument = RemoteDocument()
+            self.closed = True
+            self.session_id = None
+            self.tab_id = None
+            self.vendor_type = None
+            self.shared_data = kwargs['shared_data']
+            self.private_data_store = kwargs['private_data_store']
+            self.private_data = None
+            self.local_doc = kwargs['local_doc_class']()
+            self.local_doc_initialized = False
+            self.sharedhandlers = kwargs['shared_wshandlers']
+            self.sharedhandlers[self.id] = self
+        except:
+            log.exception('Initialization of websocket handler failed!')
 
     @gen.coroutine
     def open(self):
@@ -73,19 +80,22 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         try:
             if not self.local_doc_initialized:
                 log.info('Initializing local document...')
-                self.sessionid = message.split(':')[1]
-                if self.sessionid == 'null':
+                self.session_id = message.split(':')[1]
+                if self.session_id == 'null':
                     log.info('initializing new session...')
-                    self.sessionid = self.id
-                    self.remotedocument.inline('set_cookie("webalchemy","' + self.sessionid + '",3);\n')
-                self.tabid = message.split(':')[3]
-                if self.tabid == '':
+                    self.session_id = self.id
+                    self.remotedocument.inline('set_cookie("webalchemy","' + self.session_id + '",3);\n')
+                self.tab_id = message.split(':')[3]
+                if self.tab_id == '':
                     log.info('initializing new tab...')
-                    self.tabid = self.id
-                    self.remotedocument.inline('window.name="' + self.tabid + '";\n')
+                    self.tab_id = self.id
+                    self.remotedocument.inline('window.name="' + self.tab_id + '";\n')
                 self.vendor_type = message.split(':')[-1]
                 self.remotedocument.set_vendor_prefix(self.vendor_type)
-                yield self.local_doc.initialize(self.remotedocument, self, self.sessionid, self.tabid)
+                self.private_data = self.private_data_store.get_store(self.session_id, self.tab_id)
+                yield self.local_doc.initialize(remote_document=self.remotedocument, comm_handler=self,
+                                                session_id=self.session_id, tab_id=self.tab_id,
+                                                shared_data=self.shared_data, private_data=self.private_data)
                 self.local_doc_initialized = True
             else:
                 if message.startswith('rpc: '):
@@ -275,10 +285,11 @@ def dreload(module, dreload_blacklist_starting_with, just_visit=False):
 
 
 class AppUpdater:
-    def __init__(self, app, cls, shared_wshandlers, hn, dreload_blacklist_starting_with):
+    def __init__(self, app, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data):
         self.app = app
         self.cls = cls
         self.shared_wshandlers = shared_wshandlers
+        self.shared_data = shared_data
         self.hn = hn
         self.dreload_blacklist_starting_with = dreload_blacklist_starting_with
         self.mdl = sys.modules[self.cls.__module__]
@@ -297,15 +308,16 @@ class AppUpdater:
             fn: os.stat(fn).st_mtime for fn in self.monitored_files
         }
         clean_rpc()
-        has_data = False
         data = None
         if hasattr(self.cls, 'prepare_app_for_general_reload'):
-            has_data = True
             data = self.cls.prepare_app_for_general_reload()
         dreload(self.mdl, self.dreload_blacklist_starting_with)
         tmp_cls = getattr(self.mdl, self.cls.__name__)
-        if hasattr(tmp_cls, 'recover_app_from_general_reload') and has_data:
+        if hasattr(tmp_cls, 'recover_app_from_general_reload'):
             tmp_cls.recover_app_from_general_reload(data)
+        if hasattr(tmp_cls, 'initialize_shared_data'):
+            tmp_cls.initialize_shared_data(self.shared_data)
+
         self.app.handlers[0][1][self.hn].kwargs['local_doc_class'] = tmp_cls
         log.info('wsh=' + str(self.shared_wshandlers))
         for wsh in self.shared_wshandlers.values():
@@ -313,8 +325,26 @@ class AppUpdater:
             wsh.please_reload()
 
 
+class PrivateDataStore:
+
+    def __init__(self):
+        self.d = dict()
+
+    def get_store(self, sid, tid):
+        if (sid, tid) in self.d:
+            return self.d[(sid, tid)]
+        pd = OrderedDict()
+        self.d[(sid, tid)] = pd
+        return pd
+
+    def remove_store(self, sid, pid):
+        if (sid, pid) in self.d:
+            del self.d[(sid, pid)]
+
+
 def run(host, port, local_doc_class, static_path_from_local_doc_base='static',
-        dreload_blacklist_starting_with=('webalchemy',)):
+        dreload_blacklist_starting_with=('webalchemy',), shared_data_class=dict,
+        private_data_store_class=PrivateDataStore):
     static_path = None
     hn = 1
     if static_path_from_local_doc_base:
@@ -327,12 +357,18 @@ def run(host, port, local_doc_class, static_path_from_local_doc_base='static',
         hn = 4
 
     shared_wshandlers = {}
+    shared_data = shared_data_class()
+    if hasattr(local_doc_class, 'initialize_shared_data'):
+        local_doc_class.initialize_shared_data(shared_data)
+    private_data_store = private_data_store_class()
     application = tornado.web.Application([
         (r'/', MainHandler, dict(host=host, port=port)),
         (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class,
-                                                 shared_wshandlers=shared_wshandlers)),
+                                                 shared_wshandlers=shared_wshandlers,
+                                                 shared_data=shared_data,
+                                                 private_data_store=private_data_store)),
     ], static_path=static_path)
-    au = AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with)
+    au = AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     application.listen(port)
     log.info('starting Tornado event loop')

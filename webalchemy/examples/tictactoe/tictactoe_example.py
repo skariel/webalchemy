@@ -1,6 +1,9 @@
 #
 # a massive multiplayer tictactoe server
 #
+# This is WIP, no quite working yet...
+#
+
 import logging
 from tornado import gen
 
@@ -10,7 +13,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-class tictactoe_app:
+class TickTackToeApp:
     @gen.coroutine
     def initialize(self, remotedocument, wshandler, sessionid, tabid):
         # remember these for later use

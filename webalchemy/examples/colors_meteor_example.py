@@ -1,51 +1,37 @@
 #
 # trying to reconstruct Meteor color application
 #
-import logging
 
 from tornado import gen
 from webalchemy import server
 from webalchemy.widgets.basic.menu import Menu
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
-
 
 class ColorsMeteorApp:
-# shared state between sessions in process
-    colors_count = {
-        'foo': 0,
-        'baar': 0,
-        'wowowowowo!!!': 0,
-        'this is cool': 0,
-        'WEBALCHEMY ROCKS': 0,
-    }
-
-    colors_selected = {}
 
     @staticmethod
-    def prepare_app_for_general_reload():
-        return {
-            'colors_count': ColorsMeteorApp.colors_count,
-            'colors_selected': ColorsMeteorApp.colors_selected}
-
-    @staticmethod
-    def recover_app_from_general_reload(data):
-        colors_count = data['colors_count']
-        ColorsMeteorApp.colors_selected = data['colors_selected']
-        for color in ColorsMeteorApp.colors_count.keys():
-            if color in colors_count:
-                ColorsMeteorApp.colors_count[color] = colors_count[color]
+    def initialize_shared_data(sdata):
+        # shared state between sessions in process
+        def add_update(d1, d2):
+            for k, v in d2.items():
+                d1[k] = d1.get(k, 0) + v
+        add_update(sdata, {
+            'fooooo': 0,
+            'baar': 0,
+            'wowowowowo!!!': 0,
+            'this is cool': 0,
+            'WEBALCHEMY ROCKS': 0,
+        })
 
     # this method is called when a new session starts
     @gen.coroutine
-    def initialize(self, remotedocument, wshandler, sessionid, tabid):
-
+    def initialize(self, **kwargs):
         # remember these for later use
-        self.tabid = tabid
-        self.sessionid = sessionid
-        self.rdoc = remotedocument
-        self.wsh = wshandler
+        self.rdoc = kwargs['remote_document']
+        self.com = kwargs['comm_handler']
+        self.sdata = kwargs['shared_data']
+        self.pdata = kwargs['private_data']
+        self.selected_color_text = self.pdata.get('selected color text', None)
 
         # insert a title
         self.title = self.rdoc.body.element('h1', 'COLORS I REALLY LIKE :)')
@@ -84,22 +70,16 @@ class ColorsMeteorApp:
             rpc('color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1);
         '''))
 
-        if tabid in ColorsMeteorApp.colors_selected:
-            for i in self.menu.id_dict.values():
-                if i.text == ColorsMeteorApp.colors_selected[tabid]:
-                    break
-            self.menu.select_color(i)
-
     # register the method so we can call it from frontend js,
     # and then also from other sessions (from Python)
     @server.jsrpc
     @server.pyrpc
     @gen.coroutine
     def color_liked(self, sender_id, item_id, color, amount):
-        if sender_id == self.wsh.id:
+        if sender_id == self.com.id:
             # button clicked on this session
-            ColorsMeteorApp.colors_count[color] += int(amount)
-            self.wsh.rpc(self.color_liked, item_id, color, amount)
+            self.sdata[color] += int(amount)
+            self.com.rpc(self.color_liked, item_id, color, amount)
         else:
             # button clicked by other session
             item = self.menu.id_dict[item_id]
@@ -107,8 +87,8 @@ class ColorsMeteorApp:
 
     @server.jsrpc
     @gen.coroutine
-    def color_selected(self, sender_id, item_id, color):
-        ColorsMeteorApp.colors_selected[self.tabid] = color
+    def color_selected(self, sender_id, color):
+        self.pdata['selected color text'] = color
 
     def build_menu(self):
         # the following function will be used to initialize all menu items
@@ -116,11 +96,12 @@ class ColorsMeteorApp:
             nonlocal m
             col = item.text
             item.app.color = col
-            item.app.clickedcount = ColorsMeteorApp.colors_count[col]
+            item.app.clickedcount = self.sdata.get(col, 0)
             m.increase_count_by(item, 0)
+            if item.text == self.selected_color_text:
+                m.select_color(item)
 
-            # create a menu element with the above item initializer
-
+        # create a menu element with the above item initializer
         m = Menu(self.rdoc, on_add)
         # function to increase the count in front-end
         m.sort = self.rdoc.jsfunction(body='''
@@ -140,15 +121,14 @@ class ColorsMeteorApp:
             att= element.app;
             att.clickedcount+= amount;
             #{m.sort}();
-            if (att.clickedcount>0.5) {
-                element.textContent= '('+att.clickedcount+') '+att.color;
-            }''')
+            element.textContent= '('+att.clickedcount+') '+att.color;
+            ''')
         m.select_color = self.rdoc.jsfunction('element', body='''
             element.classList.add('selected');
             if ((#{m.element}.app.selected)&&(#{m.element}.app.selected!=element))
                 #{m.element}.app.selected.classList.remove('selected');
             #{m.element}.app.selected= element;
-            rpc('color_selected', element.id, element.app.color);
+            rpc('color_selected', element.app.color);
         ''')
         m.element.events.add(click=self.rdoc.jsfunction('event', body='''
             #{m.select_color}(event.target);
@@ -179,7 +159,6 @@ class ColorsMeteorApp:
             webkitTransform='rotate(3deg)'
         )
         # populate the menu with shared colors dict
-        for color in sorted(ColorsMeteorApp.colors_count.keys()):
-            m.add_item(color)
+        m.add_item(*self.sdata.keys())
         m.sort()
         return m
