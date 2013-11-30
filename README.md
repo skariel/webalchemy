@@ -19,7 +19,7 @@ log.setLevel(logging.INFO)
 
 
 class ColorsMeteorApp:
-# shared state between sessions in process
+	# shared state between sessions in process
     colors_count = {
         'foo': 0,
         'baar': 0,
