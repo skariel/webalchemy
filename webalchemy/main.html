@@ -6,32 +6,7 @@
 
 
 /** The reconnecting WS from https://github.com/joewalnes/reconnecting-websocket
- * This behaves like a WebSocket in every way, except if it fails to connect,
- * or it gets disconnected, it will repeatedly poll until it succesfully connects
- * again.
- *
- * It is API compatible, so when you have:
- *   ws = new WebSocket('ws://....');
- * you can replace with:
- *   ws = new ReconnectingWebSocket('ws://....');
- *
- * The event stream will typically look like:
- *  onconnecting
- *  onopen
- *  onmessage
- *  onmessage
- *  onclose // lost connection
- *  onconnecting
- *  onopen  // sometime later...
- *  onmessage
- *  onmessage
- *  etc... 
- *
- * It is API compatible with the standard WebSocket API.
- *
- * Latest version: https://github.com/joewalnes/reconnecting-websocket/
- * - Joe Walnes
- */
+*/
 function ReconnectingWebSocket(url, protocols) {
     protocols = protocols || [];
 
@@ -163,14 +138,6 @@ function ReconnectingWebSocket(url, protocols) {
 ReconnectingWebSocket.debugAll = false;
 
 
-
-
-
-
-
-
-
-
 set_cookie= function (c_name,value,exdays) {
   var exdate=new Date();
   exdate.setDate(exdate.getDate() + exdays);
@@ -191,11 +158,6 @@ get_cookie= function (c_name) {
   return c_value;
 }
 
-
-
-
-
-
 var overlay = document.createElement('div');
 var overlay_shown = false;
 overlay.style.position = 'fixed';
@@ -205,6 +167,17 @@ overlay.style.top = '0px';
 overlay.style.bottom = '0px';
 overlay.style.zIndex= 2;
 overlay.style.background= 'rgba(0,0,0,0.7)';
+var h1= document.createElement('h1');
+h1.textContent='Connection lost. Trying to reconnect...';
+
+h1.style.background='#FFFFFF'
+h1.style.display='inline-block';
+h1.style.border='solid 3px red'
+h1.style.marginLeft='50px';
+h1.style.marginTop='50px';
+h1.style.padding='10px';
+
+overlay.appendChild(h1)
 
 // find vendor prefix. from:
 // http://davidwalsh.name/vendor-prefix
@@ -271,6 +244,8 @@ rpcfy= function () {
 rpc= function () {
     message('rpc: '+rpcfy.apply(this,arguments))
 }
+
+
 
 
 
