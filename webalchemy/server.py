@@ -17,7 +17,6 @@ from tornado import gen
 
 from webalchemy.remotedocument import RemoteDocument
 
-
 # logger for internal purposes
 log = logging.getLogger(__name__)
 
@@ -60,12 +59,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.tab_id = None
             self.vendor_type = None
             self.shared_data = kwargs['shared_data']
-            self.private_data_store = kwargs['private_data_store']
-            self.private_data = None
+            self.session_data_store = kwargs['session_data_store']
+            self.tab_data_store = kwargs['tab_data_store']
+            self.session_data = None
+            self.tab_data = None
             self.local_doc = kwargs['local_doc_class']()
             self.local_doc_initialized = False
             self.sharedhandlers = kwargs['shared_wshandlers']
             self.sharedhandlers[self.id] = self
+            self.is_new_tab = None
+            self.is_new_session = None
         except:
             log.exception('Initialization of websocket handler failed!')
 
@@ -81,21 +84,28 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             if not self.local_doc_initialized:
                 log.info('Initializing local document...')
                 self.session_id = message.split(':')[1]
+                self.is_new_session = False
                 if self.session_id == 'null':
                     log.info('initializing new session...')
+                    self.is_new_session = True
                     self.session_id = self.id
                     self.remotedocument.inline('set_cookie("webalchemy","' + self.session_id + '",3);\n')
                 self.tab_id = message.split(':')[3]
+                self.is_new_tab = False
                 if self.tab_id == '':
                     log.info('initializing new tab...')
                     self.tab_id = self.id
                     self.remotedocument.inline('window.name="' + self.tab_id + '";\n')
+                    self.is_new_tab = True
                 self.vendor_type = message.split(':')[-1]
                 self.remotedocument.set_vendor_prefix(self.vendor_type)
-                self.private_data = self.private_data_store.get_store(self.session_id, self.tab_id)
+                self.session_data = self.session_data_store.get_store(self.session_id)
+                self.tab_data = self.tab_data_store.get_store(self.tab_id)
                 r = self.local_doc.initialize(remote_document=self.remotedocument, comm_handler=self,
-                                                session_id=self.session_id, tab_id=self.tab_id,
-                                                shared_data=self.shared_data, private_data=self.private_data)
+                                              session_id=self.session_id, tab_id=self.tab_id,
+                                              shared_data=self.shared_data, session_data=self.session_data,
+                                              tab_data=self.tab_data, is_new_tab=self.is_new_tab,
+                                              is_new_session=self.is_new_session)
                 if r is not None:
                     yield r
                 self.local_doc_initialized = True
@@ -328,25 +338,28 @@ class AppUpdater:
 
 
 class PrivateDataStore:
-
     def __init__(self):
         self.d = dict()
 
-    def get_store(self, sid, tid):
-        if (sid, tid) in self.d:
-            return self.d[(sid, tid)]
+    def get_store(self, uid):
+        if uid in self.d:
+            return self.d[uid]
         pd = OrderedDict()
-        self.d[(sid, tid)] = pd
+        self.d[uid] = pd
         return pd
 
-    def remove_store(self, sid, pid):
-        if (sid, pid) in self.d:
-            del self.d[(sid, pid)]
+    def remove_store(self, uid):
+        del self.d[uid]
 
 
-def run(host, port, local_doc_class, static_path_from_local_doc_base='static',
-        dreload_blacklist_starting_with=('webalchemy',), shared_data_class=OrderedDict,
-        private_data_store_class=PrivateDataStore):
+def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
+
+    static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
+    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy',))
+    shared_data_class = kwargs.get('shared_data_class', OrderedDict)
+    tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
+    session_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
+
     static_path = None
     hn = 1
     if static_path_from_local_doc_base:
@@ -362,13 +375,15 @@ def run(host, port, local_doc_class, static_path_from_local_doc_base='static',
     shared_data = shared_data_class()
     if hasattr(local_doc_class, 'initialize_shared_data'):
         local_doc_class.initialize_shared_data(shared_data)
-    private_data_store = private_data_store_class()
+    session_data_store = session_data_store_class()
+    tab_data_store = tab_data_store_class()
     application = tornado.web.Application([
         (r'/', MainHandler, dict(host=host, port=port)),
         (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class,
                                                  shared_wshandlers=shared_wshandlers,
                                                  shared_data=shared_data,
-                                                 private_data_store=private_data_store)),
+                                                 session_data_store=session_data_store,
+                                                 tab_data_store=tab_data_store)),
     ], static_path=static_path)
     au = AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()

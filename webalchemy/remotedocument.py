@@ -238,8 +238,11 @@ add_attr_typ_dict = {
 
 
 class Element:
-    def __init__(self, rdoc, typ, text=None):
-        self.varname = rdoc.get_new_uid()
+    def __init__(self, rdoc, typ, text=None, customvarname=None):
+        if not customvarname:
+            self.varname = rdoc.get_new_uid()
+        else:
+            self.varname = customvarname
         self.rdoc = rdoc
         self.typ = typ
         self.parent = None
