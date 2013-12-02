@@ -1,6 +1,9 @@
 import re
 import inspect
 import logging
+import weakref
+import hashlib
+from webalchemy.saferef import safeRef
 
 
 # logger for internal purposes
@@ -301,18 +304,45 @@ class Element:
         return e
 
 
-def inline(code, level=1):
+def strhash(s):
+    return hashlib.sha1(s.encode()).hexdigest()
+
+
+rec1_inline = re.compile(r'#\{([^}]*)\}')
+rec2_rpc = re.compile(r'#rpc\{([^}]*)\}')
+
+def inline(code, level=1, stringify=None, rpcweakrefs=None):
     # inline interpolation...
     prev_frame = inspect.getouterframes(inspect.currentframe())[level][0]
     loc = prev_frame.f_locals
     glo = prev_frame.f_globals
-    for item in re.findall(r'#\{([^}]*)\}', code):
+    for item in rec1_inline.findall(code):
         rep = eval(item, glo, loc)
-        if hasattr(rep, 'varname'):
-            rep = rep.varname
+        if not stringify:
+            if hasattr(rep, 'varname'):
+                rep = rep.varname
+            else:
+                rep = str(rep)
         else:
-            rep = str(rep)
+            rep = stringify(rep)
         code = code.replace('#{%s}' % item, rep)
+
+    if rpcweakrefs is not None:
+        for item in rec2_rpc.findall(code):
+            sitem = item.split(',')
+            litem = sitem[0].strip()
+            ritem = ','.join(sitem[1:])
+            fnc = eval(litem, glo, loc)
+            rep = strhash(fnc.__repr__())
+
+            def ondelete(r):
+                del rpcweakrefs[r.__rep]
+
+            wr = safeRef(fnc, ondelete)
+            wr.__rep = rep
+            rpcweakrefs[rep] = wr
+            code = code.replace('#rpc{%s}' % item, 'rpc(%s)' % ("'"+rep+"',"+ritem))
+
     return code
 
 
@@ -323,7 +353,7 @@ class Interval:
         self.ms = ms
         self.is_running = True
         code = self.rdoc.stringify(exp, pop_line=False)
-        code = inline(code, level=level)
+        code = inline(code, level=level, rpcweakrefs=self.rdoc.rpcweakrefs)
         if not callable(exp):
             code = 'function(){' + code + '}'
         js = self.varname + '=setInterval(' + code + ',' + str(ms) + ');\n'
@@ -340,7 +370,7 @@ class JSFunction:
         self.rdoc = rdoc
         self.varname = rdoc.get_new_uid()
         code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False)
-        code = inline(code, level=level)
+        code = inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
         code = code.rstrip(';\n')
         args = ','.join(varargs)
         self.js = self.varname + '=function(' + args + '){\n' + code + '\n}\n'
@@ -400,6 +430,7 @@ class RemoteDocument:
         self.props = SimpleProp(self, 'document', None)
         self.stylesheet = StyleSheet(self)
         self.vendor_prefix = None
+        self.jsrpcweakrefs = {}
 
     def set_vendor_prefix(self, vendor_prefix):
         self.vendor_prefix = vendor_prefix

@@ -55,7 +55,7 @@ class ColorsMeteorApp:
         self.button.events.add(click=self.rdoc.jsfunction(body='''
             if (!#{self.menu.element}.app.selected) return;
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,1);
-            rpc('color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, 1);
+            #rpc{'color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, 1};
         '''))
 
         # insert another button !!
@@ -67,7 +67,7 @@ class ColorsMeteorApp:
         self.button2.events.add(click=self.rdoc.jsfunction(body='''
             if (!#{self.menu.element}.app.selected) return;
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,-1);
-            rpc('color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1);
+            #rpc{'color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1};
         '''))
 
     # register the method so we can call it from frontend js,
@@ -128,7 +128,7 @@ class ColorsMeteorApp:
             if ((#{m.element}.app.selected)&&(#{m.element}.app.selected!=element))
                 #{m.element}.app.selected.classList.remove('selected');
             #{m.element}.app.selected= element;
-            rpc('color_selected', element.app.color);
+            #rpc{'color_selected', element.app.color};
         ''')
         m.element.events.add(click=self.rdoc.jsfunction('event', body='''
             #{m.select_color}(event.target);

@@ -93,16 +93,20 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 self.vendor_type = message.split(':')[-1]
                 self.remotedocument.set_vendor_prefix(self.vendor_type)
                 self.private_data = self.private_data_store.get_store(self.session_id, self.tab_id)
-                yield self.local_doc.initialize(remote_document=self.remotedocument, comm_handler=self,
+                r = self.local_doc.initialize(remote_document=self.remotedocument, comm_handler=self,
                                                 session_id=self.session_id, tab_id=self.tab_id,
                                                 shared_data=self.shared_data, private_data=self.private_data)
+                if r is not None:
+                    yield r
                 self.local_doc_initialized = True
             else:
                 if message.startswith('rpc: '):
                     yield self.handle_js_to_py_rpc_message(message)
                 elif message.startswith('msg: '):
                     log.info('Passing message to document inmessage...')
-                    yield self.local_doc.inmessage(message)
+                    r = self.local_doc.inmessage(message)
+                    if r is not None:
+                        yield r
                 else:
                     log.info('Discarding message...')
             yield self.flush_dom()
@@ -136,7 +140,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             h = self.sharedhandlers[k]
             if h is not self or send_to_self:
                 try:
-                    yield h.local_doc.outmessage(self.id, msg)
+                    r = h.local_doc.outmessage(self.id, msg)
+                    if r is not None:
+                        yield r
                     yield h.flush_dom()
                 except:
                     log.exception('Failed handling outmessage. Exception:')
@@ -150,8 +156,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         if hasattr(self.local_doc, 'onclose'):
             log.info('Calling local document onclose:')
             try:
-                yield self.local_doc.onclose()
-                yield sys.stdout.flush()
+                r = self.local_doc.onclose()
+                if r is not None:
+                    yield r
             except:
                 log.exception('Failed handling local document onclose. Exception:')
 
@@ -159,7 +166,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def prepare_session_for_general_reload(self):
         if hasattr(self.local_doc, 'prepare_session_for_general_reload'):
             log.info('preparing session for reload...')
-            yield self.local_doc.prepare_session_for_general_reload()
+            r = self.local_doc.prepare_session_for_general_reload()
+            if r is not None:
+                yield r
 
     @gen.coroutine
     def handle_js_to_py_rpc_message(self, msg):
@@ -174,18 +183,23 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             ln = int(ln)
             args.append(args_txt[curr_pos:curr_pos + ln])
             curr_pos += ln
-        fname, *args = args
-        if fname not in js_to_py_rpcdict:
-            raise Exception('Function not found in js->py RPC table: ' + fname)
-        log.info('Calling local function: ' + fname)
+        rep, *args = args
+        wr = self.remotedocument.jsrpcweakrefs[rep]
+        fn = wr()
+        if fn is None:
+            del self.remotedocument.jsrpcweakrefs[rep]
+        log.info('Calling local function: ' + str(fn))
         log.info('With args: ' + str(args))
         try:
-            yield js_to_py_rpcdict[fname](self.local_doc, self.id, *args)
+            r = fn(self.id, *args)
+            if r is not None:
+                yield r
         except:
             log.exception('JS RPC call failed')
 
     @gen.coroutine
     def rpc(self, f, *varargs, send_to_self=False, to_session_ids=None, **kwargs):
+        # TODO: reconsider the whole py->py RPC. Methods should get a self arg, not document...
         log.info('Sending py->py rpc: ' + f.__name__)
         log.info('PARAMS: varargs: ' + str(varargs) + ' kwargs: ' + str(kwargs))
         if not to_session_ids:
@@ -198,26 +212,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             h = self.sharedhandlers[k]
             if h is not self or send_to_self:
                 try:
-                    yield py_to_py_rpcdict[f.__name__](h.local_doc, self.id, *varargs, **kwargs)
+                    r = py_to_py_rpcdict[f.__name__](h.local_doc, self.id, *varargs, **kwargs)
+                    if r is not None:
+                        yield r
                     yield h.flush_dom()
                 except:
                     log.exception('PY RPC call failed for target session: ' + k)
 
+
 # decorator to register functions for js->py rpc
-js_to_py_rpcdict = {}
-
-
-def jsrpc(f):
-    log.info('registering function to js->py rpc: ' + f.__name__)
-    try:
-        if f.__name__ in js_to_py_rpcdict:
-            raise Exception('cannot decorate with js->py rpc since name already exists: ' + f.__name__)
-        js_to_py_rpcdict[f.__name__] = f
-        return f
-    except:
-        log.exception('Failed registering js->py RPC function')
-
-# decorator to register functions for py->py rpc
+# TODO: put this global state in 'Run' function...
 py_to_py_rpcdict = {}
 
 
@@ -232,10 +236,8 @@ def pyrpc(f):
         log.exception('Failed registering py->py RPC function')
 
 
-def clean_rpc():
-    global js_to_py_rpcdict
+def clean_pyrpc():
     global py_to_py_rpcdict
-    js_to_py_rpcdict = {}
     py_to_py_rpcdict = {}
 
 
@@ -307,7 +309,7 @@ class AppUpdater:
         self.last_time_modified = {
             fn: os.stat(fn).st_mtime for fn in self.monitored_files
         }
-        clean_rpc()
+        clean_pyrpc()
         data = None
         if hasattr(self.cls, 'prepare_app_for_general_reload'):
             data = self.cls.prepare_app_for_general_reload()
@@ -343,7 +345,7 @@ class PrivateDataStore:
 
 
 def run(host, port, local_doc_class, static_path_from_local_doc_base='static',
-        dreload_blacklist_starting_with=('webalchemy',), shared_data_class=dict,
+        dreload_blacklist_starting_with=('webalchemy',), shared_data_class=OrderedDict,
         private_data_store_class=PrivateDataStore):
     static_path = None
     hn = 1
