@@ -34,8 +34,8 @@ class ColorsMeteorApp:
         self.rdoc = kwargs['remote_document']
         self.com = kwargs['comm_handler']
         self.sdata = kwargs['shared_data']
-        self.pdata = kwargs['private_data']
-        self.selected_color_text = self.pdata.get('selected color text', None)
+        self.tdata = kwargs['tab_data']
+        self.selected_color_text = self.tdata.get('selected color text', None)
 
         # insert a title
         self.title = self.rdoc.body.element('h1', 'COLORS I REALLY LIKE :)')
@@ -86,7 +86,7 @@ class ColorsMeteorApp:
             self.menu.increase_count_by(item, int(amount))
 
     def color_selected(self, sender_id, color):
-        self.pdata['selected color text'] = color
+        self.tdata['selected color text'] = color
 
     def build_menu(self):
         # the following function will be used to initialize all menu items
