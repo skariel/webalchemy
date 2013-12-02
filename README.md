@@ -8,7 +8,6 @@ Built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the futu
 We "translated" Meteor colors app to webalchemy. The app below can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast)
 
 ```python
-from tornado import gen
 from webalchemy import server
 from webalchemy.widgets.basic.menu import Menu
 
@@ -30,7 +29,6 @@ class ColorsMeteorApp:
         })
 
     # this method is called when a new session starts
-    @gen.coroutine
     def initialize(self, **kwargs):
         # remember these for later use
         self.rdoc = kwargs['remote_document']
@@ -61,7 +59,7 @@ class ColorsMeteorApp:
         self.button.events.add(click=self.rdoc.jsfunction(body='''
             if (!#{self.menu.element}.app.selected) return;
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,1);
-            rpc('color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, 1);
+            #rpc{self.color_liked, #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, 1};
         '''))
 
         # insert another button !!
@@ -73,14 +71,10 @@ class ColorsMeteorApp:
         self.button2.events.add(click=self.rdoc.jsfunction(body='''
             if (!#{self.menu.element}.app.selected) return;
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,-1);
-            rpc('color_liked', #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1);
+            #rpc{self.color_liked, #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1};
         '''))
 
-    # register the method so we can call it from frontend js,
-    # and then also from other sessions (from Python)
-    @server.jsrpc
     @server.pyrpc
-    @gen.coroutine
     def color_liked(self, sender_id, item_id, color, amount):
         if sender_id == self.com.id:
             # button clicked on this session
@@ -91,8 +85,6 @@ class ColorsMeteorApp:
             item = self.menu.id_dict[item_id]
             self.menu.increase_count_by(item, int(amount))
 
-    @server.jsrpc
-    @gen.coroutine
     def color_selected(self, sender_id, color):
         self.pdata['selected color text'] = color
 
@@ -134,7 +126,7 @@ class ColorsMeteorApp:
             if ((#{m.element}.app.selected)&&(#{m.element}.app.selected!=element))
                 #{m.element}.app.selected.classList.remove('selected');
             #{m.element}.app.selected= element;
-            rpc('color_selected', element.app.color);
+            #rpc{self.color_selected, element.app.color};
         ''')
         m.element.events.add(click=self.rdoc.jsfunction('event', body='''
             #{m.select_color}(event.target);
@@ -190,7 +182,7 @@ from webalchemy.examples.colors_meteor_example import colors_meteor_app
 server.run('127.0.0.1',8083,colors_meteor_app) 
 ```
 
-now set your browser to http://127.0.0.1:8083
+now set your browser to http://127.0.0.1:8080
 
 ###Requirements
 * Python >= 3.3
