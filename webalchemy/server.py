@@ -20,6 +20,7 @@ from webalchemy.remotedocument import RemoteDocument
 # logger for internal purposes
 log = logging.getLogger(__name__)
 
+
 curr_session_counter = 0
 
 
@@ -297,7 +298,8 @@ def dreload(module, dreload_blacklist_starting_with, just_visit=False):
 
 
 class AppUpdater:
-    def __init__(self, app, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data):
+    def __init__(self, app, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data,
+                 additional_monitored_files):
         self.app = app
         self.cls = cls
         self.shared_wshandlers = shared_wshandlers
@@ -307,18 +309,25 @@ class AppUpdater:
         self.mdl = sys.modules[self.cls.__module__]
         self.mdl_fn = self.mdl.__file__
         self.monitored_files = dreload(self.mdl, self.dreload_blacklist_starting_with, just_visit=True)
+        self.set_additional_monitored_files(additional_monitored_files)
         log.info('monitored files: ' + str(self.monitored_files))
         self.last_time_modified = {
             fn: os.stat(fn).st_mtime for fn in self.monitored_files
         }
 
+    def set_additional_monitored_files(self, fns):
+        if fns:
+            self.monitored_files.extend(fns)
+
     def update_app(self):
-        if not any([os.stat(fn).st_mtime != self.last_time_modified[fn] for fn in self.monitored_files]):
-            return
+        try:
+            # this is inside a try block so we track for missing files
+            if not any(os.stat(fn).st_mtime != self.last_time_modified[fn] for fn in self.monitored_files):
+                return
+        except:
+            pass
         log.info('Reloading document!')
-        self.last_time_modified = {
-            fn: os.stat(fn).st_mtime for fn in self.monitored_files
-        }
+        self.last_time_modified = {fn: os.stat(fn).st_mtime for fn in self.monitored_files}
         clean_pyrpc()
         data = None
         if hasattr(self.cls, 'prepare_app_for_general_reload'):
@@ -338,6 +347,7 @@ class AppUpdater:
 
 
 class PrivateDataStore:
+
     def __init__(self):
         self.d = dict()
 
@@ -355,10 +365,11 @@ class PrivateDataStore:
 def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
 
     static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
-    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy',))
+    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'tornado'))
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
     session_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
+    additional_monitored_files = kwargs.get('additional_monitored_files', None)
 
     static_path = None
     hn = 1
@@ -385,7 +396,8 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
                                                  session_data_store=session_data_store,
                                                  tab_data_store=tab_data_store)),
     ], static_path=static_path)
-    au = AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data)
+    au = AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with,
+                    shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     application.listen(port)
     log.info('starting Tornado event loop')

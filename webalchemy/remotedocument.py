@@ -268,6 +268,7 @@ class Element:
         self.app = SimpleProp(rdoc, self.varname, 'app')
         self.att.id = self.varname
         self.cls.append(self.varname)
+        self.prop = SimpleProp(self.rdoc, self.varname, None)
 
         if typ in add_attr_typ_dict:
             self.att(**add_attr_typ_dict[typ])
