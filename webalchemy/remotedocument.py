@@ -10,28 +10,27 @@ from webalchemy.saferef import safeRef
 log = logging.getLogger(__name__)
 
 
-# TODO: populate this...
-style_atts_requiring_vendor = ['transition', 'transform', 'userSelect', 'animation']
-
-
-def vendorize(vendor_prefix, item):
-    if item == 'float':
-        return ['cssFloat']
-    if item.startswith('vendor'):
-        real_item_cap = item[6:]
-        real_item_uncap = real_item_cap[:1].lower() + real_item_cap[1:]
-    elif item in style_atts_requiring_vendor:
-        real_item_cap = item[0].upper() + item[1:]
-        real_item_uncap = item
-    else:
-        return [item]
-    vendorized = [real_item_uncap]
-    if vendor_prefix:
-        vendorized.append(vendor_prefix + real_item_cap)
-    return vendorized
-
-
 class StyleAtt:
+    # TODO: populate this...
+    _style_atts_requiring_vendor = {'transition', 'transform', 'userSelect', 'animation'}
+
+    @staticmethod
+    def _vendorize(vendor_prefix, item):
+        if item == 'float':
+            return ['cssFloat']
+        if item.startswith('vendor'):
+            real_item_cap = item[6:]
+            real_item_uncap = real_item_cap[:1].lower() + real_item_cap[1:]
+        elif item in StyleAtt._style_atts_requiring_vendor:
+            real_item_cap = item[0].upper() + item[1:]
+            real_item_uncap = item
+        else:
+            return [item]
+        vendorized = [real_item_uncap]
+        if vendor_prefix:
+            vendorized.append(vendor_prefix + real_item_cap)
+        return vendorized
+
     def __init__(self, rdoc, varname):
         super().__setattr__('rdoc', rdoc)
         super().__setattr__('varname', varname)
@@ -42,13 +41,13 @@ class StyleAtt:
             strval = '"{'
             for k, v in val.items():
                 strv = ': ' + self.rdoc.stringify(v, encapsulate_strings=False) + ';\n'
-                for ki in vendorize(self.rdoc.vendor_prefix, k):
+                for ki in StyleAtt._vendorize(self.rdoc.vendor_prefix, k):
                     strval += ki
                     strval += strv
             strval += '}"'
         else:
             strval = self.rdoc.stringify(val)
-        for vi in vendorize(self.rdoc.vendor_prefix, item):
+        for vi in StyleAtt._vendorize(self.rdoc.vendor_prefix, item):
             js = self.varname + '.style["' + vi + '"]=' + strval + ';\n'
             self.rdoc.inline(js)
             self.d[vi] = val
@@ -65,8 +64,8 @@ class StyleAtt:
         return self[name]
 
     def __delitem__(self, item):
-        for vi in vendorize(self.rdoc.vendor_prefix, item):
-            js = self.varname + '.removeProperty("' + vi + '");\n'
+        for vi in StyleAtt._vendorize(self.rdoc.vendor_prefix, item):
+            js = self.varname + '.style.removeProperty("' + vi + '");\n'
             self.rdoc.inline(js)
             del self.d[vi]
 
@@ -213,31 +212,31 @@ class SimpleProp:
             self[k] = v
 
 
-# List of namespaces
-unique_ns = {
-    'ww3/svg': 'http://www.w3.org/2000/svg',
-}
-
-# Namespace in which to create items of type 'typ'
-ns_typ_dict = {
-    'svg': 'ww3/svg',
-    'line': 'ww3/svg',
-    'rect': 'ww3/svg',
-    'circle': 'ww3/svg',
-    'ellipse': 'ww3/svg',
-    'polyline': 'ww3/svg',
-    'polygon': 'ww3/svg',
-    'path': 'ww3/svg',
-    'g': 'ww3/svg',
-}
-
-# additional attributes that elements of type 'typ' should have
-add_attr_typ_dict = {
-    'svg': {'xmlns': 'http://www.w3.org/2000/svg'},
-}
-
-
 class Element:
+    # Namespace in which to create items of type 'typ'
+    # this is good to handle SVGs, etc.
+    _ns_typ_dict = {
+        'svg': 'ww3/svg',
+        'line': 'ww3/svg',
+        'rect': 'ww3/svg',
+        'circle': 'ww3/svg',
+        'ellipse': 'ww3/svg',
+        'polyline': 'ww3/svg',
+        'polygon': 'ww3/svg',
+        'path': 'ww3/svg',
+        'g': 'ww3/svg',
+    }
+
+    # List of namespaces
+    _unique_ns = {
+        'ww3/svg': 'http://www.w3.org/2000/svg',
+    }
+
+    # additional attributes that elements of type 'typ' should have
+    _add_attr_typ_dict = {
+        'svg': {'xmlns': 'http://www.w3.org/2000/svg'},
+    }
+
     def __init__(self, rdoc, typ, text=None, customvarname=None):
         if not customvarname:
             self.varname = rdoc.get_new_uid()
@@ -247,9 +246,8 @@ class Element:
         self.typ = typ
         self.parent = None
         self.childs = []
-        global ns_typ_dict
-        if typ in ns_typ_dict:
-            ns = unique_ns[ns_typ_dict[typ]]
+        if typ in Element._ns_typ_dict:
+            ns = Element._unique_ns[Element._ns_typ_dict[typ]]
             js = self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
         else:
             js = self.varname + '=document.createElement("' + typ + '");\n'
@@ -270,8 +268,8 @@ class Element:
         self.cls.append(self.varname)
         self.prop = SimpleProp(self.rdoc, self.varname, None)
 
-        if typ in add_attr_typ_dict:
-            self.att(**add_attr_typ_dict[typ])
+        if typ in Element._add_attr_typ_dict:
+            self.att(**Element._add_attr_typ_dict[typ])
 
     def remove(self):
         s = self.varname + '.parentNode.removeChild(' + self.varname + ');\n'
@@ -312,15 +310,16 @@ def strhash(s):
     return hashlib.sha1(s.encode()).hexdigest()
 
 
-rec1_inline = re.compile(r'#\{([^}]*)\}')
-rec2_rpc = re.compile(r'#rpc\{([^}]*)\}')
+_rec1_inline = re.compile(r'#\{([^}]*)\}')
+_rec2_rpc = re.compile(r'#rpc\{([^}]*)\}')
 
-def inline(code, level=1, stringify=None, rpcweakrefs=None):
+
+def _inline(code, level=1, stringify=None, rpcweakrefs=None):
     # inline interpolation...
     prev_frame = inspect.getouterframes(inspect.currentframe())[level][0]
     loc = prev_frame.f_locals
     glo = prev_frame.f_globals
-    for item in rec1_inline.findall(code):
+    for item in _rec1_inline.findall(code):
         rep = eval(item, glo, loc)
         if not stringify:
             if hasattr(rep, 'varname'):
@@ -332,7 +331,7 @@ def inline(code, level=1, stringify=None, rpcweakrefs=None):
         code = code.replace('#{%s}' % item, rep)
 
     if rpcweakrefs is not None:
-        for item in rec2_rpc.findall(code):
+        for item in _rec2_rpc.findall(code):
             sitem = item.split(',')
             litem = sitem[0].strip()
             ritem = ','.join(sitem[1:])
@@ -357,7 +356,7 @@ class Interval:
         self.ms = ms
         self.is_running = True
         code = self.rdoc.stringify(exp, pop_line=False)
-        code = inline(code, level=level, rpcweakrefs=self.rdoc.rpcweakrefs)
+        code = _inline(code, level=level, rpcweakrefs=self.rdoc.rpcweakrefs)
         if not callable(exp):
             code = 'function(){' + code + '}'
         js = self.varname + '=setInterval(' + code + ',' + str(ms) + ');\n'
@@ -374,7 +373,7 @@ class JSFunction:
         self.rdoc = rdoc
         self.varname = rdoc.get_new_uid()
         code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False)
-        code = inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
+        code = _inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
         code = code.rstrip(';\n')
         args = ','.join(varargs)
         self.js = self.varname + '=function(' + args + '){\n' + code + '\n}\n'

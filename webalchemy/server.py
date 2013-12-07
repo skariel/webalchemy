@@ -34,12 +34,7 @@ class MainHandler(tornado.web.RequestHandler):
 
     def initialize(self, **kwargs):
         log.info('Initiallizing new app!')
-        ffn = os.path.realpath(__file__)
-        ffn = os.path.dirname(ffn)
-        ffn = os.path.join(ffn, 'main.html')
-        with open(ffn, 'r') as f:
-            self.main_html = f.read()
-        self.main_html = self.main_html.replace('PORT', str(kwargs['port'])).replace('HOST', kwargs['host'])
+        self.main_html = kwargs['main_html']
 
     @gen.coroutine
     def get(self):
@@ -272,16 +267,16 @@ def dreload(module, dreload_blacklist_starting_with, just_visit=False):
         for name in dir(mdl):
             mm = getattr(mdl, name)
             if type(mm) is not ModuleType:
-                if hasattr(mm, '__module__') and \
-                        mm.__module__ is not None:
+                if (hasattr(mm, '__module__') and
+                        mm.__module__ is not None):
                     mm = sys.modules[mm.__module__]
 
-            if not hasattr(mm, '__file__') or \
-                    not os.path.realpath(mm.__file__).startswith(_base_path) or \
-                    mm.__name__[0] == '_' or \
-                    '._' in mm.__name__ or \
-                    mm.__name__ in _s or \
-                    any(mm.__name__.startswith(bln) for bln in dreload_blacklist_starting_with):
+            if (not hasattr(mm, '__file__') or
+                    not os.path.realpath(mm.__file__).startswith(_base_path) or
+                    mm.__name__[0] == '_' or
+                    '._' in mm.__name__ or
+                    mm.__name__ in _s or
+                    any(mm.__name__.startswith(bln) for bln in dreload_blacklist_starting_with)):
                 continue
 
             _s.add(mm.__name__)
@@ -388,8 +383,26 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
         local_doc_class.initialize_shared_data(shared_data)
     session_data_store = session_data_store_class()
     tab_data_store = tab_data_store_class()
+
+    # prepare main_html ...
+    mfn = os.path.realpath(__file__)
+    mfn = os.path.dirname(mfn)
+    ffn = os.path.join(mfn, 'main.html')
+    lines = []
+    with open(ffn, 'r') as f:
+        for l in f:
+            if l.startswith('-->'):
+                fnjs = l.split()[1].strip()
+                fnjs = os.path.join(mfn, fnjs)
+                with open(fnjs, 'r') as fjs:
+                    l = fjs.read()
+            lines.append(l)
+    main_html = ''.join(lines)
+    main_html = main_html.replace('PORT', str(port)).replace('HOST', host)
+
+    # setting-up the tornado server
     application = tornado.web.Application([
-        (r'/', MainHandler, dict(host=host, port=port)),
+        (r'/', MainHandler, dict(main_html=main_html)),
         (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class,
                                                  shared_wshandlers=shared_wshandlers,
                                                  shared_data=shared_data,
@@ -402,3 +415,4 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
     application.listen(port)
     log.info('starting Tornado event loop')
     tornado.ioloop.IOLoop.instance().start()
+

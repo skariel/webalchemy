@@ -99,21 +99,17 @@ class ColorsMeteorApp:
         m.sort = self.rdoc.jsfunction(body='''
             e=#{m.element}
             var arr = Array.prototype.slice.call( e.children ).sort(function (a,b) {
-                if (a.app.clickedcount < b.app.clickedcount)
-                    return -1;
-                if (a.app.clickedcount > b.app.clickedcount)
-                    return 1;
+                if (a.app.clickedcount < b.app.clickedcount) return -1;
+                if (a.app.clickedcount > b.app.clickedcount) return 1;
                 return 0;                
             });
             for(i=0;i<arr.length;i++)
                 e.appendChild(arr[i])
-            return arr;
             ''')
         m.increase_count_by = self.rdoc.jsfunction('element', 'amount', body='''
-            att= element.app;
-            att.clickedcount+= amount;
+            element.app.clickedcount+= amount;
             #{m.sort}();
-            element.textContent= '('+att.clickedcount+') '+att.color;
+            element.textContent= '('+element.app.clickedcount+') '+element.app.color;
             ''')
         m.select_color = self.rdoc.jsfunction('element', body='''
             element.classList.add('selected');
@@ -121,7 +117,9 @@ class ColorsMeteorApp:
                 #{m.element}.app.selected.classList.remove('selected');
             #{m.element}.app.selected= element;
             #rpc{self.color_selected, element.app.color};
+            // SYNC HERE INSTEAD OF LINE ABOVE!!!
         ''')
+        # TODO: the dsync above
         m.element.events.add(click=self.rdoc.jsfunction('event', body='''
             #{m.select_color}(event.target);
         '''))
