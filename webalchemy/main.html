@@ -4,15 +4,17 @@
 </body>
 <script>
 // the following files will be inserted here
---> reconnecting_ws.js
---> watch.js
---> cookie.js
---> vendor.js
---> comm.js
---> reconnection_overlay.js
+--> js/reconnecting_ws.js
+--> js/watch.js
+--> js/cookie.js
+--> js/vendor.js
+--> js/comm.js
+--> js/reconnection_overlay.js
+--> js/download_url.js
 
+debug = false;
 init_communication = function() {
-    ws = new ReconnectingWebSocket('ws://HOST:PORT/websocket');
+    ws = new ReconnectingWebSocket('ws://__HOST__:__PORT__/__WEBSOCKET__/__ARGS__');
     ws.onopen = function() {
        if (overlay_shown) {
         overlay_shown = false;
@@ -27,10 +29,12 @@ init_communication = function() {
       }  
     }
     ws.onmessage = function (evt) {
-       console.log('message received:')
-       console.log(evt.data)
-       eval(evt.data)
-       message('done')
+       if (debug) {
+          console.log('message received:');
+          console.log(evt.data);
+       }
+       eval(evt.data);
+       message('done');
     };
 }
 </script>

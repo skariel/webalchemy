@@ -1,8 +1,7 @@
 import re
+import random
 import inspect
 import logging
-import weakref
-import hashlib
 from webalchemy.saferef import safeRef
 
 
@@ -306,8 +305,11 @@ class Element:
         return e
 
 
-def strhash(s):
-    return hashlib.sha1(s.encode()).hexdigest()
+class Window:
+    def __init__(self, rdoc):
+        self.rdoc = rdoc
+        self.varname = 'window'
+        self.events = EventListener(rdoc, self.varname)
 
 
 _rec1_inline = re.compile(r'#\{([^}]*)\}')
@@ -336,7 +338,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None):
             litem = sitem[0].strip()
             ritem = ','.join(sitem[1:])
             fnc = eval(litem, glo, loc)
-            rep = strhash(fnc.__repr__())
+            rep = str(random.randint(0, 1e16))
 
             def ondelete(r):
                 del rpcweakrefs[r.__rep]
@@ -368,7 +370,7 @@ class Interval:
         self.rdoc.inline(js)
 
 
-class JSFunction:
+class _JSFunction:
     def __init__(self, rdoc, *varargs, body=None, level=2):
         self.rdoc = rdoc
         self.varname = rdoc.get_new_uid()
@@ -387,7 +389,7 @@ class JSFunction:
         return self.varname + '();\n'
 
 
-class StyleSheet:
+class _StyleSheet:
     def __init__(self, rdoc):
         self.rdoc = rdoc
         self.element = rdoc.element('style')
@@ -398,10 +400,10 @@ class StyleSheet:
         self.rdoc.inline(js)
 
     def rule(self, selector, **kwargs):
-        return Rule(self, selector, **kwargs)
+        return _Rule(self, selector, **kwargs)
 
 
-class Rule:
+class _Rule:
     def __init__(self, stylesheet, selector, **kwargs):
         if selector.split()[0] == '@keyframes' and stylesheet.rdoc.vendor_prefix == 'webkit':
             selector = '@-webkit-' + selector[1:]
@@ -431,9 +433,10 @@ class RemoteDocument:
         self.inline('document.app={};\n')
         self.app = SimpleProp(self, 'document', 'app')
         self.props = SimpleProp(self, 'document', None)
-        self.stylesheet = StyleSheet(self)
+        self.stylesheet = _StyleSheet(self)
         self.vendor_prefix = None
         self.jsrpcweakrefs = {}
+        self.window = Window(self)
 
     def set_vendor_prefix(self, vendor_prefix):
         self.vendor_prefix = vendor_prefix
@@ -450,7 +453,7 @@ class RemoteDocument:
         return Interval(self, ms, exp, level=3)
 
     def jsfunction(self, *varargs, body=None):
-        return JSFunction(self, *varargs, body=body, level=3)
+        return _JSFunction(self, *varargs, body=body, level=3)
 
     def get_new_uid(self):
         uid = '__v' + str(self.__uid_count)
@@ -491,7 +494,7 @@ class RemoteDocument:
         self.inline('message("' + text + '");')
 
     def stylesheet(self):
-        return StyleSheet(self)
+        return _StyleSheet(self)
 
     def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True):
         if type(val) is bool:

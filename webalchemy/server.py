@@ -2,6 +2,7 @@ import os
 import imp
 import sys
 import time
+import random
 import logging
 import os.path
 
@@ -21,24 +22,22 @@ from webalchemy.remotedocument import RemoteDocument
 log = logging.getLogger(__name__)
 
 
-curr_session_counter = 0
+def _generate_session_id():
+    return str(random.randint(0, 1e16))
 
 
-def generate_session_id():
-    global curr_session_counter
-    curr_session_counter += 1
-    return 's' + str(curr_session_counter) + 'p' + str(os.getpid())
-
-
-class MainHandler(tornado.web.RequestHandler):
+class _MainHandler(tornado.web.RequestHandler):
 
     def initialize(self, **kwargs):
         log.info('Initiallizing new app!')
         self.main_html = kwargs['main_html']
 
     @gen.coroutine
-    def get(self):
+    def get(self, *varargs):
         self.add_header('X-UA-Compatible', 'IE=edge')
+        if not varargs:
+            varargs = ('',)
+        self.main_html = self.main_html.replace('__ARGS__', str(varargs[0]))
         self.write(self.main_html)
 
 
@@ -48,7 +47,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def initialize(self, **kwargs):
         log.info('Initiallizing a websocket handler!')
         try:
-            self.id = generate_session_id()
+            self.id = _generate_session_id()
             self.remotedocument = RemoteDocument()
             self.closed = True
             self.session_id = None
@@ -69,15 +68,24 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             log.exception('Initialization of websocket handler failed!')
 
     @gen.coroutine
-    def open(self):
+    def open(self, *varargs):
         self.closed = False
         log.info('WebSocket opened')
+        self.getargs = varargs
+
+    @gen.coroutine
+    def handle_binary_message(self, message):
+        # TODO: implement this!
+        raise NotImplementedError
 
     @gen.coroutine
     def on_message(self, message):
         log.info('Message received:\n' + message)
         try:
-            if not self.local_doc_initialized:
+            if not isinstance(message, str):
+                log.info('binary data')
+                yield self.handle_binary_message(message)
+            elif not self.local_doc_initialized:
                 log.info('Initializing local document...')
                 self.session_id = message.split(':')[1]
                 self.is_new_session = False
@@ -101,7 +109,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                                               session_id=self.session_id, tab_id=self.tab_id,
                                               shared_data=self.shared_data, session_data=self.session_data,
                                               tab_data=self.tab_data, is_new_tab=self.is_new_tab,
-                                              is_new_session=self.is_new_session)
+                                              is_new_session=self.is_new_session,
+                                              getargs=self.getargs)
                 if r is not None:
                     yield r
                 self.local_doc_initialized = True
@@ -113,11 +122,19 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     r = self.local_doc.inmessage(message)
                     if r is not None:
                         yield r
-                else:
-                    log.info('Discarding message...')
+                elif message != 'done':
+                    raise Exception('bad message received: '+str(message))
+
             yield self.flush_dom()
         except:
             log.exception('Failed handling message:')
+
+    @gen.coroutine
+    def send_data(self, text, data):
+        # TODO: implement!
+        # will have to have a binary format for both text and binary data
+        # also change the handling in the client
+        raise NotImplementedError
 
     @gen.coroutine
     def flush_dom(self):
@@ -242,7 +259,7 @@ def pyrpc(f):
         log.exception('Failed registering py->py RPC function')
 
 
-def clean_pyrpc():
+def _clean_pyrpc():
     global py_to_py_rpcdict
     py_to_py_rpcdict = {}
 
@@ -252,13 +269,13 @@ def async_delay(secs):
     yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
 
 
-def dreload(module, dreload_blacklist_starting_with, just_visit=False):
+def _dreload(module, dreload_blacklist_starting_with, just_visit=False):
     _s = {module.__name__}
     _base_file = os.path.realpath(module.__file__)
     _base_path = os.path.dirname(_base_file)
     _reloaded_files = []
 
-    def _dreload(mdl):
+    def __dreload(mdl):
         """Recursively reload modules."""
         nonlocal _s
         nonlocal _base_path
@@ -280,7 +297,7 @@ def dreload(module, dreload_blacklist_starting_with, just_visit=False):
                 continue
 
             _s.add(mm.__name__)
-            _dreload(mm)
+            __dreload(mm)
         _reloaded_files.append(os.path.realpath(mdl.__file__))
         if not just_visit:
             log.info('reloading: ' + str(mdl.__name__))
@@ -288,11 +305,11 @@ def dreload(module, dreload_blacklist_starting_with, just_visit=False):
         else:
             log.info('visiting: ' + str(mdl.__name__))
 
-    _dreload(module)
+    __dreload(module)
     return _reloaded_files
 
 
-class AppUpdater:
+class _AppUpdater:
     def __init__(self, app, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data,
                  additional_monitored_files):
         self.app = app
@@ -303,7 +320,7 @@ class AppUpdater:
         self.dreload_blacklist_starting_with = dreload_blacklist_starting_with
         self.mdl = sys.modules[self.cls.__module__]
         self.mdl_fn = self.mdl.__file__
-        self.monitored_files = dreload(self.mdl, self.dreload_blacklist_starting_with, just_visit=True)
+        self.monitored_files = _dreload(self.mdl, self.dreload_blacklist_starting_with, just_visit=True)
         self.set_additional_monitored_files(additional_monitored_files)
         log.info('monitored files: ' + str(self.monitored_files))
         self.last_time_modified = {
@@ -323,11 +340,11 @@ class AppUpdater:
             pass
         log.info('Reloading document!')
         self.last_time_modified = {fn: os.stat(fn).st_mtime for fn in self.monitored_files}
-        clean_pyrpc()
+        _clean_pyrpc()
         data = None
         if hasattr(self.cls, 'prepare_app_for_general_reload'):
             data = self.cls.prepare_app_for_general_reload()
-        dreload(self.mdl, self.dreload_blacklist_starting_with)
+        _dreload(self.mdl, self.dreload_blacklist_starting_with)
         tmp_cls = getattr(self.mdl, self.cls.__name__)
         if hasattr(tmp_cls, 'recover_app_from_general_reload'):
             tmp_cls.recover_app_from_general_reload(data)
@@ -365,8 +382,17 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
     session_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
     additional_monitored_files = kwargs.get('additional_monitored_files', None)
+    ssl = kwargs.get('ssl', False)
+    ssl_cert_file = kwargs.get('cert_file', 'mydomain.crt')
+    ssl_key_file = kwargs.get('ket_file', 'mydomain.key')
+    ws_explicit_route = kwargs.get('ws_explicit_route', r'websocket')
+    ws_route = r'/'+ws_explicit_route+r'/(.*)'
+    main_explicit_route = kwargs.get('main_route', None)
+    if not main_explicit_route:
+        main_route = r'/(.*)'
+    else:
+        main_route = r'/'+main_explicit_route+r'/(.*)'
 
-    static_path = None
     hn = 1
     if static_path_from_local_doc_base:
         mdl = sys.modules[local_doc_class.__module__]
@@ -398,21 +424,36 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
                     l = fjs.read()
             lines.append(l)
     main_html = ''.join(lines)
-    main_html = main_html.replace('PORT', str(port)).replace('HOST', host)
+    main_html = main_html.replace('__WEBSOCKET__', ws_explicit_route)
+    main_html = main_html.replace('__PORT__', str(port)).replace('__HOST__', host)
+    if ssl:
+        main_html = main_html.replace('ws://', 'wss://')
 
     # setting-up the tornado server
     application = tornado.web.Application([
-        (r'/', MainHandler, dict(main_html=main_html)),
-        (r'/websocket/*', WebSocketHandler, dict(local_doc_class=local_doc_class,
-                                                 shared_wshandlers=shared_wshandlers,
-                                                 shared_data=shared_data,
-                                                 session_data_store=session_data_store,
-                                                 tab_data_store=tab_data_store)),
+        (ws_route, WebSocketHandler, dict(local_doc_class=local_doc_class,
+                                          shared_wshandlers=shared_wshandlers,
+                                          shared_data=shared_data,
+                                          session_data_store=session_data_store,
+                                          tab_data_store=tab_data_store,
+                                          main_explicit_route=main_explicit_route)),
+        (main_route, _MainHandler, dict(main_html=main_html)),
     ], static_path=static_path)
-    au = AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with,
-                    shared_data, additional_monitored_files=additional_monitored_files)
+    au = _AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with,
+                     shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
-    application.listen(port)
+    if not ssl:
+        application.listen(port)
+    else:
+        mdl = sys.modules[local_doc_class.__module__]
+        mdl_fn = mdl.__file__
+        lib_dir = os.path.realpath(mdl_fn)
+        lib_dir = os.path.dirname(lib_dir)
+        application.listen(port, ssl_options={
+            'certfile': os.path.join(lib_dir, ssl_cert_file),
+            'keyfile': os.path.join(lib_dir, ssl_key_file),
+        })
+
     log.info('starting Tornado event loop')
     tornado.ioloop.IOLoop.instance().start()
 
