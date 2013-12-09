@@ -1,5 +1,5 @@
-##webalchemy: realtime web framework for Python
-Weblchemy helps keep frontend code simple by automating it through a websocket connection. Built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It is MIT [licensed](LICENSE.txt).
+##Webalchemy: realtime web framework for Python
+helps keep frontend code simple by automating it through a websocket connection. Built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It is MIT [licensed](LICENSE.txt).
 
 ##Getting started
 
