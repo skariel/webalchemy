@@ -28,7 +28,7 @@ now set your browser to http://127.0.0.1:8080
 
 ###Run an example
 
-We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory, to run the following:
+We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory, it can be executed like this:
 
 ```python
 from webalchemy import server
