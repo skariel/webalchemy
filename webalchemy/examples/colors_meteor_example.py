@@ -29,11 +29,10 @@ class ColorsMeteorApp:
         self.com = kwargs['comm_handler']
         self.sdata = kwargs['shared_data']
         self.tdata = kwargs['tab_data']
-        self.selected_color_text = self.tdata.get('selected color text', None)
 
         # insert a title
-        self.title = self.rdoc.body.element('h1', 'COLORS I REALLY LIKE :)')
-        self.title.style(
+        title = self.rdoc.body.element(h1='COLORS I REALLY LIKE :)')
+        title.style(
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='3.5em',
         )
@@ -41,36 +40,40 @@ class ColorsMeteorApp:
 
         # insert a menu
         self.menu = self.build_menu()
-        self.menu.element.style(marginLeft='50px', marginBottom='30px', width='400px', borderWidth='2px')
+        self.menu.element.style(
+            marginLeft='50px',
+            marginBottom='30px',
+            width='400px',
+            borderWidth='2px')
         self.rdoc.body.append(self.menu.element)
 
         # insert a button
-        self.button = self.rdoc.body.element('button', 'Like!')
-        self.button.style(
+        button = self.rdoc.body.element(button='Like!')
+        button.style(
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='1.5em',
         )
-        self.button.events.add(click=self.rdoc.jsfunction(body='''
+        button.events.add(click=self.rdoc.jsfunction(body='''
             if (!#{self.menu.element}.app.selected) return;
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,1);
             #rpc{self.color_liked, #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, 1};
         '''))
 
         # insert another button !!
-        self.button2 = self.rdoc.body.element('button', 'UNLike!')
-        self.button2.style(
+        button2 = self.rdoc.body.element(button='UNLike!')
+        button2.style(
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='1.5em',
         )
-        self.button2.events.add(click=self.rdoc.jsfunction(body='''
+        button2.events.add(click=self.rdoc.jsfunction(body='''
             if (!#{self.menu.element}.app.selected) return;
             #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,-1);
             #rpc{self.color_liked, #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1};
         '''))
 
     @server.pyrpc
-    def color_liked(self, sender_id, item_id, color, amount):
-        if sender_id == self.com.id:
+    def color_liked(self, sender_com_id, item_id, color, amount):
+        if sender_com_id == self.com.id:
             # button clicked on this session
             self.sdata[color] += int(amount)
             self.com.rpc(self.color_liked, item_id, color, amount)
@@ -90,7 +93,7 @@ class ColorsMeteorApp:
             item.app.color = col
             item.app.clickedcount = self.sdata.get(col, 0)
             m.increase_count_by(item, 0)
-            if item.text == self.selected_color_text:
+            if item.text == self.tdata.get('selected color text', None):
                 m.select_color(item)
 
         # create a menu element with the above item initializer
@@ -105,24 +108,22 @@ class ColorsMeteorApp:
             });
             for(i=0;i<arr.length;i++)
                 e.appendChild(arr[i])
-            ''')
+        ''')
         m.increase_count_by = self.rdoc.jsfunction('element', 'amount', body='''
             element.app.clickedcount+= amount;
             #{m.sort}();
             element.textContent= '('+element.app.clickedcount+') '+element.app.color;
-            ''')
+        ''')
         m.select_color = self.rdoc.jsfunction('element', body='''
+            if (element.target) element = element.target;
             element.classList.add('selected');
             if ((#{m.element}.app.selected)&&(#{m.element}.app.selected!=element))
                 #{m.element}.app.selected.classList.remove('selected');
             #{m.element}.app.selected= element;
             #rpc{self.color_selected, element.app.color};
-            // SYNC HERE INSTEAD OF LINE ABOVE!!!
         ''')
-        # TODO: the dsync above
-        m.element.events.add(click=self.rdoc.jsfunction('event', body='''
-            #{m.select_color}(event.target);
-        '''))
+        m.element.events.add(click=m.select_color)
+
         # style the menu
         m.rule_menu.style(display='table', margin='10px')
         m.rule_item.style(

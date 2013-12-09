@@ -12,7 +12,7 @@
 --> js/reconnection_overlay.js
 --> js/download_url.js
 
-debug = false;
+debug = true;
 init_communication = function() {
     ws = new ReconnectingWebSocket('ws://__HOST__:__PORT__/__WEBSOCKET__/__ARGS__');
     ws.onopen = function() {

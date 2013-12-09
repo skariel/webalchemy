@@ -276,11 +276,19 @@ class Element:
         self.parent.childs.remove(self)
         self.parent = None
 
-    def append(self, e):
-        self.childs.append(e)
-        e.parent = self
-        s = self.varname + '.appendChild(' + e.varname + ');\n'
-        self.rdoc.inline(s)
+    def append(self, es):
+        if hasattr(es, '__len__'):
+            for e in es:
+                self.childs.append(e)
+                e.parent = self
+                s = self.varname + '.appendChild(' + e.varname + ');\n'
+                self.rdoc.inline(s)
+        else:
+            self.childs.append(es)
+            es.parent = self
+            s = self.varname + '.appendChild(' + es.varname + ');\n'
+            self.rdoc.inline(s)
+
 
     @property
     def text(self):
@@ -299,10 +307,10 @@ class Element:
     def __str__(self):
         return self.varname
 
-    def element(self, typ, txt=None):
-        e = self.rdoc.element(typ, txt)
-        self.append(e)
-        return e
+    def element(self, typ=None, txt=None, **kwargs):
+        es = self.rdoc.element(typ, txt, **kwargs)
+        self.append(es)
+        return es
 
 
 class Window:
@@ -444,10 +452,21 @@ class RemoteDocument:
     def get_element_from_varname(self, varname) -> Element:
         return self.__varname_element_dict[varname]
 
-    def element(self, typ, text=None):
-        e = Element(self, typ, text)
-        self.__varname_element_dict[e.varname] = e
-        return e
+    def element(self, typ=None, text=None, **kwargs):
+        elems = []
+        if typ:
+            e = Element(self, typ, text)
+            self.__varname_element_dict[e.varname] = e
+            elems.append(e)
+        if kwargs:
+            for i, t in kwargs.items():
+                kwe = Element(self, i, t)
+                self.__varname_element_dict[kwe.varname] = kwe
+                elems.append(kwe)
+        if len(elems) > 1:
+            return elems
+        else:
+            return elems[0]
 
     def startinterval(self, ms, exp=None):
         return Interval(self, ms, exp, level=3)
