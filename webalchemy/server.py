@@ -377,6 +377,7 @@ class PrivateDataStore:
 def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
 
     static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
+    main_html_file_path = kwargs.get('main_html_file_path', None)
     dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'tornado'))
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
@@ -393,7 +394,6 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
     else:
         main_route = r'/'+main_explicit_route+r'/(.*)'
 
-    hn = 1
     if static_path_from_local_doc_base:
         mdl = sys.modules[local_doc_class.__module__]
         mdl_fn = mdl.__file__
@@ -401,7 +401,10 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
         static_path = os.path.dirname(static_path)
         static_path = os.path.join(static_path, static_path_from_local_doc_base)
         log.info('static_path: ' + static_path)
-        hn = 4
+        hn = 3
+    else:
+        static_path = None
+        hn = 0
 
     shared_wshandlers = {}
     shared_data = shared_data_class()
@@ -413,11 +416,14 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
     # prepare main_html ...
     mfn = os.path.realpath(__file__)
     mfn = os.path.dirname(mfn)
-    ffn = os.path.join(mfn, 'main.html')
+    if not main_html_file_path:
+        ffn = os.path.join(mfn, 'main.html')
+    else:
+        ffn = main_html_file_path
     lines = []
     with open(ffn, 'r') as f:
         for l in f:
-            if l.startswith('-->'):
+            if l.lstrip().startswith('-->'):
                 fnjs = l.split()[1].strip()
                 fnjs = os.path.join(mfn, fnjs)
                 with open(fnjs, 'r') as fjs:

@@ -236,7 +236,7 @@ class Element:
         'svg': {'xmlns': 'http://www.w3.org/2000/svg'},
     }
 
-    def __init__(self, rdoc, typ, text=None, customvarname=None):
+    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None):
         if not customvarname:
             self.varname = rdoc.get_new_uid()
         else:
@@ -245,11 +245,14 @@ class Element:
         self.typ = typ
         self.parent = None
         self.childs = []
-        if typ in Element._ns_typ_dict:
-            ns = Element._unique_ns[Element._ns_typ_dict[typ]]
-            js = self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
+        if not fromid:
+            if typ in Element._ns_typ_dict:
+                ns = Element._unique_ns[Element._ns_typ_dict[typ]]
+                js = self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
+            else:
+                js = self.varname + '=document.createElement("' + typ + '");\n'
         else:
-            js = self.varname + '=document.createElement("' + typ + '");\n'
+            js = self.varname + '=document.getElementById("' + fromid + '");\n'
         js += self.varname + '.app={};\n'
         if text is not None:
             self._text = text
@@ -435,8 +438,7 @@ class RemoteDocument:
         self.__code_strings = []
         self.__block_ixs = []
         self.__varname_element_dict = {}
-        self.body = self.element('body', '')
-        self.body.varname = 'document.body'
+        self.body = Element(self, 'body', '', customvarname='document.body')
         self.pop_all_code()  # body is special, it's created by static content
         self.inline('document.app={};\n')
         self.app = SimpleProp(self, 'document', 'app')
@@ -451,6 +453,9 @@ class RemoteDocument:
 
     def get_element_from_varname(self, varname) -> Element:
         return self.__varname_element_dict[varname]
+
+    def getElementById(self, fromid):
+        return Element(self, fromid=fromid)
 
     def element(self, typ=None, text=None, **kwargs):
         elems = []
@@ -508,6 +513,9 @@ class RemoteDocument:
         if varargs:
             text = text.format(*(v.varname for v in varargs))
         self.__code_strings.append(text)
+
+    def JS(self, text):
+        self.__code_strings.append(_inline(text, level=2))
 
     def msg(self, text):
         self.inline('message("' + text + '");')
