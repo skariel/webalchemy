@@ -173,7 +173,7 @@ class EventListener:
 
 
 class SimpleProp:
-    def __init__(self, rdoc, varname, namespace):
+    def __init__(self, rdoc, varname, namespace=None):
         super().__setattr__('rdoc', rdoc)
         if namespace:
             super().__setattr__('varname', varname + '.' + namespace)
@@ -356,6 +356,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None):
 
             wr = safeRef(fnc, ondelete)
             wr.__rep = rep
+            # TODO: should we check for existance first? i.e. every RPC should have its own random number, or can we reuse it?
             rpcweakrefs[rep] = wr
             code = code.replace('#rpc{%s}' % item, 'rpc(%s)' % ("'"+rep+"',"+ritem))
 
@@ -442,7 +443,9 @@ class RemoteDocument:
         self.pop_all_code()  # body is special, it's created by static content
         self.inline('document.app={};\n')
         self.app = SimpleProp(self, 'document', 'app')
-        self.props = SimpleProp(self, 'document', None)
+        self.props = SimpleProp(self, 'document')
+        self.localStorage = SimpleProp(self, 'localStorage')
+        self.sessionStorage = SimpleProp(self, 'localStorage')
         self.stylesheet = _StyleSheet(self)
         self.vendor_prefix = None
         self.jsrpcweakrefs = {}
@@ -515,7 +518,7 @@ class RemoteDocument:
         self.__code_strings.append(text)
 
     def JS(self, text):
-        self.__code_strings.append(_inline(text, level=2))
+        self.__code_strings.append(_inline(text, level=2, stringify=self.stringify, rpcweakrefs=self.jsrpcweakrefs))
 
     def msg(self, text):
         self.inline('message("' + text + '");')
