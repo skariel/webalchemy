@@ -43,7 +43,7 @@ class Table:
                 else:
                     cell = self.rdoc.element('td', 'empty!')
                     if on_add_data_cell:
-                        on_add_data_cell(cell, row_ix, col_ix, self.rows, self.colsc)
+                        on_add_data_cell(cell, row_ix, col_ix, self.rowsc, self.colsc)
                 if col_ix == 0 and has_index:
                     cell.cls.append('index')
                 row.append(cell)
