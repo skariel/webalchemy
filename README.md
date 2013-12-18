@@ -1,5 +1,7 @@
 ##Webalchemy: realtime web framework for Python
-helps keep frontend code simple by automating it through a websocket connection. Built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It is MIT [licensed](LICENSE.txt).
+helps keep frontend code simple by automating it through a websocket connection. Built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/). It is MIT [licensed](LICENSE.txt), and very minimallistic.
+
+checkout our obligratory TodoMVC [implementation](http://skariel.org/webalchemy/todomvc.html) which is client side only but can be served also from a websocket (more info [here](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)), and our initiall [demo](https://vimeo.com/74150054).
 
 ##Getting started
 
