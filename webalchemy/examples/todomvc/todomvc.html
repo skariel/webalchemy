@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Template • TodoMVC</title>
+		<link rel="stylesheet" href="./static/template/bower_components/todomvc-common/base.css">
+	</head>
+<body>		<section id="todoapp">
+			<header id="header">
+				<h1 id="todos">todos</h1>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section id="main">
+				<input id="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul id="todo-list">
+				</ul>
+			</section>
+			<footer id="footer">
+				<span id="todo-count"><strong id="todo-num">0</strong> <span id="item-vs-items">item</span> left</span>
+				<ul id="filters">
+					<li>
+						<a id="filter-all" class="selected" href="#/">All</a>
+					</li>
+					<li>
+						<a id="filter-active" href="#/active">Active</a>
+					</li>
+					<li>
+						<a id="filter-completed" href="#/completed">Completed</a>
+					</li>
+				</ul>
+				<button id="clear-completed">Clear completed (<span id="completed-num">0</span>)</button>
+			</footer>
+		</section>
+		<footer id="info">
+			<p>Double-click to edit a todo</p>
+			<p>Created by <a href="http://todomvc.com">Ariel Keselman</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+		<script src="./static/template/bower_components/todomvc-common/base.js"></script>
+		</script>
+	</body>
+
+
+	<script>
+	// the following files will be inserted here
+	// this is good to serve via a websocket. Can be removed
+	// if app is to be frozen
+
+
+	// the following is good for freezing the app
+
+document.app={};
+var __v0=document.createElement("style");
+__v0.app={};
+__v0.setAttribute("id","__v0");
+__v0.setAttribute("type","text/css");
+document.body.appendChild(__v0);
+__v0=document.styleSheets[0];
+var __v1=document.getElementById("todoapp");
+__v1.app={};
+var __v2=document.getElementById("header");
+__v2.app={};
+var __v3=document.getElementById("todos");
+__v3.app={};
+var __v4=document.getElementById("new-todo");
+__v4.app={};
+var __v5=document.getElementById("main");
+__v5.app={};
+var __v6=document.getElementById("toggle-all");
+__v6.app={};
+var __v7=document.getElementById("todo-list");
+__v7.app={};
+var __v8=document.getElementById("footer");
+__v8.app={};
+var __v9=document.getElementById("todo-count");
+__v9.app={};
+var __v10=document.getElementById("todo-num");
+__v10.app={};
+var __v11=document.getElementById("item-vs-items");
+__v11.app={};
+var __v12=document.getElementById("filters");
+__v12.app={};
+var __v13=document.getElementById("filter-all");
+__v13.app={};
+var __v14=document.getElementById("filter-active");
+__v14.app={};
+var __v15=document.getElementById("filter-completed");
+__v15.app={};
+var __v16=document.getElementById("clear-completed");
+__v16.app={};
+var __v17=document.getElementById("completed-num");
+__v17.app={};
+var __v18=document.getElementById("info");
+__v18.app={};
+__v19=function(){
+
+            __v13.classList.remove('selected');
+            __v14.classList.remove('selected');
+            __v15.classList.remove('selected');
+            switch (location.hash) {
+                case '':
+                case '#/': __v13.classList.add('selected'); break;
+                case '#/active': __v14.classList.add('selected'); break;
+                case '#/completed': __v15.classList.add('selected'); break;
+            }
+
+            var list = __v7;
+            var total = list.children.length;
+            var completed = 0;
+
+            for (var i=0; i<total; i++) {
+                var it = list.children[i];
+                if (it.classList.contains('completed')) {
+                    completed++;
+                    it.app.completedcheckbox.checked = true;
+                }
+                it.style.display = '';
+                if ((location.hash == '#/active') &&
+                    (it.classList.contains('completed')))
+                        it.style.display = 'none';
+                if ((location.hash == '#/completed') &&
+                    (!it.classList.contains('completed')))
+                        it.style.display = 'none';
+            }
+
+            var remaining = total - completed;
+
+            __v17.textContent = completed;
+            __v10.textContent = remaining;
+            if (total == 0) {
+                __v8.style.display = 'none';
+                __v5.style.display = 'none';
+            } else {
+                __v8.style.display = '';
+                __v5.style.display = '';
+            }
+            if (completed == total) {
+                __v6.checked = true;
+            } else {
+                __v6.checked = false;
+            }
+            if (completed == 0) {
+                __v16.style.display = 'none';
+            } else {
+                __v16.style.display = '';
+            }
+            if (remaining == '1') __v11.textContent = 'item';
+            else __v11.textContent = 'items';
+
+            // drop new data to disk...
+            if (total == 0) localStorage['ult'] = 0;
+            if (!('ult' in localStorage))
+                localStorage['ult'] = 0;
+
+            ults_in_list = []
+            for (var i=0; i<list.children.length; i++) {
+                var it = list.children[i];
+                if (!('ult' in it)) {
+                    it.ult = localStorage['ult'];
+                    localStorage['ult'] = 1+parseInt(localStorage['ult']);
+                }
+                localStorage[it.ult] = it.app.tasktextlabel.textContent;
+                localStorage[it.ult+'_completed'] = it.classList.contains('completed');
+                ults_in_list.push(it.ult);
+                ults_in_list.push(it.ult+'_completed');
+            }
+            // delete old data from disk...
+            for (var key in localStorage) {
+                if (key == 'ult') continue;
+                if (ults_in_list.indexOf(key)<0)
+                    localStorage.removeItem(key);
+            }
+        
+}
+__v20=function(text){var __v21=document.createElement("li");
+__v21.app={};
+__v21.setAttribute("id","__v21");
+__v7.appendChild(__v21);
+var __v22=document.createElement("div");
+__v22.app={};
+__v22.setAttribute("id","__v22");
+__v21.appendChild(__v22);
+__v22.classList.add("view");
+var __v23=document.createElement("input");
+__v23.app={};
+__v23.setAttribute("id","__v23");
+__v22.appendChild(__v23);
+__v21.app["completedcheckbox"]=__v23;
+__v23.setAttribute("type","checkBox");
+__v23.classList.add("toggle");
+var __v24=document.createElement("label");
+__v24.app={};
+__v24.setAttribute("id","__v24");
+__v22.appendChild(__v24);
+__v24.textContent=text;
+__v21.app["tasktextlabel"]=__v24;
+var __v25=document.createElement("button");
+__v25.app={};
+__v25.setAttribute("id","__v25");
+__v22.appendChild(__v25);
+__v25.classList.add("destroy");
+var __v26=document.createElement("input");
+__v26.app={};
+__v26.setAttribute("id","__v26");
+__v21.appendChild(__v26);
+__v26.classList.add("edit");
+__v26["value"]=text;
+__v23.addEventListener("click",function(){
+                if (__v21.classList.contains("completed"))
+                    __v21.classList.remove("completed");
+                else
+                    __v21.classList.add("completed");
+            __v19();
+},false);
+__v24.addEventListener("dblclick",function(){__v21.classList.add("editing");
+},false);
+__v24.addEventListener("dblclick",function(){__v26.focus();
+},false);
+__v26.addEventListener("blur",function(){__v21.classList.remove("editing");
+},false);
+__v25.addEventListener("click",function(){__v21.parentNode.removeChild(__v21);
+__v19();
+},false);
+__v27=function(event){
+
+            if (event.keyCode == 27) __v26.blur();
+            if (event.keyCode != 13) return;
+            __v26.blur();
+            __v24.textContent = __v26.value
+            __v19();
+        
+}
+__v26.addEventListener("keyup",__v27,false);
+}
+window.addEventListener("hashchange",__v19,false);
+__v28=function(e){
+e.target.value = ""
+}
+__v4.addEventListener("blur",__v28,false);
+__v29=function(event){
+
+            if (event.keyCode == 27) __v4.blur();
+            if (event.keyCode == 13) {
+                __v20(__v4.value);
+                __v4.blur();
+                __v19();
+            }
+        
+}
+__v4.addEventListener("keyup",__v29,false);
+current_view = "all";__v30=function(){
+
+            var list = __v7;
+            for (var i=0; i<list.children.length; i++) {
+                it = list.children[i];
+                if (__v6.checked) {
+                    it.classList.add('completed');
+                    it.app.completedcheckbox.checked = checked = true;
+                } else {
+                    it.classList.remove('completed');
+                    it.app.completedcheckbox.checked = checked = false;
+                }
+            }
+            __v6.checked = !__v6.checked;
+            __v19();
+        
+}
+__v6.addEventListener("click",__v30,false);
+__v31=function(){
+
+            var items = [];
+            var list = __v7;
+            for (var i=0; i<list.children.length; i++)
+                items.push(list.children[i]);
+            for (var i=0; i<items.length; i++) {
+                var it = items[i];
+                if (it.classList.contains('completed'))
+                    list.removeChild(it);
+            }
+            __v19();
+        
+}
+__v16.addEventListener("click",__v31,false);
+
+            var list = __v7.children;
+            for (var key in localStorage) {
+                if (key == 'ult') continue;
+                if (key.indexOf('_')>=0) continue;
+                if (['watch', 'unwatch'].indexOf(key)>=0) continue;
+                // we have a real item!
+                __v20(localStorage[key]);
+                item = list[list.length-1];
+                item.app.ult = key;
+                if (localStorage[key+'_completed'] == 'true')
+                    item.classList.add('completed');
+            }
+        __v19();
+	</script>
+
+
+</html>

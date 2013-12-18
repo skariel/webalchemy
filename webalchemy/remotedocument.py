@@ -3,10 +3,16 @@ import random
 import inspect
 import logging
 from webalchemy.saferef import safeRef
+from webalchemy.htmlparser import get_element_ids
 
 
 # logger for internal purposes
 log = logging.getLogger(__name__)
+
+
+class KeyCode:
+    ENTER = 13
+    ESC = 27
 
 
 class StyleAtt:
@@ -101,6 +107,20 @@ class ClassAtt:
             self.rdoc.inline(js)
             self.lst.remove(name)
 
+    def toggle(self, *varargs):
+        for name in varargs:
+            js = '''
+                if (svn.classList.contains("name"))
+                    svn.classList.remove("name");
+                else
+                    svn.classList.add("name");
+            '''.replace('svn', self.varname).replace('name', name)
+            self.rdoc.inline(js)
+            if name in self.lst:
+                self.lst.remove(name)
+            else:
+                self.lst.append(name)
+
     def replace(self, old_name, new_name):
         self.remove(old_name)
         self.append(new_name)
@@ -145,31 +165,39 @@ class SimpleAtt:
 
 
 class EventListener:
-    def __init__(self, rdoc, varname):
-        super().__setattr__('rdoc', rdoc)
-        super().__setattr__('varname', varname)
+    def __init__(self, rdoc, varname, level=2):
+        self.rdoc = rdoc
+        self.varname = varname
+        self.level = level
 
     def add(self, **kwargs):
         for event, listener in kwargs.items():
-            if hasattr(listener, 'varname'):
-                l = listener.varname
-            elif type(listener) is str:
-                l = listener
-            else:
-                self.rdoc.begin_block()
-                l = listener()
-                if not l:
-                    l = self.rdoc.pop_block()
-                    l = 'function(){' + l.rstrip('\n').rstrip(';') + '}'
-                else:
-                    self.rdoc.cancel_block()
-
+            l = self.rdoc.stringify(listener, encapsulate_strings=False, pop_line=False)
+            l = _inline(l, level=self.level, stringify=self.rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
             js = self.varname + '.addEventListener("' + event + '",' + l + ',false);\n'
             self.rdoc.inline(js)
 
     def remove(self, event, listener):
-        js = self.varname + '.removeEventListener("' + event + '",' + listener + ');\n'
+        l = self.rdoc.stringify(listener, encapsulate_strings=False, pop_line=False)
+        l = _inline(l, level=self.level, stringify=self.rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
+        js = self.varname + '.removeEventListener("' + event + '",' + l + ');\n'
         self.rdoc.inline(js)
+
+
+class CallableProp:
+    def __init__(self, rdoc, varname, namespace=None):
+        super().__setattr__('rdoc', rdoc)
+        if namespace:
+            super().__setattr__('varname', varname + '.' + namespace)
+        else:
+            super().__setattr__('varname', varname)
+        super().__setattr__('d', {})
+
+    def __getattr__(self, name):
+        def fnc(*varargs):
+            js = self.varname + '.' + name + '('+','.join(self.rdoc.stringify(v) for v in varargs)+');\n'
+            self.rdoc.inline(js)
+        return fnc
 
 
 class SimpleProp:
@@ -193,7 +221,10 @@ class SimpleProp:
     def __getitem__(self, item):
         js = self.varname + '["' + item + '"];\n'
         self.rdoc.inline(js)
-        return self.d[item]
+        try:
+            return self.d[item]
+        except:
+            pass
 
     def __getattr__(self, name):
         return self[name]
@@ -259,6 +290,7 @@ class Element:
             js += self.varname + '.textContent="' + text + '";\n'
         else:
             self._text = ''
+        js = 'var '+js
         rdoc.inline(js)
 
         self.cls = ClassAtt(rdoc, self.varname)
@@ -266,10 +298,10 @@ class Element:
         self.style = StyleAtt(rdoc, self.varname)
         self.events = EventListener(rdoc, self.varname)
         self.app = SimpleProp(rdoc, self.varname, 'app')
-        self.att.id = self.varname
-        self.cls.append(self.varname)
+        if not fromid:
+            self.att.id = self.varname
         self.prop = SimpleProp(self.rdoc, self.varname, None)
-
+        self.cal = CallableProp(self.rdoc, self.varname, None)
         if typ in Element._add_attr_typ_dict:
             self.att(**Element._add_attr_typ_dict[typ])
 
@@ -371,8 +403,6 @@ class Interval:
         self.is_running = True
         code = self.rdoc.stringify(exp, pop_line=False)
         code = _inline(code, level=level, rpcweakrefs=self.rdoc.rpcweakrefs)
-        if not callable(exp):
-            code = 'function(){' + code + '}'
         js = self.varname + '=setInterval(' + code + ',' + str(ms) + ');\n'
         rdoc.inline(js)
 
@@ -382,19 +412,39 @@ class Interval:
         self.rdoc.inline(js)
 
 
-class _JSFunction:
-    def __init__(self, rdoc, *varargs, body=None, level=2):
+class JSFunction:
+    def __init__(self, rdoc, *varargs, body=None, level=2, varname=None, **kwargs):
+        if len(varargs) == 2 and not body:
+            body = varargs[1]
+            varargs = (varargs[0],)
+        elif len(varargs) == 1 and not body:
+            body = varargs[0]
+            varargs = ()
         self.rdoc = rdoc
-        self.varname = rdoc.get_new_uid()
-        code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False)
+        if not varname:
+            self.varname = rdoc.get_new_uid()
+        else:
+            self.varname = varname
+
+        self.rdoc.jsfunctions_being_built.append(self)
+
+        code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False, vars=varargs)
         code = _inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
+
+        self.rdoc.jsfunctions_being_built.pop()
+
         code = code.rstrip(';\n')
         args = ','.join(varargs)
-        self.js = self.varname + '=function(' + args + '){\n' + code + '\n}\n'
+        if not code.startswith('function'):
+            self.js = self.varname + '=function(' + args + '){\n' + code + '\n}\n'
+        else:
+            self.js = self.varname + '='+code+'\n'
         rdoc.inline(self.js)
+        if kwargs.get('call', False):
+            self()
 
     def __call__(self, *varargs):
-        js = self.varname + '(' + ','.join([str(v) for v in varargs]) + ');\n'
+        js = self.varname + '(' + ','.join([self.rdoc.stringify(v) for v in varargs]) + ');\n'
         self.rdoc.inline(js)
 
     def __str__(self):
@@ -450,6 +500,20 @@ class RemoteDocument:
         self.vendor_prefix = None
         self.jsrpcweakrefs = {}
         self.window = Window(self)
+        self.jsfunctions_being_built = []
+        self.KeyCode = KeyCode
+
+    def parse_elements(self, html):
+        class E:
+            pass
+        e = E()
+        for id in get_element_ids(html):
+            try:
+                attr_id = id.replace('-', '_').replace(' ', '_')
+                setattr(e, attr_id, self.getElementById(id))
+            except:
+                pass
+        return e
 
     def set_vendor_prefix(self, vendor_prefix):
         self.vendor_prefix = vendor_prefix
@@ -479,8 +543,8 @@ class RemoteDocument:
     def startinterval(self, ms, exp=None):
         return Interval(self, ms, exp, level=3)
 
-    def jsfunction(self, *varargs, body=None):
-        return _JSFunction(self, *varargs, body=body, level=3)
+    def jsfunction(self, *varargs, body=None, **kwargs):
+        return JSFunction(self, *varargs, body=body, level=3, **kwargs)
 
     def get_new_uid(self):
         uid = '__v' + str(self.__uid_count)
@@ -526,7 +590,7 @@ class RemoteDocument:
     def stylesheet(self):
         return _StyleSheet(self)
 
-    def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True):
+    def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True, vars=None):
         if type(val) is bool:
             if val:
                 return 'true'
@@ -540,12 +604,20 @@ class RemoteDocument:
             return val
         if callable(val):
             self.begin_block()
-            tmp = val()
+            if vars:
+                tmp = val(*vars)
+            else:
+                tmp = val()
             if tmp:
                 self.cancel_block()
             else:
                 tmp = self.pop_block()
-            return 'function(){' + tmp + '}'
+            if not vars:
+                return 'function(){' + tmp + '}'
+            else:
+                for v in vars:
+                    tmp = tmp.replace('"'+v+'"', v)
+                return 'function('+','.join(v for v in vars)+'){' + tmp + '}'
         if val is None:
             if pop_line:
                 return self.pop_line()

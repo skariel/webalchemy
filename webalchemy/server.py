@@ -64,6 +64,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.sharedhandlers[self.id] = self
             self.is_new_tab = None
             self.is_new_session = None
+            self.main_html = kwargs['main_html']
         except:
             log.exception('Initialization of websocket handler failed!')
 
@@ -110,7 +111,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                                               shared_data=self.shared_data, session_data=self.session_data,
                                               tab_data=self.tab_data, is_new_tab=self.is_new_tab,
                                               is_new_session=self.is_new_session,
-                                              getargs=self.getargs)
+                                              getargs=self.getargs,
+                                              main_html=self.main_html)
                 if r is not None:
                     yield r
                 self.local_doc_initialized = True
@@ -150,6 +152,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     @gen.coroutine
     def please_reload(self):
         self.write_message('location.reload();\n')
+        self.close()
 
     @gen.coroutine
     def msg_to_sessions(self, msg, send_to_self=False, to_session_ids=None):
@@ -425,6 +428,8 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
         for l in f:
             if l.lstrip().startswith('-->'):
                 fnjs = l.split()[1].strip()
+                if fnjs == 'websocket':
+                    continue
                 fnjs = os.path.join(mfn, fnjs)
                 with open(fnjs, 'r') as fjs:
                     l = fjs.read()
@@ -442,7 +447,8 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
                                           shared_data=shared_data,
                                           session_data_store=session_data_store,
                                           tab_data_store=tab_data_store,
-                                          main_explicit_route=main_explicit_route)),
+                                          main_explicit_route=main_explicit_route,
+                                          main_html=main_html)),
         (main_route, _MainHandler, dict(main_html=main_html)),
     ], static_path=static_path)
     au = _AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with,
@@ -462,4 +468,40 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
 
     log.info('starting Tornado event loop')
     tornado.ioloop.IOLoop.instance().start()
+
+
+def generate_static(App, writefile, main_html_file_path=None):
+    # prepare main_html ...
+    mfn = os.path.realpath(__file__)
+    mfn = os.path.dirname(mfn)
+    if not main_html_file_path:
+        ffn = os.path.join(mfn, 'main.html')
+    else:
+        ffn = main_html_file_path
+    lines = []
+    with open(ffn, 'r') as f:
+        for l in f:
+            if l.strip() == '<body onload="init_communication()">':
+                l = '<body>'
+            if l.lstrip().startswith('-->'):
+                fnjs = l.split()[1].strip()
+                if fnjs != 'websocket':
+                    continue
+            lines.append(l)
+    main_html = ''.join(lines)
+
+    static_html = []
+    for l in lines:
+        if l.lstrip().startswith('-->'):
+            rdoc = RemoteDocument()
+            app = App()
+            app.initialize(remote_document=rdoc, main_html=main_html)
+            l = rdoc.pop_all_code()
+        static_html.append(l)
+    static_html = ''.join(static_html)
+
+    with open(writefile, 'w') as f:
+        f.write(static_html)
+
+
 

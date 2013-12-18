@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Template • TodoMVC</title>
+		<link rel="stylesheet" href="./static/template/bower_components/todomvc-common/base.css">
+	</head>
+	<body onload="init_communication()">
+		<section id="todoapp">
+			<header id="header">
+				<h1 id="todos">todos</h1>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section id="main">
+				<input id="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul id="todo-list">
+				</ul>
+			</section>
+			<footer id="footer">
+				<span id="todo-count"><strong id="todo-num">0</strong> <span id="item-vs-items">item</span> left</span>
+				<ul id="filters">
+					<li>
+						<a id="filter-all" class="selected" href="#/">All</a>
+					</li>
+					<li>
+						<a id="filter-active" href="#/active">Active</a>
+					</li>
+					<li>
+						<a id="filter-completed" href="#/completed">Completed</a>
+					</li>
+				</ul>
+				<button id="clear-completed">Clear completed (<span id="completed-num">0</span>)</button>
+			</footer>
+		</section>
+		<footer id="info">
+			<p>Double-click to edit a todo</p>
+			<p>Created by <a href="http://todomvc.com">Ariel Keselman</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+		<script src="./static/template/bower_components/todomvc-common/base.js"></script>
+		</script>
+	</body>
+
+
+	<script>
+	// the following files will be inserted here
+	// this is good to serve via a websocket. Can be removed
+	// if app is to be frozen
+
+	--> js/reconnecting_ws.js
+	--> js/watch.js
+	--> js/cookie.js
+	--> js/vendor.js
+	--> js/comm.js
+	--> js/reconnection_overlay.js
+	--> js/download_url.js
+
+	// the following is good for freezing the app
+
+	--> websocket
+	</script>
+
+
+</html>

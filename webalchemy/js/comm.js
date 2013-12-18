@@ -19,3 +19,26 @@ rpcfy= function () {
 rpc= function () {
     message('rpc: '+rpcfy.apply(this,arguments))
 }
+debug = true;
+init_communication = function() {
+    ws = new ReconnectingWebSocket('ws://__HOST__:__PORT__/__WEBSOCKET__/__ARGS__');
+    ws.onopen = function() {
+       if (overlay_shown)
+            location.reload()
+       message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name+': and my vendor prefix is:'+vendor_prefix);
+    };
+    ws.onclose = function() {
+      if (!overlay_shown) {
+        document.body.appendChild(overlay);
+        overlay_shown = true;
+      }
+    }
+    ws.onmessage = function (evt) {
+       if (debug) {
+          console.log('message received:');
+          console.log(evt.data);
+       }
+       eval(evt.data);
+       message('done');
+    };
+}

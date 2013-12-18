@@ -3,40 +3,21 @@
 <body onload="init_communication()">
 </body>
 <script>
-// the following files will be inserted here
---> js/reconnecting_ws.js
---> js/watch.js
---> js/cookie.js
---> js/vendor.js
---> js/comm.js
---> js/reconnection_overlay.js
---> js/download_url.js
+	// the following files will be inserted here
+	// this is good to serve via a websocket. Can be removed
+	// if app is to be frozen
 
-debug = true;
-init_communication = function() {
-    ws = new ReconnectingWebSocket('ws://__HOST__:__PORT__/__WEBSOCKET__/__ARGS__');
-    ws.onopen = function() {
-       if (overlay_shown) {
-            ws.close();
-       		location.reload();
-       } else
-            message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name+': and my vendor prefix is:'+vendor_prefix);
-    };
-    ws.onclose = function() {
-      if (!overlay_shown) {
-        document.body.appendChild(overlay);
-        overlay_shown = true;
-      }  
-    }
-    ws.onmessage = function (evt) {
-       if (debug) {
-          console.log('message received:');
-          console.log(evt.data);
-       }
-       eval(evt.data);
-       message('done');
-    };
-}
+	--> js/reconnecting_ws.js
+	--> js/watch.js
+	--> js/cookie.js
+	--> js/vendor.js
+	--> js/comm.js
+	--> js/reconnection_overlay.js
+	--> js/download_url.js
+
+	// the following is good for freezing the app
+
+	--> websocket
 </script>
 </html> 
 
