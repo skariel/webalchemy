@@ -21,13 +21,13 @@
 				<span id="todo-count"><strong id="todo-num">0</strong> <span id="item-vs-items">item</span> left</span>
 				<ul id="filters">
 					<li>
-						<a id="filter-all" class="selected" href="#/">All</a>
+						<a id="filter-all" weba-class="location.hash=='#/'?'selected':''" href="#/">All</a>
 					</li>
 					<li>
-						<a id="filter-active" href="#/active">Active</a>
+						<a id="filter-active" weba-class="location.hash=='#/active'?'selected':''" href="#/active">Active</a>
 					</li>
 					<li>
-						<a id="filter-completed" href="#/completed">Completed</a>
+						<a id="filter-completed" weba-class="location.hash=='#/completed'?'selected':''" href="#/completed">Completed</a>
 					</li>
 				</ul>
 				<button id="clear-completed">Clear completed (<span id="completed-num">0</span>)</button>
@@ -95,16 +95,6 @@ __v17.app={};
 var __v18=document.getElementById("info");
 __v18.app={};
 __v19=function(){
-
-            __v13.classList.remove('selected');
-            __v14.classList.remove('selected');
-            __v15.classList.remove('selected');
-            switch (location.hash) {
-                case '':
-                case '#/': __v13.classList.add('selected'); break;
-                case '#/active': __v14.classList.add('selected'); break;
-                case '#/completed': __v15.classList.add('selected'); break;
-            }
 
             var list = __v7;
             var total = list.children.length;

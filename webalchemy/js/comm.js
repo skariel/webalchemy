@@ -38,7 +38,7 @@ init_communication = function() {
           console.log('message received:');
           console.log(evt.data);
        }
-       eval(evt.data);
+       eval.apply(window, [evt.data]);
        message('done');
     };
 }

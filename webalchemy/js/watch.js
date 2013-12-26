@@ -8,7 +8,7 @@ if (!Object.prototype.watch) {
 		var newSet;
 		//these cases make little sense, so do nothing we won't be watching readonly descriptors
 		if (!desc.configurable
-			|| (desc.value === undefined && !desc.set)
+		    || (desc.value === undefined && !desc.set)
 			|| desc.writable === false)
 			return;
 

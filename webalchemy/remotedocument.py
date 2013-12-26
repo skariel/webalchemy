@@ -109,12 +109,7 @@ class ClassAtt:
 
     def toggle(self, *varargs):
         for name in varargs:
-            js = '''
-                if (svn.classList.contains("name"))
-                    svn.classList.remove("name");
-                else
-                    svn.classList.add("name");
-            '''.replace('svn', self.varname).replace('name', name)
+            js = self.varname+'.classList.toggle("'+name+'");\n'
             self.rdoc.inline(js)
             if name in self.lst:
                 self.lst.remove(name)
@@ -199,19 +194,24 @@ class CallableProp:
             self.rdoc.inline(js)
         return fnc
 
-
 class SimpleProp:
-    def __init__(self, rdoc, varname, namespace=None):
+    def __init__(self, rdoc, varname=None, namespace=None, create=False):
         super().__setattr__('rdoc', rdoc)
-        if namespace:
-            super().__setattr__('varname', varname + '.' + namespace)
+        if not varname:
+            super().__setattr__('varname', self.rdoc.get_new_uid())
+            js = self.varname+'={};\n'
+            self.rdoc.inline(js)
         else:
             super().__setattr__('varname', varname)
+        if namespace:
+            super().__setattr__('varname', varname + '.' + namespace)
         super().__setattr__('d', {})
+        if create:
+            self.rdoc.inline(self.varname + '= {};\n')
 
     def __setitem__(self, item, val):
         v = self.rdoc.stringify(val)
-        js = self.varname + '["' + item + '"]=' + v + ';\n'
+        js = self.varname + '["' + str(item) + '"]=' + v + ';\n'
         self.rdoc.inline(js)
         self.d[item] = val
 
@@ -219,7 +219,7 @@ class SimpleProp:
         self[attr] = val
 
     def __getitem__(self, item):
-        js = self.varname + '["' + item + '"];\n'
+        js = self.varname + '["' + str(item) + '"];\n'
         self.rdoc.inline(js)
         try:
             return self.d[item]
@@ -267,7 +267,7 @@ class Element:
         'svg': {'xmlns': 'http://www.w3.org/2000/svg'},
     }
 
-    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None):
+    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=False, **kwargs):
         if not customvarname:
             self.varname = rdoc.get_new_uid()
         else:
@@ -279,27 +279,24 @@ class Element:
         if not fromid:
             if typ in Element._ns_typ_dict:
                 ns = Element._unique_ns[Element._ns_typ_dict[typ]]
-                js = self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
+                js = 'var ' + self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
             else:
-                js = self.varname + '=document.createElement("' + typ + '");\n'
+                js = 'var ' + self.varname + '=document.createElement("' + typ + '");\n'
         else:
-            js = self.varname + '=document.getElementById("' + fromid + '");\n'
-        js += self.varname + '.app={};\n'
+            js = 'var ' + self.varname + '=document.getElementById("' + fromid + '");\n'
         if text is not None:
             self._text = text
             js += self.varname + '.textContent="' + text + '";\n'
         else:
             self._text = ''
-        js = 'var '+js
         rdoc.inline(js)
 
         self.cls = ClassAtt(rdoc, self.varname)
         self.att = SimpleAtt(rdoc, self.varname)
         self.style = StyleAtt(rdoc, self.varname)
         self.events = EventListener(rdoc, self.varname)
-        self.app = SimpleProp(rdoc, self.varname, 'app')
-        if not fromid:
-            self.att.id = self.varname
+        if app:
+            self.app = SimpleProp(rdoc, self.varname, 'app', create=True)
         self.prop = SimpleProp(self.rdoc, self.varname, None)
         self.cal = CallableProp(self.rdoc, self.varname, None)
         if typ in Element._add_attr_typ_dict:
@@ -342,8 +339,8 @@ class Element:
     def __str__(self):
         return self.varname
 
-    def element(self, typ=None, txt=None, **kwargs):
-        es = self.rdoc.element(typ, txt, **kwargs)
+    def element(self, typ=None, txt=None, app=False, **kwargs):
+        es = self.rdoc.element(typ, txt, app=app, **kwargs)
         self.append(es)
         return es
 
@@ -359,7 +356,7 @@ _rec1_inline = re.compile(r'#\{([^}]*)\}')
 _rec2_rpc = re.compile(r'#rpc\{([^}]*)\}')
 
 
-def _inline(code, level=1, stringify=None, rpcweakrefs=None):
+def _inline(code, level=1, stringify=None, rpcweakrefs=None, **kwargs):
     # inline interpolation...
     prev_frame = inspect.getouterframes(inspect.currentframe())[level][0]
     loc = prev_frame.f_locals
@@ -372,7 +369,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None):
             else:
                 rep = str(rep)
         else:
-            rep = stringify(rep)
+            rep = stringify(rep, encapsulate_strings=kwargs.get('encapsulate_strings', True))
         code = code.replace('#{%s}' % item, rep)
 
     if rpcweakrefs is not None:
@@ -401,9 +398,10 @@ class Interval:
         self.varname = rdoc.get_new_uid()
         self.ms = ms
         self.is_running = True
+        # TODO: replace this with a jsfunction...
         code = self.rdoc.stringify(exp, pop_line=False)
         code = _inline(code, level=level, rpcweakrefs=self.rdoc.rpcweakrefs)
-        js = self.varname + '=setInterval(' + code + ',' + str(ms) + ');\n'
+        js = 'var ' + self.varname + '=setInterval(' + code + ',' + str(ms) + ');\n'
         rdoc.inline(js)
 
     def stop(self):
@@ -429,16 +427,16 @@ class JSFunction:
         self.rdoc.jsfunctions_being_built.append(self)
 
         code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False, vars=varargs)
-        code = _inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
+        code = _inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs, encapsulate_strings=False)
 
         self.rdoc.jsfunctions_being_built.pop()
 
         code = code.rstrip(';\n')
         args = ','.join(varargs)
         if not code.startswith('function'):
-            self.js = self.varname + '=function(' + args + '){\n' + code + '\n}\n'
+            self.js = 'var '+self.varname + '=function(' + args + '){\n' + code + '\n}\n'
         else:
-            self.js = self.varname + '='+code+'\n'
+            self.js = 'var ' + self.varname + '='+code+'\n'
         rdoc.inline(self.js)
         if kwargs.get('call', False):
             self()
@@ -458,7 +456,7 @@ class _StyleSheet:
         self.varname = self.element.varname
         self.element.att.type = 'text/css'
         self.rdoc.body.append(self.element)
-        js = self.varname + '=document.styleSheets[0];\n'
+        js = 'var ' + self.varname + '=document.styleSheets[0];\n'
         self.rdoc.inline(js)
 
     def rule(self, selector, **kwargs):
@@ -473,16 +471,16 @@ class _Rule:
         self.rdoc = self.stylesheet.rdoc
         self.varname = self.rdoc.get_new_uid()
         self.selector = selector
-        # TODO: what if we want to change the selector?!
         ssn = self.stylesheet.varname
         js = ssn + '.insertRule("' + selector + ' {}",' + ssn + '.cssRules.length);\n'
-        js += self.varname + '=' + ssn + '.cssRules[' + ssn + '.cssRules.length-1];\n'
+        js += 'var ' + self.varname + '=' + ssn + '.cssRules[' + ssn + '.cssRules.length-1];\n'
         self.rdoc.inline(js)
         self.style = StyleAtt(self.rdoc, self.varname)
         self.style(**kwargs)
 
 
 class RemoteDocument:
+    # TODO: remove block altogether...
     def __init__(self):
         self.varname = 'document'
         self.__uid_count = 0
@@ -491,8 +489,7 @@ class RemoteDocument:
         self.__varname_element_dict = {}
         self.body = Element(self, 'body', '', customvarname='document.body')
         self.pop_all_code()  # body is special, it's created by static content
-        self.inline('document.app={};\n')
-        self.app = SimpleProp(self, 'document', 'app')
+        self.app = SimpleProp(self, 'document', 'app', create=True)
         self.props = SimpleProp(self, 'document')
         self.localStorage = SimpleProp(self, 'localStorage')
         self.sessionStorage = SimpleProp(self, 'localStorage')
@@ -521,18 +518,18 @@ class RemoteDocument:
     def get_element_from_varname(self, varname) -> Element:
         return self.__varname_element_dict[varname]
 
-    def getElementById(self, fromid):
-        return Element(self, fromid=fromid)
+    def getElementById(self, fromid, app=False):
+        return Element(self, fromid=fromid, app=app)
 
-    def element(self, typ=None, text=None, **kwargs):
+    def element(self, typ=None, text=None, app=False, **kwargs):
         elems = []
         if typ:
-            e = Element(self, typ, text)
+            e = Element(self, typ, text, app=app)
             self.__varname_element_dict[e.varname] = e
             elems.append(e)
         if kwargs:
             for i, t in kwargs.items():
-                kwe = Element(self, i, t)
+                kwe = Element(self, i, t, app=app)
                 self.__varname_element_dict[kwe.varname] = kwe
                 elems.append(kwe)
         if len(elems) > 1:
@@ -581,14 +578,17 @@ class RemoteDocument:
             text = text.format(*(v.varname for v in varargs))
         self.__code_strings.append(text)
 
-    def JS(self, text):
-        self.__code_strings.append(_inline(text, level=2, stringify=self.stringify, rpcweakrefs=self.jsrpcweakrefs))
+    def JS(self, text, encapsulate_strings=True):
+        self.__code_strings.append(_inline(text, level=2, stringify=self.stringify, rpcweakrefs=self.jsrpcweakrefs, encapsulate_strings=encapsulate_strings))
 
     def msg(self, text):
         self.inline('message("' + text + '");')
 
     def stylesheet(self):
         return _StyleSheet(self)
+
+    def dict(self):
+        return SimpleProp(self)
 
     def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True, vars=None):
         if type(val) is bool:

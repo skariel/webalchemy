@@ -10,28 +10,41 @@
 		<section id="todoapp">
 			<header id="header">
 				<h1 id="todos">todos</h1>
-				<input id="new-todo" placeholder="What needs to be done?" autofocus>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus onblur="this.value=''">
 			</header>
-			<section id="main">
-				<input id="toggle-all" type="checkbox">
+			<section id="main" weba-toggled_style="'display', 'none', model.total==0">
+				<input id="toggle-all" type="checkbox" weba-property="'checked', model.completed==model.total">
 				<label for="toggle-all">Mark all as complete</label>
-				<ul id="todo-list">
+				<ul id="todo-list" weba-repeat_child_for_i_in_range="model.itemlist.length">
+
+
+                    <li id="item-template">
+                            <div class="view">
+                                    <input id="item-template-input" class="toggle" type="checkbox">
+                                    <label id="item-template-label"></label>
+                                    <button id="item-template-destroy" class="destroy"></button>
+                            </div>
+                            <input id="item-template-edit" class="edit">
+                    </li>
+
+
+
 				</ul>
 			</section>
-			<footer id="footer">
-				<span id="todo-count"><strong id="todo-num">0</strong> <span id="item-vs-items">item</span> left</span>
+			<footer id="footer" weba-toggled_style="'display', 'none', model.total==0">
+				<span id="todo-count"><strong id="todo-num" weba-property="'textContent', model.remaining">0</strong> <span id="item-vs-items" weba-property="'textContent', model.remaining==1?'item':'items'">item</span> left</span>
 				<ul id="filters">
 					<li>
-						<a id="filter-all" class="selected" href="#/">All</a>
+						<a id="filter-all" weba-toggled_class="'selected', location.hash=='#/'" href="#/">All</a>
 					</li>
 					<li>
-						<a id="filter-active" href="#/active">Active</a>
+						<a id="filter-active" weba-toggled_class="'selected', location.hash=='#/active'" href="#/active">Active</a>
 					</li>
 					<li>
-						<a id="filter-completed" href="#/completed">Completed</a>
+						<a id="filter-completed" weba-toggled_class="'selected', location.hash=='#/completed'" href="#/completed">Completed</a>
 					</li>
 				</ul>
-				<button id="clear-completed">Clear completed (<span id="completed-num">0</span>)</button>
+				<button id="clear-completed" weba-toggled_style="'display', 'none', model.completed==0">Clear completed (<span id="completed-num" weba-property="'textContent', model.completed">0</span>)</button>
 			</footer>
 		</section>
 		<footer id="info">
