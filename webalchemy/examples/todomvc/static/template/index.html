@@ -15,19 +15,16 @@
 			<section id="main" weba-toggled_style="'display', 'none', model.total==0">
 				<input id="toggle-all" type="checkbox" weba-property="'checked', model.completed==model.total">
 				<label for="toggle-all">Mark all as complete</label>
-				<ul id="todo-list" weba-repeat_child_for_i_in_range="model.itemlist.length">
+				<ul id="todo-list" weba-repeat_i_in="model.itemlist">
 
-
-                    <li id="item-template">
+                    <li id="item-template" weba-toggled_class="'completed', model.itemlist[element.app.i].completed" weba-toggled_style="'display', 'none', ((model.itemlist[element.app.i].completed)&&(location.hash=='#/active'))||((!model.itemlist[element.app.i].completed)&&(location.hash=='#/completed'))">
                             <div class="view">
-                                    <input id="item-template-input" class="toggle" type="checkbox">
-                                    <label id="item-template-label"></label>
+                                    <input id="item-template-input" class="toggle" type="checkbox" weba-property="'checked', model.itemlist[element.app.i].completed">
+                                    <label id="item-template-label" weba-property="'textContent', model.itemlist[element.app.i].text"></label>
                                     <button id="item-template-destroy" class="destroy"></button>
                             </div>
                             <input id="item-template-edit" class="edit">
                     </li>
-
-
 
 				</ul>
 			</section>

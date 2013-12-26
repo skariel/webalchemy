@@ -23,18 +23,53 @@ class controller:
                 element.style[style_att]='';
         ''')
 
-        self.repeat_child_for_i_in_range = self.rdoc.jsfunction('model', 'element', 'fnc', body='''
-            if (typeof element.app.template=='undefined')
+        self.repeat_i_in = self.rdoc.jsfunction('model', 'element', 'fnc', body='''
+            if (typeof element.app.template=='undefined') {
                 element.app.template = element.children[0];
-            c = (fnc(model, element)-element.children.length);
-            te = element.app.template;
-            tag = te.tagName;
-            ih = te.innerHTML;
-            for (var i=0; i<c; i++) {
-                e = document.createElement(tag);
-                e.innerHTML = ih;
-                element.appendChild(e);
+                element.removeChild(element.children[0]);
             }
+
+            var ec = element.children;
+            var ecl = ec.length;
+            var arr = fnc(model, element);
+            var arrl = arr.length;
+            var c = arrl-ecl;
+            var te = element.app.template;
+            var tag = te.tagName;
+            var ih = te.innerHTML;
+            var app = te.app;
+            var eid = String(element.getAttribute('id'));
+            var tid = String(te.getAttribute('id'));
+            var id = eid+'_'+tid+'_';
+            function copy_app_execute_controller(to, from, i) {
+                if ((typeof from.app!='undefined')&&
+                    (typeof from.app.execute_controller!='undefined')) {
+                    to.app = {};
+                    to.app.execute_controller = from.app.execute_controller;
+                    to.app.i = i;
+                }
+                var fc = from.children;
+                if (typeof fc=='undefined')
+                    return;
+                var tc = to.children;
+                var l = tc.length;
+                for (var ci=0; ci<l; ci++)
+                    copy_app_execute_controller(tc[ci], fc[ci], i)
+            }
+            if (c>0)
+                // add new elements
+                for (var i=0; i<c; i++) {
+                    var e = te.cloneNode(false);
+                    var eid = id+i;
+                    e.setAttribute('id', eid);
+                    e.innerHTML = ih;
+                    copy_app_execute_controller(e, te, ecl+i);
+                    element.appendChild(e);
+                }
+            else
+                // remove un-needed elements
+                for (var i=c; i>0; i--)
+                    element.removeChild(element.children[0]);
         ''')
 
         self.property = self.rdoc.jsfunction('model', 'element', 'fnc', 'prop', body='''
@@ -46,7 +81,8 @@ class controller:
             for (var i=0, a=document.all, c=a.length; i<c; i++)
                 if ((typeof a[i]!='undefined')&&(typeof a[i].app!='undefined')&&
                 (typeof a[i].app.execute_controller!='undefined'))
-                    a[i].app.execute_controller();
+                    for (var j=0; k=a[i].app.execute_controller.length, j<k; j++)
+                        a[i].app.execute_controller[j](#{self.model}, a[i]);
         ''')
 
     def bind(self, at, element, code, *varargs):
@@ -62,9 +98,12 @@ class controller:
         self.rdoc.JS('''
             if (typeof #{element}.app == 'undefined')
                 #{element}.app = {};
-            #{element}.app.execute_controller = function(model, element) {
-                #{whattodo}(self.model, element, #{fnc}'''+s+''');
-            }
+            if (typeof #{element}.app.execute_controller == 'undefined')
+                #{element}.app.execute_controller = [];
+            #{element}.app.execute_controller.push(
+                function(model, element) {
+                    #{whattodo}(model, element, #{fnc}'''+s+''');
+                });
         ''', encapsulate_strings=False)
 
     def bind_html(self, html):
@@ -79,15 +118,14 @@ class controller:
                         eid = attr[1]
                         e = self.ctrl.rdoc.getElementById(eid)
                         setattr(self.ctrl.e, eid.replace('-', '_').strip().replace(' ', '_'), e)
-                        for att in attrs:
-                            if att[0].startswith('weba-'):
-                                at = att[0][5:]
-                                v = att[1]
-                                s = v.split(',')
-                                c = s[-1]
-                                v = [l.strip() for l in s[:-1]]
-                                self.ctrl.bind(at, e, c, *v)
-                        break
+                    elif attr[0].startswith('weba-'):
+                        at = attr[0][5:]
+                        v = attr[1]
+                        s = v.split(',')
+                        c = s[-1]
+                        v = [l.strip() for l in s[:-1]]
+                        self.ctrl.bind(at, e, c, *v)
+
         parser = MyHTMLParser(self)
         parser.feed(html)
 

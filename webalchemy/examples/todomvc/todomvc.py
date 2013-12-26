@@ -77,20 +77,36 @@ class AppTodoMvc:
         '''))
 
         # loading from disk...
+        # self.rdoc.JS('''
+        #     var list = #{self.controller.e.todo_list}.children;
+        #     for (var key in localStorage) {
+        #         if (key == 'ult') continue;
+        #         if (key.indexOf('_')>=0) continue;
+        #         if (['watch', 'unwatch'].indexOf(key)>=0) continue;
+        #         // we have a real item!
+        #         #{self.js_createitem}(localStorage[key]);
+        #         item = list[list.length-1];
+        #         item.app.ult = key;
+        #         if (localStorage[key+'_completed'] == 'true')
+        #             item.classList.add('completed');
+        #     }
+        # ''')
+
         self.rdoc.JS('''
-            var list = #{self.controller.e.todo_list}.children;
-            for (var key in localStorage) {
-                if (key == 'ult') continue;
-                if (key.indexOf('_')>=0) continue;
-                if (['watch', 'unwatch'].indexOf(key)>=0) continue;
-                // we have a real item!
-                #{self.js_createitem}(localStorage[key]);
-                item = list[list.length-1];
-                item.app.ult = key;
-                if (localStorage[key+'_completed'] == 'true')
-                    item.classList.add('completed');
-            }
-            #{self.controller.model}.itemlist=[1,2,3,4,5,6,7];
+            // some dmmy model
+            #{self.controller.model}.itemlist=[
+                {
+                    text:'hi1',
+                    completed:true
+                },
+                {
+                    text:'hi2',
+                    completed:false
+                },
+                {
+                    text:'hi3',
+                    completed:true
+                }]
         ''')
         self.controller.prerender = self.js_renderpage
         self.controller.call_on_request_frame()
