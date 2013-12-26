@@ -19,9 +19,9 @@
 
                     <li id="item-template" weba-toggled_class="'completed', model.itemlist[element.app.i].completed" weba-toggled_style="'display', 'none', ((model.itemlist[element.app.i].completed)&&(location.hash=='#/active'))||((!model.itemlist[element.app.i].completed)&&(location.hash=='#/completed'))">
                             <div class="view">
-                                    <input id="item-template-input" class="toggle" type="checkbox" weba-property="'checked', model.itemlist[element.app.i].completed">
+                                    <input id="item-template-input" class="toggle" type="checkbox" weba-property="'checked', model.itemlist[element.app.i].completed" onclick="this.app.model.itemlist[this.app.i].completed = !(this.app.model.itemlist[this.app.i].completed)">
                                     <label id="item-template-label" weba-property="'textContent', model.itemlist[element.app.i].text"></label>
-                                    <button id="item-template-destroy" class="destroy"></button>
+                                    <button id="item-template-destroy" class="destroy" onclick="this.app.model.itemlist.splice(this.app.i,1)"></button>
                             </div>
                             <input id="item-template-edit" class="edit">
                     </li>
@@ -41,7 +41,7 @@
 						<a id="filter-completed" weba-toggled_class="'selected', location.hash=='#/completed'" href="#/completed">Completed</a>
 					</li>
 				</ul>
-				<button id="clear-completed" weba-toggled_style="'display', 'none', model.completed==0">Clear completed (<span id="completed-num" weba-property="'textContent', model.completed">0</span>)</button>
+				<button id="clear-completed" weba-toggled_style="'display', 'none', model.completed==0" onclick="for (var i=0; i<this.app.model.itemlist.length; i++) if (this.app.model.itemlist[i].completed) this.app.model.itemlist.splice(i,1)">Clear completed (<span id="completed-num" weba-property="'textContent', model.completed">0</span>)</button>
 			</footer>
 		</section>
 		<footer id="info">

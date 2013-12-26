@@ -42,12 +42,14 @@ class controller:
             var tid = String(te.getAttribute('id'));
             var id = eid+'_'+tid+'_';
             function copy_app_execute_controller(to, from, i) {
-                if ((typeof from.app!='undefined')&&
-                    (typeof from.app.execute_controller!='undefined')) {
+                if (typeof to.app=='undefined')
                     to.app = {};
+                if ((typeof from.app!='undefined')&&
+                    (typeof from.app.execute_controller!='undefined'))
                     to.app.execute_controller = from.app.execute_controller;
-                    to.app.i = i;
-                }
+                to.app.model = model;
+                to.app.i = i;
+
                 var fc = from.children;
                 if (typeof fc=='undefined')
                     return;
@@ -59,17 +61,22 @@ class controller:
             if (c>0)
                 // add new elements
                 for (var i=0; i<c; i++) {
-                    var e = te.cloneNode(false);
+                    var e = te.cloneNode(true);
                     var eid = id+i;
                     e.setAttribute('id', eid);
                     e.innerHTML = ih;
+                    e.app = {};
                     copy_app_execute_controller(e, te, ecl+i);
                     element.appendChild(e);
                 }
             else
                 // remove un-needed elements
-                for (var i=c; i>0; i--)
-                    element.removeChild(element.children[0]);
+                for (var i=c; i<0; i++) {
+                    console.log('removing...')
+                    element.removeChild(element.children[element.children.length-1]);
+                    console.log('removed!')
+                }
+
         ''')
 
         self.property = self.rdoc.jsfunction('model', 'element', 'fnc', 'prop', body='''
@@ -100,6 +107,8 @@ class controller:
                 #{element}.app = {};
             if (typeof #{element}.app.execute_controller == 'undefined')
                 #{element}.app.execute_controller = [];
+            if (typeof #{element}.app.model == 'undefined')
+                #{element}.app.model = #{self.model};
             #{element}.app.execute_controller.push(
                 function(model, element) {
                     #{whattodo}(model, element, #{fnc}'''+s+''');
@@ -117,6 +126,12 @@ class controller:
                     if attr[0] == 'id':
                         eid = attr[1]
                         e = self.ctrl.rdoc.getElementById(eid)
+                        self.ctrl.rdoc.JS('''
+                            if (typeof #{e}.app=='undefined')
+                                #{e}.app = {};
+                            if (typeof #{e}.app.model=='undefined')
+                                #{e}.app.model = #{self.ctrl.model};
+                        ''')
                         setattr(self.ctrl.e, eid.replace('-', '_').strip().replace(' ', '_'), e)
                     elif attr[0].startswith('weba-'):
                         at = attr[0][5:]
