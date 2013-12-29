@@ -1,10 +1,10 @@
 ##Webalchemy: realtime web framework for Python
-helps keep frontend code simple by automating it through a websocket connection. Built on top of [Tornado](http://www.tornadoweb.org/en/stable/) (and in the future Tulip), inspired by [SQLAlchemy](http://www.sqlalchemy.org/), the [IPython notebook](http://ipython.org/), and of course [Meteor](http://www.meteor.com/)
+helps keep frontend code simple by automating it through a websocket connection
 
-###Highlights:
+###Features:
 
-- __Data binding and MVVM support__, Angular style. Checkout our [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html) (only 61 SLOC)
-- __Realtime and live-editing__, Meteor style. Checkout our [demo (video)](https://vimeo.com/74150054)
+- Data binding and MVVM support, Angular style: [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html) only 61 SLOC
+- Realtime and live-editing, Meteor style. Checkout our [demo (video)](https://vimeo.com/74150054)
 - Organize code and develop components with Python modules, packages and classes
 - Generate static sites
 - [MIT licensed](LICENSE.txt)
