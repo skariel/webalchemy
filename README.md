@@ -6,13 +6,7 @@ helps keep frontend code simple by automating it through a websocket connection
 - Data binding and MVVM support, Angular style: [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html) only 61 SLOC
 - Realtime and live-editing, Meteor style. Checkout our [demo (video)](https://vimeo.com/74150054)
 - Organize code and develop components with Python modules, packages and classes
-- Generate static sites
 - [MIT licensed](LICENSE.txt)
-
-###What to expect:
-
-- integration of [Pythonium](https://github.com/pythonium/pythonium)
-- Documentation :)
 
 ##Getting started
 
@@ -65,3 +59,9 @@ The project is young, documentation is high priority but still missing. There ar
 ##Philosophy and Roadmap
 
 Run relatively simple Javascript code in the frontend, and structure this code so it is easy to automate from the backend. I would like to have a rich widgets library and a strategy for easy development of new ones. The roadmap to achieve this is to use webalchemy to reimplement demos and examples from Meteor and other frameworks, while filling in missing functionality.
+
+###What to expect:
+
+- integration of [Pythonium](https://github.com/pythonium/pythonium)
+- Documentation :)
+
