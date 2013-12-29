@@ -2,7 +2,7 @@ from html.parser import HTMLParser
 
 
 class controller:
-    def __init__(self, rdoc):
+    def __init__(self, rdoc, html, run=False):
         self.rdoc = rdoc
         class c:
             pass
@@ -10,36 +10,36 @@ class controller:
         self.model = self.rdoc.dict()
         self.viewmodel = self.rdoc.dict()
 
-        self.toggled_class = self.rdoc.jsfunction('viewmodel', 'model', 'element', 'newval', 'i', 'cls', body='''
+        self.cls = self.rdoc.jsfunction('vm', 'm', 'e', 'newval', 'i', 'cls', body='''
             if (newval)
-                element.classList.add(cls);
+                e.classList.add(cls);
             else
-                element.classList.remove(cls);
+                e.classList.remove(cls);
             ''')
 
-        self.toggled_style = self.rdoc.jsfunction('viewmodel', 'model', 'element', 'newval', 'i', 'style_att', 'style_opt', body='''
+        self.style = self.rdoc.jsfunction('vm', 'm', 'e', 'newval', 'i', 'style_att', 'style_opt', body='''
             if (newval)
-                element.style[style_att]=style_opt;
+                e.style[style_att]=style_opt;
             else
-                element.style[style_att]='';
+                e.style[style_att]='';
         ''')
 
-        self.repeat_i_in = self.rdoc.jsfunction('viewmodel', 'model', 'element', 'newval', 'i', body='''
-            if (typeof element.app.template=='undefined') {
-                element.app.template = element.children[0];
-                element.removeChild(element.children[0]);
+        self.repeat = self.rdoc.jsfunction('vm', 'm', 'e', 'newval', 'i', body='''
+            if (typeof e.app.template=='undefined') {
+                e.app.template = e.children[0];
+                e.removeChild(e.children[0]);
             }
 
-            var ec = element.children;
+            var ec = e.children;
             var ecl = ec.length;
             var arr = newval;
             var arrl = arr.length;
             var c = arrl-ecl;
-            var te = element.app.template;
+            var te = e.app.template;
             var tag = te.tagName;
             var ih = te.innerHTML;
             var app = te.app;
-            var eid = String(element.getAttribute('id'));
+            var eid = String(e.getAttribute('id'));
             var tid = String(te.getAttribute('id'));
             var id = eid+'_'+tid+'_';
 
@@ -52,8 +52,8 @@ class controller:
                     to.app.oldval = new Array(from.app.oldval.length);
                 }
                 to.app.i = i;
-                to.app.model = model;
-                to.app.viewmodel = viewmodel;
+                to.app.m = m;
+                to.app.vm = vm;
 
                 var fc = from.children;
                 if (typeof fc=='undefined')
@@ -67,36 +67,41 @@ class controller:
             if (c>0)
                 // add new elements
                 for (var i=0; i<c; i++) {
-                    var e = te.cloneNode(true);
+                    var ee = te.cloneNode(true);
                     var eid = id+(i+ecl);
-                    e.setAttribute('id', eid);
-                    e.innerHTML = ih;
-                    e.app = {};
-                    copy_app_execute_controller(e, te, ecl+i);
-                    element.appendChild(e);
+                    ee.setAttribute('id', eid);
+                    ee.innerHTML = ih;
+                    ee.app = {};
+                    copy_app_execute_controller(ee, te, ecl+i);
+                    e.appendChild(ee);
                 }
             else
                 // remove un-needed elements
                 for (var i=c; i<0; i++)
-                    element.removeChild(ec[ec.length-1]);
+                    e.removeChild(ec[ec.length-1]);
         ''')
 
-        self.property = self.rdoc.jsfunction('viewmodel', 'model', 'element', 'newval', 'i', 'prop', body='''
-            element[prop] = newval;
+        self.property = self.rdoc.jsfunction('vw', 'm', 'e', 'newval', 'i', 'prop', body='''
+            e[prop] = newval;
         ''')
 
-        self.code = self.rdoc.jsfunction('viewmodel', 'model', 'element', 'newval', 'i', 'code', body='''
+        self.code = self.rdoc.jsfunction('vm', 'm', 'e', 'newval', 'i', 'code', body='''
             eval(code);
         ''')
 
         self.ismuttable = self.rdoc.jsfunction('test', body='''return (test && (typeof test == 'object' || typeof test == 'function'))''')
 
+        self.bind_html(html)
+
+        if run:
+            self.call_on_request_frame()
+
     def execute(self):
         self.rdoc.JS('''
             function crawl_element(e) {
                 if ((typeof e!='undefined')&&(typeof e.app!='undefined')) {
-                    e.app.model = #{self.model};
-                    e.app.viewmodel = #{self.viewmodel};
+                    e.app.m = #{self.model};
+                    e.app.vm = #{self.viewmodel};
                     if (typeof e.app.execute_controller!='undefined')
                         for (var j=0, k=e.app.execute_controller, kl=k.length; j<kl; j++)
                             k[j](#{self.viewmodel}, #{self.model}, e, j, e.app.i);
@@ -109,7 +114,7 @@ class controller:
 
     def bind(self, at, element, code, *varargs):
         if isinstance(code, str):
-            fnc = self.rdoc.jsfunction('viewmodel', 'model', 'element', 'i', body='return '+code)
+            fnc = self.rdoc.jsfunction('vm', 'm', 'e', 'i', body='return '+code)
         else:
             fnc = code
         whattodo = getattr(self, at)
@@ -125,14 +130,14 @@ class controller:
             if (typeof #{element}.app.oldval == 'undefined')
                 #{element}.app.oldval = [];
             #{element}.app.oldval.push(undefined);
-            #{element}.app.model = #{self.model};
-            #{element}.app.viewmodel = #{self.viewmodel};
+            #{element}.app.m = #{self.model};
+            #{element}.app.vm = #{self.viewmodel};
             #{element}.app.execute_controller.push(
-                function(viewmodel, model, element, j, i) {
-                    var newval = #{fnc}(viewmodel, model, element, i);
-                    if ((#{self.ismuttable}(newval)) || (newval != element.app.oldval[j])) {
-                        #{whattodo}(viewmodel, model, element, newval, i'''+s+''');
-                        element.app.oldval[j] = newval;
+                function(vm, m, e, j, i) {
+                    var newval = #{fnc}(vm, m, e, i);
+                    if ((#{self.ismuttable}(newval)) || (newval != e.app.oldval[j])) {
+                        #{whattodo}(vm, m, e, newval, i'''+s+''');
+                        e.app.oldval[j] = newval;
                     }
                 });
         ''', encapsulate_strings=False)
@@ -143,23 +148,29 @@ class controller:
             def __init__(self, ctrl):
                 super().__init__()
                 self.ctrl = ctrl
+                self.tagdict = {}
 
             def handle_starttag(self, tag, attrs):
+                if tag in self.tagdict:
+                    self.tagdict[tag] += 1
+                else:
+                    self.tagdict[tag] = 0
+                e = self.ctrl.rdoc.element(tag)
+                self.ctrl.rdoc.JS('#{e} = document.getElementsByTagName(#{tag})[#{self.tagdict[tag]}]')
+                self.ctrl.rdoc.JS('''
+                    if (typeof #{e}.app=='undefined')
+                        #{e}.app = {};
+                    #{e}.app.m = #{self.ctrl.model};
+                    #{e}.app.vm = #{self.ctrl.viewmodel};
+                ''')
                 for attr in attrs:
                     if attr[0] == 'id':
                         eid = attr[1]
-                        e = self.ctrl.rdoc.getElementById(eid)
-                        self.ctrl.rdoc.JS('''
-                            if (typeof #{e}.app=='undefined')
-                                #{e}.app = {};
-                            #{e}.app.model = #{self.ctrl.model};
-                            #{e}.app.viewmodel = #{self.ctrl.viewmodel};
-                        ''')
                         setattr(self.ctrl.e, eid.replace('-', '_').strip().replace(' ', '_'), e)
                     elif attr[0].startswith('weba-'):
                         at = attr[0][5:]
                         v = attr[1]
-                        s = v.split(',')
+                        s = v.split('::')
                         c = s[-1]
                         v = [l.strip() for l in s[:-1]]
                         self.ctrl.bind(at, e, c, *v)

@@ -4,8 +4,7 @@ class AppTodoMvc:
 
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
-        self.controller = controller(self.rdoc)
-        self.controller.bind_html(kwargs['main_html'])
+        self.controller = controller(self.rdoc, kwargs['main_html'])
         self.rdoc.JS('''
 
             // the data model
@@ -15,17 +14,16 @@ class AppTodoMvc:
                 itemlist : JSON.parse(localStorage.getItem('webatodomvcdata')) || [],
 
                 set_all_completed : function(comp_or_not) {
+
                     for (var i=0, ill=this.itemlist.length; i<ill; i++)
                         this.itemlist[i].completed = comp_or_not;
                     this.persist();
                 },
 
                 remove_completed : function() {
-                    var new_list = [];
-                    for (var i=0, ill=this.itemlist.length; i<ill; i++)
-                        if (!this.itemlist[i].completed)
-                            new_list.push(this.itemlist[i]);
-                    this.itemlist = new_list;
+                    this.itemlist = this.itemlist.filter(
+                        function(e) {return !e.completed}
+                    );
                     this.persist();
                 },
 
@@ -42,8 +40,8 @@ class AppTodoMvc:
                     this.persist();
                 },
 
-                toggle_item_completed : function(i) {
-                    this.itemlist[i].completed = !this.itemlist[i].completed;
+                toggle_item_completed : function(i, v) {
+                    this.itemlist[i].completed = v;
                     this.persist();
                 },
 
@@ -52,7 +50,7 @@ class AppTodoMvc:
                 }
             }
 
-            // viemodel
+            // viewmodel
 
             #{self.controller.viewmodel} = {
 
@@ -60,29 +58,38 @@ class AppTodoMvc:
 
                 new_item_keyup : function(e) {
                     if (e.keyCode == #{self.rdoc.KeyCode.ESC}) e.target.blur();
-                    if (e.keyCode == #{self.rdoc.KeyCode.ENTER}) {
-                        if (e.target.value.trim()!='')
-                            e.target.app.model.add_item(e.target.value);
-                        e.target.blur();
-                    }
+                    if (e.keyCode == #{self.rdoc.KeyCode.ENTER})
+                        if (e.target.value.trim()!='') {
+                            e.target.app.m.add_item(e.target.value);
+                            e.target.value='';
+                        }
                 },
 
-                edit_keyup : function(e, model, i) {
+                edit_keyup : function(e, i) {
                     if (e.keyCode == #{self.rdoc.KeyCode.ESC}) this.itembeingedited = undefined;
                     if (e.keyCode != #{self.rdoc.KeyCode.ENTER}) return;
                     this.itembeingedited = undefined;
-                    model.itemlist[i].text = e.target.value;
-                    if (e.target.value.trim()=='') model.remove_item(i);
+                    e.target.app.m.itemlist[i].text = e.target.value;
+                    if (e.target.value.trim()=='') e.target.app.m.remove_item(i);
+                    e.target.app.m.persist();
                 },
 
-                editing_item_changed : function(e, model, i, tothisitem) {
+                editing_item_changed : function(e, i, tothisitem) {
                     if (tothisitem) {
                         e.focus();
-                        e.value=model.itemlist[i].text;
-                        this.persist();
+                        e.value=e.app.m.itemlist[i].text;
                     }
                     else
                         e.blur();
+                },
+
+                should_hide : function(e, i) {
+                    return  ((e.app.m.itemlist[i].completed)&&(location.hash=='#/active'))     ||
+                            ((!e.app.m.itemlist[i].completed)&&(location.hash=='#/completed'));
+                },
+
+                finish_editing : function(i) {
+                    if (this.itembeingedited==i) this.itembeingedited=undefined;
                 }
             }
         ''')

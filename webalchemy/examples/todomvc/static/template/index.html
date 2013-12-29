@@ -10,55 +10,60 @@
 
 	<body onload="init_communication()">
 		<section id="todoapp">
+
 			<header id="header">
-				<h1 id="todos">todos</h1>
-				<input id="new-todo" placeholder="What needs to be done?" autofocus onblur="this.value=''" onkeyup="this.app.viewmodel.new_item_keyup(event)">
+				<h1>todos</h1>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus
+                       onblur="this.value=''"
+                       onkeyup="this.app.vm.new_item_keyup(event)">
 			</header>
 
-			<section id="main" style="display:none" weba-toggled_style="'display', 'none', model.itemlist.length==0">
+			<section id="main" weba-style="'display'::'none':: m.itemlist.length==0">
 				<input id="toggle-all" type="checkbox"
-                       weba-property="'checked', model.completed==model.itemlist.length"
-                       onclick="this.app.model.set_all_completed(this.checked)">
+                       weba-property="'checked':: m.completed==m.itemlist.length"
+                       onclick="this.app.m.set_all_completed(this.checked)">
 
 				<label for="toggle-all">Mark all as complete</label>
 
-				<ul id="todo-list" weba-repeat_i_in="model.itemlist">
+				<ul id="todo-list" weba-repeat="m.itemlist">
 
-                    <li id="item-template"
-                        style="display:none"
-                        weba-toggled_class="'completed', model.itemlist[i].completed"
-                        weba-toggled_style="'display', 'none', ((model.itemlist[i].completed)&&(location.hash=='#/active'))||((!model.itemlist[i].completed)&&(location.hash=='#/completed'))"
-                        weba-toggled_class="'editing', viewmodel.itembeingedited==i">
+                    <li weba-cls="'completed':: m.itemlist[i].completed"
+                        weba-style="'display':: 'none':: vm.should_hide(e, i)"
+                        weba-cls="'editing':: vm.itembeingedited==i">
 
                             <div class="view">
-                                    <input id="item-template-input" class="toggle" type="checkbox"
-                                           weba-property="'checked', model.itemlist[i].completed"
-                                           onclick="this.app.model.toggle_item_completed(this.app.i)">
-
-                                    <label id="item-template-label"
-                                           weba-property="'textContent', model.itemlist[i].text"
-                                           ondblclick="this.app.viewmodel.itembeingedited=this.app.i"></label>
-                                    <button id="item-template-destroy" class="destroy" onclick="this.app.model.remove_item(this.app.i)"></button>
+                                    <input class="toggle" type="checkbox"
+                                           weba-property="'checked':: m.itemlist[i].completed"
+                                           onclick="this.app.m.toggle_item_completed(this.app.i, this.checked)">
+                                    <label weba-property="'textContent':: m.itemlist[i].text"
+                                           ondblclick="this.app.vm.itembeingedited=this.app.i"></label>
+                                    <button class="destroy"
+                                            onclick="this.app.m.remove_item(this.app.i)"></button>
                             </div>
-                            <input id="item-template-edit" class="edit"  weba-code="'viewmodel.editing_item_changed(element, model, i, newval)', viewmodel.itembeingedited==i" onkeyup="this.app.viewmodel.edit_keyup(event, this.app.model, this.app.i)" onblur="if (this.app.viewmodel.itembeingedited==this.app.i) this.app.viewmodel.itembeingedited=undefined">
+                            <input class="edit"
+                                   weba-code="'vm.editing_item_changed(e, i, newval)':: vm.itembeingedited==i"
+                                   onkeyup="this.app.vm.edit_keyup(event, this.app.i)"
+                                   onblur="mv.finish_editing(i)">
                     </li>
 
 				</ul>
 			</section>
-			<footer id="footer" style="display:none" weba-toggled_style="'display', 'none', model.itemlist.length==0">
-				<span id="todo-count"><strong id="todo-num" weba-property="'textContent', model.remaining">0</strong> <span id="item-vs-items" weba-property="'textContent', model.remaining==1?'item':'items'">item</span> left</span>
+			<footer id="footer" weba-style="'display':: 'none':: m.itemlist.length==0">
+				<span id="todo-count"><strong weba-property="'textContent':: m.remaining"></strong> <span weba-property="'textContent':: m.remaining==1?'item':'items'"></span> left</span>
 				<ul id="filters">
 					<li>
-						<a id="filter-all" weba-toggled_class="'selected', location.hash=='#/'" href="#/">All</a>
+						<a weba-cls="'selected':: location.hash=='#/'" href="#/">All</a>
 					</li>
 					<li>
-						<a id="filter-active" weba-toggled_class="'selected', location.hash=='#/active'" href="#/active">Active</a>
+						<a weba-cls="'selected':: location.hash=='#/active'" href="#/active">Active</a>
 					</li>
 					<li>
-						<a id="filter-completed" weba-toggled_class="'selected', location.hash=='#/completed'" href="#/completed">Completed</a>
+						<a weba-cls="'selected':: location.hash=='#/completed'" href="#/completed">Completed</a>
 					</li>
 				</ul>
-				<button id="clear-completed" weba-toggled_style="'display', 'none', model.completed==0" onclick="this.app.model.remove_completed()">Clear completed (<span id="completed-num" weba-property="'textContent', model.completed">0</span>)</button>
+				<button id="clear-completed"
+                        weba-style="'display':: 'none':: m.completed==0"
+                        onclick="this.app.m.remove_completed()">Clear completed (<span weba-property="'textContent':: m.completed"></span>)</button>
 			</footer>
 		</section>
 		<footer id="info">
@@ -72,21 +77,15 @@
 
 
 	<script>
-	// the following files will be inserted here
-	// this is good to serve via a websocket. Can be removed
-	// if app is to be frozen
 
 	--> js/reconnecting_ws.js
-	--> js/watch.js
 	--> js/cookie.js
 	--> js/vendor.js
 	--> js/comm.js
 	--> js/reconnection_overlay.js
-	--> js/download_url.js
-
-	// the following is good for freezing the app
 
 	--> websocket
+
 	</script>
 
 
