@@ -1,34 +1,51 @@
 <!doctype html>
 <html lang="en">
+
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>Template • TodoMVC</title>
 		<link rel="stylesheet" href="./static/template/bower_components/todomvc-common/base.css">
 	</head>
+
 	<body onload="init_communication()">
 		<section id="todoapp">
 			<header id="header">
 				<h1 id="todos">todos</h1>
-				<input id="new-todo" placeholder="What needs to be done?" autofocus onblur="this.value=''">
+				<input id="new-todo" placeholder="What needs to be done?" autofocus onblur="this.value=''" onkeyup="this.app.viewmodel.new_item_keyup(event)">
 			</header>
-			<section id="main" weba-toggled_style="'display', 'none', model.total==0">
-				<input id="toggle-all" type="checkbox" weba-property="'checked', model.completed==model.total">
+
+			<section id="main" style="display:none" weba-toggled_style="'display', 'none', model.itemlist.length==0">
+				<input id="toggle-all" type="checkbox"
+                       weba-property="'checked', model.completed==model.itemlist.length"
+                       onclick="this.app.model.set_all_completed(this.checked)">
+
 				<label for="toggle-all">Mark all as complete</label>
+
 				<ul id="todo-list" weba-repeat_i_in="model.itemlist">
 
-                    <li id="item-template" weba-toggled_class="'completed', model.itemlist[element.app.i].completed" weba-toggled_style="'display', 'none', ((model.itemlist[element.app.i].completed)&&(location.hash=='#/active'))||((!model.itemlist[element.app.i].completed)&&(location.hash=='#/completed'))">
+                    <li id="item-template"
+                        style="display:none"
+                        weba-toggled_class="'completed', model.itemlist[i].completed"
+                        weba-toggled_style="'display', 'none', ((model.itemlist[i].completed)&&(location.hash=='#/active'))||((!model.itemlist[i].completed)&&(location.hash=='#/completed'))"
+                        weba-toggled_class="'editing', viewmodel.itembeingedited==i">
+
                             <div class="view">
-                                    <input id="item-template-input" class="toggle" type="checkbox" weba-property="'checked', model.itemlist[element.app.i].completed" onclick="this.app.model.itemlist[this.app.i].completed = !(this.app.model.itemlist[this.app.i].completed)">
-                                    <label id="item-template-label" weba-property="'textContent', model.itemlist[element.app.i].text"></label>
-                                    <button id="item-template-destroy" class="destroy" onclick="this.app.model.itemlist.splice(this.app.i,1)"></button>
+                                    <input id="item-template-input" class="toggle" type="checkbox"
+                                           weba-property="'checked', model.itemlist[i].completed"
+                                           onclick="this.app.model.toggle_item_completed(this.app.i)">
+
+                                    <label id="item-template-label"
+                                           weba-property="'textContent', model.itemlist[i].text"
+                                           ondblclick="this.app.viewmodel.itembeingedited=this.app.i"></label>
+                                    <button id="item-template-destroy" class="destroy" onclick="this.app.model.remove_item(this.app.i)"></button>
                             </div>
-                            <input id="item-template-edit" class="edit">
+                            <input id="item-template-edit" class="edit"  weba-code="'viewmodel.editing_item_changed(element, model, i, newval)', viewmodel.itembeingedited==i" onkeyup="this.app.viewmodel.edit_keyup(event, this.app.model, this.app.i)" onblur="if (this.app.viewmodel.itembeingedited==this.app.i) this.app.viewmodel.itembeingedited=undefined">
                     </li>
 
 				</ul>
 			</section>
-			<footer id="footer" weba-toggled_style="'display', 'none', model.total==0">
+			<footer id="footer" style="display:none" weba-toggled_style="'display', 'none', model.itemlist.length==0">
 				<span id="todo-count"><strong id="todo-num" weba-property="'textContent', model.remaining">0</strong> <span id="item-vs-items" weba-property="'textContent', model.remaining==1?'item':'items'">item</span> left</span>
 				<ul id="filters">
 					<li>
@@ -41,7 +58,7 @@
 						<a id="filter-completed" weba-toggled_class="'selected', location.hash=='#/completed'" href="#/completed">Completed</a>
 					</li>
 				</ul>
-				<button id="clear-completed" weba-toggled_style="'display', 'none', model.completed==0" onclick="for (var i=0; i<this.app.model.itemlist.length; i++) if (this.app.model.itemlist[i].completed) this.app.model.itemlist.splice(i,1)">Clear completed (<span id="completed-num" weba-property="'textContent', model.completed">0</span>)</button>
+				<button id="clear-completed" weba-toggled_style="'display', 'none', model.completed==0" onclick="this.app.model.remove_completed()">Clear completed (<span id="completed-num" weba-property="'textContent', model.completed">0</span>)</button>
 			</footer>
 		</section>
 		<footer id="info">
