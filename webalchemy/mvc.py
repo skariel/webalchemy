@@ -2,13 +2,14 @@ from html.parser import HTMLParser
 
 
 class controller:
-    def __init__(self, rdoc, html, run=False):
+    def __init__(self, rdoc, html, m=None, vm=None, prerender=None, run=True):
         self.rdoc = rdoc
         class c:
             pass
         self.e = c()
-        self.model = self.rdoc.dict()
-        self.viewmodel = self.rdoc.dict()
+        self.model = m or self.rdoc.dict()
+        self.viewmodel = vm or self.rdoc.dict()
+        self.prerender = prerender
 
         self.cls = self.rdoc.jsfunction('vm', 'm', 'e', 'newval', 'i', 'cls', body='''
             if (newval)

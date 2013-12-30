@@ -1,15 +1,3 @@
-from webalchemy.mvc import controller
-
-class AppTodoMvc:
-
-    def initialize(self, **kwargs):
-        self.rdoc = kwargs['remote_document']
-        self.datamodel = self.rdoc.new(datamodel)
-        self.viewmodel = self.rdoc.new(viewmodel)
-        self.controller = controller(self.rdoc, kwargs['main_html'], m=self.model, vm=self.viewmodel,
-                                     prerender=self.model.calc_completed_and_remaining)
-
-
 class item:
     def __init__(self, text):
         self.completed = False
@@ -34,7 +22,7 @@ class datamodel:
         self.persist()
 
     def add_item(self, txt):
-        self.itemlist.push(item(txt))
+        self.itemlist.push(new(item, txt))
         self.persist();
 
     def toggle_item_completed(self, i, v):
@@ -86,3 +74,18 @@ class viewmodel:
     def finish_editing(self, i):
         if self.itembeingedited == i:
             self.itembeingedited = undefined
+
+
+from webalchemy.mvc import controller
+
+
+class AppTodoMvc:
+
+    def initialize(self, **kwargs):
+        self.rdoc = kwargs['remote_document']
+        self.datamodel = self.rdoc.new(datamodel)
+        self.viewmodel = self.rdoc.new(viewmodel)
+        self.rdoc.translate(item)
+
+        self.controller = controller(self.rdoc, kwargs['main_html'], m=self.datamodel, vm=self.viewmodel,
+                                     prerender=self.datamodel.calc_completed_and_remaining)

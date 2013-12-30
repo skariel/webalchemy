@@ -2,8 +2,22 @@ import re
 import random
 import inspect
 import logging
+
+from ast import parse
+from types import FunctionType
+from inspect import getsource
+
+from webalchemy.pythonium.veloce.veloce import Veloce
+
 from webalchemy.saferef import safeRef
 from webalchemy.htmlparser import get_element_ids
+
+
+def vtranslate(code):
+    tree = parse(code)
+    translator = Veloce()
+    translator.visit(tree)
+    return translator.writer.value()
 
 
 # logger for internal purposes
@@ -449,6 +463,35 @@ class JSFunction:
         return self.varname + '();\n'
 
 
+class JSClass:
+    # TODO: cache the creation of classes!
+    def __init__(self, rdoc, cls):
+        self.rdoc = rdoc
+        self.classname = cls.__name__
+        self.varname = rdoc.get_new_uid()
+
+        js = vtranslate(getsource(cls))
+        js += '\n' + self.varname + ' = new '+self.classname + '();\n'
+
+        self.rdoc.inline(js)
+
+        class jsmethod:
+            def __init__(self, jsclass, name):
+                self.jsclass = jsclass
+                self.varname = jsclass.varname + '.' + name
+
+            # TODO: enable parameters!
+            def __call__(self):
+                self.jsclass.rdoc.inline(self.varname+'();\n')
+
+        for attr in dir(cls):
+            if attr.startswith('__'):
+                continue
+            if not isinstance(getattr(cls, attr), FunctionType):
+                continue
+            setattr(self, attr, jsmethod(self, attr))
+
+
 class _StyleSheet:
     def __init__(self, rdoc):
         self.rdoc = rdoc
@@ -625,3 +668,10 @@ class RemoteDocument:
         if custom_stringify:
             return custom_stringify(val)
         return str(val)
+
+    def new(self, cls):
+        return JSClass(self, cls)
+
+    def translate(self, cls):
+        self.inline(vtranslate(getsource(cls)))
+
