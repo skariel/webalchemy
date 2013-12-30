@@ -1,10 +1,10 @@
 ##Webalchemy todomvc
 
-69 sloc. PURE F****** PYTHON! Idiomatic Python I would say. Routing, LocalStorage, efficient rendering. Everything included. Check out the [result](http://skariel.org/webalchemy/todomvc.html)
+69 sloc. Pure Python. Idiomatic Python I would say. Routing, LocalStorage, efficient rendering. Everything included. Check out the [result](http://skariel.org/webalchemy/todomvc.html)
 
 Clean separation between [HTML View](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/static/template/index.html),
-[Model](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/todomvc.py#L12-L51),
-and [ViewModel](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/todomvc.py#L55-L94).
+[Model](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/todomvc.py#L8-L42),
+and [ViewModel](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/todomvc.py#L45-L79).
 
 The app can be compiled to a "static" page via [This file](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/freeze_app.py).
 The [final HTML](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/todomvc.html) lives [here](http://skariel.org/webalchemy/todomvc.html).
