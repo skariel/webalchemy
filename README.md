@@ -1,10 +1,11 @@
 ##Webalchemy: realtime web framework for Python
-helps keep frontend code simple by automating it through a websocket connection
+helps keep frontend code simple by automating it through a websocket connection. Maybe its better explained like this: Meteor + Angular, in PURE F****** PYTHON! yeah, at last!
 
 ###Features:
 
 - Data binding and MVVM support, Angular style: [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html) only [69 SLOC](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
 - Realtime and live-editing, Meteor style. Checkout our [demo (video)](https://vimeo.com/74150054)
+- If you don't want realtimeicity (?) just compile your apps to "static" HTML
 - Use pure Python3, thanks to [Pythonium](https://github.com/pythonium/pythonium)
 - [MIT licensed](LICENSE.txt)
 

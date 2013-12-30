@@ -27,8 +27,8 @@
 				<ul id="todo-list" weba-repeat="m.itemlist">
 
                     <li weba-cls="'completed':: m.itemlist[i].completed"
-                        weba-style="'display':: 'none':: vm.should_hide(e, i)"
-                        weba-cls="'editing':: vm.itembeingedited==i">
+                        weba-cls="'editing':: vm.itembeingedited==i"
+                        weba-style="'display':: 'none':: vm.should_hide(e, i)">
 
                             <div class="view">
                                     <input class="toggle" type="checkbox"
@@ -83,8 +83,110 @@ var __v0=document.createElement("style");
 __v0.setAttribute("type","text/css");
 document.body.appendChild(__v0);
 var __v0=document.styleSheets[0];
-__v1={};
-__v2={};
+var DataModel = Class.$extend({
+    __init__: function() {
+        this.itemlist = (JSON.parse(localStorage.getItem("webatodomvcdata"))||[]);
+    },
+    set_all_completed: function(comp_or_not) {
+        var iterator_item = this.itemlist;
+        for (var item_iterator_index=0; item_iterator_index < iterator_item.length; item_iterator_index++) {
+            var item = iterator_item[item_iterator_index];
+            item.completed = comp_or_not;
+        }
+        this.persist();
+    },
+    remove_completed: function() {
+        var __lambda3 = function(i) {
+            /* BEGIN arguments unpacking */
+            /* END arguments unpacking */
+            i.completed
+        }
+        this.itemlist = this.itemlist.filter(__lambda3);
+        this.persist();
+    },
+    remove_item: function(i) {
+        this.itemlist.splice(i, 1);
+        this.persist();
+    },
+    add_item: function(txt) {
+        this.itemlist.push(new Item(txt));
+        this.persist();
+    },
+    toggle_item_completed: function(i, v) {
+        this.itemlist[i].completed = v;
+        this.persist();
+    },
+    persist: function() {
+        localStorage.setItem("webatodomvcdata", JSON.stringify(this.itemlist));
+    },
+    calc_completed_and_remaining: function() {
+        this.completed = 0;
+        var iterator_item = this.itemlist;
+        for (var item_iterator_index=0; item_iterator_index < iterator_item.length; item_iterator_index++) {
+            var item = iterator_item[item_iterator_index];
+            if(item.completed) {
+                this.completed = this.completed + 1;
+            }
+        }
+        this.remaining = (this.itemlist.length - this.completed);
+    },
+});
+
+__v1 = new DataModel();
+var ViewModel = Class.$extend({
+    __init__: function() {
+        this.itembeingedited = undefined;
+    },
+    new_item_keyup: function(e) {
+        if((e.keyCode == weba.KeyCode.ESC)) {
+            e.target.blur();
+        }
+        if((e.keyCode == weba.KeyCode.ENTER)) {
+            if((e.target.value.trim() != "")) {
+                e.target.app.m.add_item(e.target.value);
+                e.target.value = "";
+            }
+        }
+    },
+    edit_keyup: function(e, i) {
+        if((e.keyCode == weba.KeyCode.ESC)) {
+            this.itembeingedited = undefined;
+        }
+        if((e.keyCode != weba.KeyCode.ENTER)) {
+            return undefined;
+        }
+        this.itembeingedited = undefined;
+        e.target.app.m.itemlist[i].text = e.target.value;
+        if((e.target.value.trim() == "")) {
+            e.target.app.m.remove_item(i);
+        }
+    },
+    editing_item_changed: function(e, i, tothisitem) {
+        if(tothisitem) {
+            e.focus();
+            e.value = e.app.m.itemlist[i].text;
+        }
+        else {
+            e.blur();
+        }
+    },
+    should_hide: function(e, i) {
+        return ((e.app.m.itemlist[i].completed&&(location.hash == "#/active"))||(!e.app.m.itemlist[i].completed&&(location.hash == "#/completed")));
+    },
+    finish_editing: function(i) {
+        if((this.itembeingedited == i)) {
+            this.itembeingedited = undefined;
+        }
+    },
+});
+
+__v2 = new ViewModel();
+var Item = Class.$extend({
+    __init__: function(text) {
+        this.completed = false;
+        this.text = text;
+    },
+});
 var __v3=function(vm,m,e,newval,i,cls){
 
             if (newval)
@@ -353,7 +455,7 @@ return  m.itemlist[i].completed
                     }
                 });
         var __v29=function(vm,m,e,i){
-return  vm.should_hide(e, i)
+return  vm.itembeingedited==i
 }
 
             if (typeof __v27.app == 'undefined')
@@ -369,12 +471,12 @@ return  vm.should_hide(e, i)
                 function(vm, m, e, j, i) {
                     var newval = __v29(vm, m, e, i);
                     if ((__v8(newval)) || (newval != e.app.oldval[j])) {
-                        __v4(vm, m, e, newval, i,'display','none');
+                        __v3(vm, m, e, newval, i,'editing');
                         e.app.oldval[j] = newval;
                     }
                 });
         var __v30=function(vm,m,e,i){
-return  vm.itembeingedited==i
+return  vm.should_hide(e, i)
 }
 
             if (typeof __v27.app == 'undefined')
@@ -390,7 +492,7 @@ return  vm.itembeingedited==i
                 function(vm, m, e, j, i) {
                     var newval = __v30(vm, m, e, i);
                     if ((__v8(newval)) || (newval != e.app.oldval[j])) {
-                        __v3(vm, m, e, newval, i,'editing');
+                        __v4(vm, m, e, newval, i,'display','none');
                         e.app.oldval[j] = newval;
                     }
                 });
@@ -781,102 +883,7 @@ __v67 = document.getElementsByTagName("script")[1]
                         __v67.app = {};
                     __v67.app.m = __v1;
                     __v67.app.vm = __v2;
-                
-
-            // the data model
-
-            __v1 = {
-
-                itemlist : JSON.parse(localStorage.getItem('webatodomvcdata')) || [],
-
-                set_all_completed : function(comp_or_not) {
-
-                    for (var i=0, ill=this.itemlist.length; i<ill; i++)
-                        this.itemlist[i].completed = comp_or_not;
-                    this.persist();
-                },
-
-                remove_completed : function() {
-                    this.itemlist = this.itemlist.filter(
-                        function(e) {return !e.completed}
-                    );
-                    this.persist();
-                },
-
-                remove_item : function(i) {
-                    this.itemlist.splice(i,1);
-                    this.persist();
-                },
-
-                add_item : function(txt) {
-                    this.itemlist.push({
-                        text:txt,
-                        completed:false
-                    });
-                    this.persist();
-                },
-
-                toggle_item_completed : function(i, v) {
-                    this.itemlist[i].completed = v;
-                    this.persist();
-                },
-
-                persist : function() {
-                    localStorage.setItem('webatodomvcdata', JSON.stringify(this.itemlist));
-                }
-            }
-
-            // viewmodel
-
-            __v2 = {
-
-                itembeingedited : null,
-
-                new_item_keyup : function(e) {
-                    if (e.keyCode == 27) e.target.blur();
-                    if (e.keyCode == 13)
-                        if (e.target.value.trim()!='') {
-                            e.target.app.m.add_item(e.target.value);
-                            e.target.value='';
-                        }
-                },
-
-                edit_keyup : function(e, i) {
-                    if (e.keyCode == 27) this.itembeingedited = undefined;
-                    if (e.keyCode != 13) return;
-                    this.itembeingedited = undefined;
-                    e.target.app.m.itemlist[i].text = e.target.value;
-                    if (e.target.value.trim()=='') e.target.app.m.remove_item(i);
-                    e.target.app.m.persist();
-                },
-
-                editing_item_changed : function(e, i, tothisitem) {
-                    if (tothisitem) {
-                        e.focus();
-                        e.value=e.app.m.itemlist[i].text;
-                    }
-                    else
-                        e.blur();
-                },
-
-                should_hide : function(e, i) {
-                    return  ((e.app.m.itemlist[i].completed)&&(location.hash=='#/active'))     ||
-                            ((!e.app.m.itemlist[i].completed)&&(location.hash=='#/completed'));
-                },
-
-                finish_editing : function(i) {
-                    if (this.itembeingedited==i) this.itembeingedited=undefined;
-                }
-            }
-        var __v68=function(){
-
-            __v1.completed = 0;
-            for (var i=0, il=__v1.itemlist, ill=il.length; i<ill; i++)
-                if (il[i].completed) __v1.completed++;
-            __v1.remaining = __v1.itemlist.length - __v1.completed;
-        
-}
-var __v69=function(){
+                var __v68=function(){
             function crawl_element(e) {
                 if ((typeof e!='undefined')&&(typeof e.app!='undefined')) {
                     e.app.m = __v1;
@@ -890,14 +897,14 @@ var __v69=function(){
             }
             crawl_element(document.body);
         }
-var __v70=function(){
-__v68();
+var __v69=function(){
+__v1.calc_completed_and_remaining();
 
-            __v69();
-            window.requestAnimationFrame(__v70);
+            __v68();
+            window.requestAnimationFrame(__v69);
         
 }
-__v70();
+__v69();
 
 	</script>
 
