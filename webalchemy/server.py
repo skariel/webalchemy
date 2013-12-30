@@ -485,6 +485,14 @@ def generate_static(App, writefile, main_html_file_path=None):
                 l = '<body>'
             if l.lstrip().startswith('-->'):
                 fnjs = l.split()[1].strip()
+                if fnjs == 'js/classy.js':
+                    mfn = os.path.realpath(__file__)
+                    mfn = os.path.dirname(mfn)
+                    fnjs = os.path.join(mfn, fnjs)
+                    with open(fnjs, 'r') as fjs:
+                        l = fjs.read()
+                    lines.append(l)
+                    continue
                 if fnjs != 'websocket':
                     continue
             lines.append(l)
