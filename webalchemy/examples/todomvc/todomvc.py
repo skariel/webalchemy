@@ -1,11 +1,13 @@
-class item:
+
+class Item:
     def __init__(self, text):
         self.completed = False
         self.text = text
 
 
-class datamodel:
+class DataModel:
     def __init__(self):
+        # loading local list of todos
         self.itemlist = JSON.parse(localStorage.getItem('webatodomvcdata')) or []
 
     def set_all_completed(self, comp_or_not):
@@ -18,11 +20,11 @@ class datamodel:
         self.persist()
 
     def remove_item(self, i):
-        self.itemlist.splice(i,1)
+        self.itemlist.splice(i, 1)
         self.persist()
 
     def add_item(self, txt):
-        self.itemlist.push(new(item, txt))
+        self.itemlist.push(new(Item, txt))
         self.persist()
 
     def toggle_item_completed(self, i, v):
@@ -40,12 +42,12 @@ class datamodel:
         self.remaining = self.itemlist.length - self.completed
 
 
-class viewmodel:
+class ViewModel:
     def __init__(self):
         self.itembeingedited = None
 
     def new_item_keyup(self, e):
-        if e.keyCode == weba.KeyCode.ESC : e.target.blur()
+        if e.keyCode == weba.KeyCode.ESC: e.target.blur()
         if e.keyCode == weba.KeyCode.ENTER:
             if e.target.value.trim() != '':
                 e.target.app.m.add_item(e.target.value)
@@ -68,8 +70,8 @@ class viewmodel:
             e.blur()
 
     def should_hide(self, e, i):
-        return  (((e.app.m.itemlist[i].completed) and (location.hash=='#/active'))  or
-            ((not e.app.m.itemlist[i].completed) and (location.hash=='#/completed')))
+        return (e.app.m.itemlist[i].completed and location.hash == '#/active') or \
+           (not e.app.m.itemlist[i].completed and location.hash == '#/completed')
 
     def finish_editing(self, i):
         if self.itembeingedited == i:
@@ -83,9 +85,9 @@ class AppTodoMvc:
 
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
-        self.datamodel = self.rdoc.new(datamodel)
-        self.viewmodel = self.rdoc.new(viewmodel)
-        self.rdoc.translate(item)
+        self.datamodel = self.rdoc.new(DataModel)
+        self.viewmodel = self.rdoc.new(ViewModel)
+        self.rdoc.translate(Item)
 
-        self.controller = controller(self.rdoc, kwargs['main_html'], m=self.datamodel, vm=self.viewmodel,
-                                     prerender=self.datamodel.calc_completed_and_remaining)
+        controller(self.rdoc, kwargs['main_html'], m=self.datamodel, vm=self.viewmodel,
+                   prerender=self.datamodel.calc_completed_and_remaining)
