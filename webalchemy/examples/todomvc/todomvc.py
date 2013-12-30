@@ -16,7 +16,7 @@ class DataModel:
         self.persist()
 
     def remove_completed(self):
-        self.itemlist = self.itemlist.filter(lambda i: i.completed)
+        self.itemlist = self.itemlist.filter(lambda i:  not i.completed)
         self.persist()
 
     def remove_item(self, i):

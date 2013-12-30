@@ -768,7 +768,7 @@ class Veloce(NodeVisitor):
         self.writer.push()
         self._unpack_arguments(args, kwargs, vararg, varkwargs)
         body = self.visit(node.body)
-        self.writer.write(body)
+        self.writer.write('return '+body)
         self.writer.pull()
         self.writer.write('}')
         return name
