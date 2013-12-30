@@ -4,101 +4,85 @@ class AppTodoMvc:
 
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
-        self.controller = controller(self.rdoc, kwargs['main_html'])
-        self.rdoc.JS('''
+        self.datamodel = self.rdoc.new(datamodel)
+        self.viewmodel = self.rdoc.new(viewmodel)
+        self.controller = controller(self.rdoc, kwargs['main_html'], m=self.model, vm=self.viewmodel,
+                                     prerender=self.model.calc_completed_and_remaining)
 
-            // the data model
 
-            #{self.controller.model} = {
+class item:
+    def __init__(self, text):
+        self.completed = False
+        self.text = text
 
-                itemlist : JSON.parse(localStorage.getItem('webatodomvcdata')) || [],
 
-                set_all_completed : function(comp_or_not) {
+class datamodel:
+    def __init__(self):
+        self.itemlist = JSON.parse(localStorage.getItem('webatodomvcdata')) or []
 
-                    for (var i=0, ill=this.itemlist.length; i<ill; i++)
-                        this.itemlist[i].completed = comp_or_not;
-                    this.persist();
-                },
+    def set_all_completed(self, comp_or_not):
+        for item in self.itemlist:
+            item.completed = comp_or_not
+        self.persist()
 
-                remove_completed : function() {
-                    this.itemlist = this.itemlist.filter(
-                        function(e) {return !e.completed}
-                    );
-                    this.persist();
-                },
+    def remove_completed(self):
+        self.itemlist = self.itemlist.filter(lambda i: i.completed)
+        self.persist()
 
-                remove_item : function(i) {
-                    this.itemlist.splice(i,1);
-                    this.persist();
-                },
+    def remove_item(self, i):
+        self.itemlist.splice(i,1)
+        self.persist()
 
-                add_item : function(txt) {
-                    this.itemlist.push({
-                        text:txt,
-                        completed:false
-                    });
-                    this.persist();
-                },
+    def add_item(self, txt):
+        self.itemlist.push(item(txt))
+        self.persist();
 
-                toggle_item_completed : function(i, v) {
-                    this.itemlist[i].completed = v;
-                    this.persist();
-                },
+    def toggle_item_completed(self, i, v):
+        self.itemlist[i].completed = v
+        self.persist()
 
-                persist : function() {
-                    localStorage.setItem('webatodomvcdata', JSON.stringify(this.itemlist));
-                }
-            }
+    def persist(self):
+        localStorage.setItem('webatodomvcdata', JSON.stringify(self.itemlist))
 
-            // viewmodel
+    def calc_completed_and_remaining(self):
+        self.completed = 0
+        for item in self.itemlist:
+            if item.completed:
+                self.completed += 1
+        self.remaining = self.itemlist.length - self.completed
 
-            #{self.controller.viewmodel} = {
 
-                itembeingedited : null,
+class viewmodel:
+    def __init__(self):
+        self.itembeingedited = None
 
-                new_item_keyup : function(e) {
-                    if (e.keyCode == #{self.rdoc.KeyCode.ESC}) e.target.blur();
-                    if (e.keyCode == #{self.rdoc.KeyCode.ENTER})
-                        if (e.target.value.trim()!='') {
-                            e.target.app.m.add_item(e.target.value);
-                            e.target.value='';
-                        }
-                },
+    def new_item_keyup(self, e):
+        if e.keyCode == weba.KeyCode.ESC : e.target.blur()
+        if e.keyCode == weba.KeyCode.ENTER:
+            if e.target.value.trim() != '':
+                e.target.app.m.add_item(e.target.value)
+                e.target.value = ''
 
-                edit_keyup : function(e, i) {
-                    if (e.keyCode == #{self.rdoc.KeyCode.ESC}) this.itembeingedited = undefined;
-                    if (e.keyCode != #{self.rdoc.KeyCode.ENTER}) return;
-                    this.itembeingedited = undefined;
-                    e.target.app.m.itemlist[i].text = e.target.value;
-                    if (e.target.value.trim()=='') e.target.app.m.remove_item(i);
-                    e.target.app.m.persist();
-                },
+    def edit_keyup(self, e, i):
+        if e.keyCode == weba.KeyCode.ESC:
+            self.itembeingedited = None
+        if e.keyCode != weba.KeyCode.ENTER: return
+        self.itembeingedited = None
+        e.target.app.m.itemlist[i].text = e.target.value
+        if e.target.value.trim() == '':
+            e.target.app.m.remove_item(i);
 
-                editing_item_changed : function(e, i, tothisitem) {
-                    if (tothisitem) {
-                        e.focus();
-                        e.value=e.app.m.itemlist[i].text;
-                    }
-                    else
-                        e.blur();
-                },
+    def editing_item_changed(self, e, i, tothisitem):
+        if tothisitem:
+            e.focus()
+            e.value = e.app.m.itemlist[i].text
+        else:
+            e.blur()
 
-                should_hide : function(e, i) {
-                    return  ((e.app.m.itemlist[i].completed)&&(location.hash=='#/active'))     ||
-                            ((!e.app.m.itemlist[i].completed)&&(location.hash=='#/completed'));
-                },
+    def should_hide(self, e, i):
+        return  (((e.app.m.itemlist[i].completed) and (location.hash=='#/active'))  or
+            ((not e.app.m.itemlist[i].completed) and (location.hash=='#/completed')))
 
-                finish_editing : function(i) {
-                    if (this.itembeingedited==i) this.itembeingedited=undefined;
-                }
-            }
-        ''')
-
-        self.controller.prerender = self.rdoc.jsfunction('''
-            #{self.controller.model}.completed = 0;
-            for (var i=0, il=#{self.controller.model}.itemlist, ill=il.length; i<ill; i++)
-                if (il[i].completed) #{self.controller.model}.completed++;
-            #{self.controller.model}.remaining = #{self.controller.model}.itemlist.length - #{self.controller.model}.completed;
-        ''')
-
-        self.controller.call_on_request_frame()
+    def finish_editing(self, i):
+        if self.itembeingedited == i:
+            self.itembeingedited = undefined

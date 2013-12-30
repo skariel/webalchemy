@@ -28,8 +28,8 @@
 				<ul id="todo-list" weba-repeat="m.itemlist">
 
                     <li weba-cls="'completed':: m.itemlist[i].completed"
-                        weba-style="'display':: 'none':: vm.should_hide(e, i)"
-                        weba-cls="'editing':: vm.itembeingedited==i">
+                        weba-cls="'editing':: vm.itembeingedited==i"
+                        weba-style="'display':: 'none':: vm.should_hide(e, i)">
 
                             <div class="view">
                                     <input class="toggle" type="checkbox"
@@ -83,6 +83,7 @@
 	--> js/vendor.js
 	--> js/comm.js
 	--> js/reconnection_overlay.js
+	--> js/classy.js
 
 	--> websocket
 
