@@ -263,7 +263,7 @@ var DataModel = Class.$extend({
         var __lambda3 = function(i) {
             /* BEGIN arguments unpacking */
             /* END arguments unpacking */
-            i.completed
+            return !i.completed
         }
         this.itemlist = this.itemlist.filter(__lambda3);
         this.persist();
