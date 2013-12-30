@@ -23,7 +23,7 @@ class datamodel:
 
     def add_item(self, txt):
         self.itemlist.push(new(item, txt))
-        self.persist();
+        self.persist()
 
     def toggle_item_completed(self, i, v):
         self.itemlist[i].completed = v
@@ -58,7 +58,7 @@ class viewmodel:
         self.itembeingedited = None
         e.target.app.m.itemlist[i].text = e.target.value
         if e.target.value.trim() == '':
-            e.target.app.m.remove_item(i);
+            e.target.app.m.remove_item(i)
 
     def editing_item_changed(self, e, i, tothisitem):
         if tothisitem:
@@ -73,7 +73,7 @@ class viewmodel:
 
     def finish_editing(self, i):
         if self.itembeingedited == i:
-            self.itembeingedited = undefined
+            self.itembeingedited = None
 
 
 from webalchemy.mvc import controller
