@@ -1,5 +1,5 @@
-##Webalchemy: realtime web framework for Python
-helps keep frontend code simple by automating it through a websocket connection. Maybe its better explained like this: Meteor + Angular, in Pure Python!
+##Webalchemy
+Modern we programming with Python
 
 ###Features:
 
