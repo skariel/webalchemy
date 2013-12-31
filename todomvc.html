@@ -1,30 +1,30 @@
 <!doctype html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Template • TodoMVC</title>
-        <link rel="stylesheet" href="./static/template/bower_components/todomvc-common/base.css">
-    </head>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Template • TodoMVC</title>
+		<link rel="stylesheet" href="./static/template/bower_components/todomvc-common/base.css">
+	</head>
 
-<body>      <section id="todoapp">
+<body>		<section id="todoapp">
 
-            <header id="header">
-                <h1>todos</h1>
-                <input id="new-todo" placeholder="What needs to be done?" autofocus
+			<header id="header">
+				<h1>todos</h1>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus
                        onblur="this.value=''"
                        onkeyup="this.app.vm.new_item_keyup(event)">
-            </header>
+			</header>
 
-            <section id="main" weba-style="'display'::'none':: m.itemlist.length==0">
-                <input id="toggle-all" type="checkbox"
+			<section id="main" weba-style="'display'::'none':: m.itemlist.length==0">
+				<input id="toggle-all" type="checkbox"
                        weba-property="'checked':: m.completed==m.itemlist.length"
                        onclick="this.app.m.set_all_completed(this.checked)">
 
-                <label for="toggle-all">Mark all as complete</label>
+				<label for="toggle-all">Mark all as complete</label>
 
-                <ul id="todo-list" weba-repeat="m.itemlist">
+				<ul id="todo-list" weba-repeat="m.itemlist">
 
                     <li weba-cls="'completed':: m.itemlist[i].completed"
                         weba-cls="'editing':: vm.itembeingedited==i"
@@ -42,40 +42,40 @@
                             <input class="edit"
                                    weba-code="'vm.editing_item_changed(e, i, newval)':: vm.itembeingedited==i"
                                    onkeyup="this.app.vm.edit_keyup(event, this.app.i)"
-                                   onblur="mv.finish_editing(i)">
+                                   onblur="this.app.vm.finish_editing(this.app.i)">
                     </li>
 
-                </ul>
-            </section>
-            <footer id="footer" weba-style="'display':: 'none':: m.itemlist.length==0">
-                <span id="todo-count"><strong weba-property="'textContent':: m.remaining"></strong> <span weba-property="'textContent':: m.remaining==1?'item':'items'"></span> left</span>
-                <ul id="filters">
-                    <li>
-                        <a weba-cls="'selected':: location.hash=='#/'" href="#/">All</a>
-                    </li>
-                    <li>
-                        <a weba-cls="'selected':: location.hash=='#/active'" href="#/active">Active</a>
-                    </li>
-                    <li>
-                        <a weba-cls="'selected':: location.hash=='#/completed'" href="#/completed">Completed</a>
-                    </li>
-                </ul>
-                <button id="clear-completed"
+				</ul>
+			</section>
+			<footer id="footer" weba-style="'display':: 'none':: m.itemlist.length==0">
+				<span id="todo-count"><strong weba-property="'textContent':: m.remaining"></strong> <span weba-property="'textContent':: m.remaining==1?'item':'items'"></span> left</span>
+				<ul id="filters">
+					<li>
+						<a weba-cls="'selected':: location.hash=='#/'" href="#/">All</a>
+					</li>
+					<li>
+						<a weba-cls="'selected':: location.hash=='#/active'" href="#/active">Active</a>
+					</li>
+					<li>
+						<a weba-cls="'selected':: location.hash=='#/completed'" href="#/completed">Completed</a>
+					</li>
+				</ul>
+				<button id="clear-completed"
                         weba-style="'display':: 'none':: m.completed==0"
                         onclick="this.app.m.remove_completed()">Clear completed (<span weba-property="'textContent':: m.completed"></span>)</button>
-            </footer>
-        </section>
-        <footer id="info">
-            <p>Double-click to edit a todo</p>
-            <p>Created by Ariel Keselman, powered by <a href="https://github.com/skariel/webalchemy">webalchemy</a></p>
-            <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-        </footer>
-        <script src="./static/template/bower_components/todomvc-common/base.js"></script>
-        </script>
-    </body>
+			</footer>
+		</section>
+		<footer id="info">
+			<p>Double-click to edit a todo</p>
+			<p>Created by Ariel Keselman, powered by <a href="https://github.com/skariel/webalchemy">webalchemy</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+		<script src="./static/template/bower_components/todomvc-common/base.js"></script>
+		</script>
+	</body>
 
 
-    <script>
+	<script>
 
 // from: http://classy.pocoo.org/
 /**
@@ -1070,7 +1070,7 @@ __v1.calc_completed_and_remaining();
 }
 __v69();
 
-    </script>
+	</script>
 
 
 </html>
