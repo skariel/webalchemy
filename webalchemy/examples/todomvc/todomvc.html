@@ -42,7 +42,7 @@
                             <input class="edit"
                                    weba-code="'vm.editing_item_changed(e, i, newval)':: vm.itembeingedited==i"
                                    onkeyup="this.app.vm.edit_keyup(event, this.app.i)"
-                                   onblur="mv.finish_editing(i)">
+                                   onblur="this.app.vm.finish_editing(this.app.i)">
                     </li>
 
 				</ul>
