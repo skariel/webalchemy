@@ -1,5 +1,5 @@
 ##Webalchemy
-Modern we programming with Python
+Modern web development with Python
 
 ###What?
 
