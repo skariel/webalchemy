@@ -1,11 +1,10 @@
 ##Webalchemy
 Modern we programming with Python
 
-###Features:
+###What?
 
-- Data binding and MVVM support, Angular style: [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html) only [69 SLOC](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
-- Realtime and live-editing, Meteor style. Checkout our [demo (video)](https://vimeo.com/74150054)
-- If you don't want realtimeicity (?) just compile your apps to "static" HTML
+- See our Angular style [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html). More info [here](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
+- See our Meteor style live editing [demo](https://vimeo.com/74150054)
 - Use pure Python3, thanks to [Pythonium](https://github.com/pythonium/pythonium)
 - [MIT licensed](LICENSE.txt)
 
@@ -63,6 +62,6 @@ Run relatively simple Javascript code in the frontend, and structure this code s
 
 ###What to expect:
 
-- integration of [Pythonium](https://github.com/pythonium/pythonium)
 - Documentation :)
+- No external dependencies (move to Tulip)
 

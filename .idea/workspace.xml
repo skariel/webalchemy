@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/pythonium/LICENSE" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -54,19 +53,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="48" selection-start="923" selection-end="923" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1628">
+            <state line="67" column="0" selection-start="2298" selection-end="2298" vertical-scroll-proportion="0.7898089" vertical-offset="978" max-vertical-offset="1606">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LICENSE" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="LICENSE" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/LICENSE">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="501" column="26" selection-start="26517" selection-end="26517" vertical-scroll-proportion="0.93135726" vertical-offset="10425" max-vertical-offset="11154">
+            <state line="22" column="9" selection-start="1031" selection-end="1031" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11154">
               <folding />
             </state>
           </provider>
@@ -102,8 +101,8 @@
         <option value="$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/static/template/index.html" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/webalchemy/pythonium/LICENSE" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -496,7 +495,11 @@
       <created>1388479035872</created>
       <updated>1388479035872</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="added Pythonium license">
+      <created>1388479192532</created>
+      <updated>1388479192532</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -508,7 +511,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -557,7 +560,8 @@
     <MESSAGE value="bug fix" />
     <MESSAGE value="bug fix in Pythonium" />
     <MESSAGE value="fixing a bug in todomvc" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing a bug in todomvc" />
+    <MESSAGE value="added Pythonium license" />
+    <option name="LAST_COMMIT_MESSAGE" value="added Pythonium license" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -584,16 +588,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
+    <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="48" selection-start="923" selection-end="923" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1628">
+        <state line="22" column="9" selection-start="1031" selection-end="1031" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11154">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/LICENSE">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="501" column="26" selection-start="26517" selection-end="26517" vertical-scroll-proportion="0.93135726" vertical-offset="10425" max-vertical-offset="11154">
+        <state line="67" column="0" selection-start="2298" selection-end="2298" vertical-scroll-proportion="0.7898089" vertical-offset="978" max-vertical-offset="1606">
           <folding />
         </state>
       </provider>
