@@ -63,5 +63,7 @@ Run relatively simple Javascript code in the frontend, and structure this code s
 ###What to expect:
 
 - Documentation :)
-- No external dependencies (move to Tulip)
+- Major cleanup
+- Tulip
+- ZMQ (for some real scalability)
 
