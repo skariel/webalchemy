@@ -1,6 +1,6 @@
 ##Webalchemy todomvc
 
-69 sloc. Pure Python. Idiomatic Python I would say. Routing, LocalStorage, efficient rendering. Everything included. Check out the [result](http://skariel.org/webalchemy/todomvc.html)
+70 sloc. Pure Python. Idiomatic Python I would say. Routing, LocalStorage, efficient rendering. Everything included. Check out the [result](http://skariel.org/webalchemy/todomvc.html)
 
 Clean separation between [HTML View](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/static/template/index.html),
 [Model](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/todomvc/todomvc.py#L8-L42),

@@ -5,7 +5,7 @@
 #
 
 import logging
-from tornado import gen
+from webalchemy.tornado import gen
 
 from webalchemy.examples.tictactoe.board import board
 

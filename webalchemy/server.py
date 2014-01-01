@@ -9,12 +9,12 @@ import os.path
 from types import ModuleType
 from collections import OrderedDict
 
-import tornado
-import tornado.web
-import tornado.ioloop
-import tornado.websocket
+import webalchemy.tornado
+import webalchemy.tornado.web
+import webalchemy.tornado.ioloop
+import webalchemy.tornado.websocket
 
-from tornado import gen
+from webalchemy.tornado import gen
 
 from webalchemy.remotedocument import RemoteDocument
 
@@ -26,7 +26,7 @@ def _generate_session_id():
     return str(random.randint(0, 1e16))
 
 
-class _MainHandler(tornado.web.RequestHandler):
+class _MainHandler(webalchemy.tornado.web.RequestHandler):
 
     def initialize(self, **kwargs):
         log.info('Initiallizing new app!')
@@ -41,7 +41,7 @@ class _MainHandler(tornado.web.RequestHandler):
         self.write(self.main_html)
 
 
-class WebSocketHandler(tornado.websocket.WebSocketHandler):
+class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
 
     @gen.coroutine
     def initialize(self, **kwargs):
@@ -269,7 +269,7 @@ def _clean_pyrpc():
 
 @gen.coroutine
 def async_delay(secs):
-    yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
+    yield gen.Task(webalchemy.tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
 
 
 def _dreload(module, dreload_blacklist_starting_with, just_visit=False):
@@ -381,7 +381,7 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
 
     static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
     main_html_file_path = kwargs.get('main_html_file_path', None)
-    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'tornado'))
+    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'webalchemy.tornado'))
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
     session_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
@@ -440,8 +440,8 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
     if ssl:
         main_html = main_html.replace('ws://', 'wss://')
 
-    # setting-up the tornado server
-    application = tornado.web.Application([
+    # setting-up the webalchemy.tornado server
+    application = webalchemy.tornado.web.Application([
         (ws_route, WebSocketHandler, dict(local_doc_class=local_doc_class,
                                           shared_wshandlers=shared_wshandlers,
                                           shared_data=shared_data,
@@ -453,7 +453,7 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
     ], static_path=static_path)
     au = _AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
-    tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
+    webalchemy.tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     if not ssl:
         application.listen(port)
     else:
@@ -467,7 +467,7 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
         })
 
     log.info('starting Tornado event loop')
-    tornado.ioloop.IOLoop.instance().start()
+    webalchemy.tornado.ioloop.IOLoop.instance().start()
 
 
 def generate_static(App, writefile, main_html_file_path=None):

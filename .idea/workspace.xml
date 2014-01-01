@@ -1,7 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="" />
+    <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/README" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/asyncio.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/auth.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/auth_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/auto.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/autoreload.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/ca-certificates.crt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/caresresolver.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/common.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/concurrent.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/concurrent_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/curl_httpclient.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/curl_httpclient_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/epoll.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/escape.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/escape_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/gettext_translations/extract_me.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/csv_translations/fr_FR.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/gen.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/gen_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/httpclient.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/httpclient_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/httpserver.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/httpserver_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/httputil.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/httputil_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/import_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/static/dir/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/interface.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/ioloop.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/ioloop_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/iostream.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/iostream_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/kqueue.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/locale.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/locale_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/log.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/log_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/netutil.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/netutil_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/options.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/options_test.cfg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/options_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/posix.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/process.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/process_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/resolve_test_helper.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/static/robots.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/runtests.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/select.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/simple_httpclient.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/simple_httpclient_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/speedups.c" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/stack_context.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/stack_context_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/tcpserver.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/template.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/template_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/test.crt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/test.key" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/testing.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/testing_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/gettext_translations/fr_FR/LC_MESSAGES/tornado_test.po" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/twisted.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/twisted_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/templates/utf8.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/util.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/util.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/util_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/web.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/web_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/websocket.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/websocket_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/windows.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/wsgi.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/wsgi_test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/todomvc/README.md" afterPath="$PROJECT_DIR$/webalchemy/examples/todomvc/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/server.py" afterPath="$PROJECT_DIR$/webalchemy/server.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py" afterPath="$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="webalchemy.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,37 +110,48 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="todomvc.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="33" selection-start="1243" selection-end="1244" vertical-scroll-proportion="0.0" vertical-offset="698" max-vertical-offset="2178">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/static/template/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="16" selection-start="2664" selection-end="2664" vertical-scroll-proportion="0.0" vertical-offset="1254" max-vertical-offset="2200">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="17" selection-start="474" selection-end="474" vertical-scroll-proportion="0.0" vertical-offset="132" max-vertical-offset="484">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="22" selection-start="35" selection-end="35" vertical-scroll-proportion="0.022940563" vertical-offset="0" max-vertical-offset="1606">
+            <state line="7" column="107" selection-start="427" selection-end="427" vertical-scroll-proportion="-5.133333" vertical-offset="0" max-vertical-offset="1672">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="server.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="1" selection-start="156" selection-end="156" vertical-scroll-proportion="-6.766667" vertical-offset="39" max-vertical-offset="11462">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="auth.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/tornado/auth.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="37" selection-start="1283" selection-end="1283" vertical-scroll-proportion="0.0" vertical-offset="227" max-vertical-offset="31570">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tictactoe_example.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="12" column="21" selection-start="248" selection-end="248" vertical-scroll-proportion="0.41185647" vertical-offset="0" max-vertical-offset="748">
+              <folding>
+                <element signature="e#87#101#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="serve_through_websocket.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="0" selection-start="245" selection-end="245" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="352">
               <folding />
             </state>
           </provider>
@@ -86,20 +184,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/webalchemy/js/classy.js" />
-        <option value="$PROJECT_DIR$/webalchemy/js/pythonium.js" />
-        <option value="$PROJECT_DIR$/webalchemy/js/weba.js" />
-        <option value="$PROJECT_DIR$/webalchemy/main.html" />
         <option value="$PROJECT_DIR$/webalchemy/mvc.py" />
         <option value="$PROJECT_DIR$/webalchemy/remotedocument.py" />
         <option value="$PROJECT_DIR$/VERSION" />
-        <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/README.md" />
-        <option value="$PROJECT_DIR$/webalchemy/server.py" />
         <option value="$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/static/template/index.html" />
         <option value="$PROJECT_DIR$/webalchemy/pythonium/LICENSE" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/README.md" />
+        <option value="$PROJECT_DIR$/webalchemy/server.py" />
+        <option value="$PROJECT_DIR$/webalchemy/tornado/platform/twisted.py" />
+        <option value="$PROJECT_DIR$/webalchemy/tornado/test/escape_test.py" />
+        <option value="$PROJECT_DIR$/webalchemy/tornado/test/import_test.py" />
+        <option value="$PROJECT_DIR$/webalchemy/tornado/auth.py" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py" />
       </list>
     </option>
   </component>
@@ -135,6 +235,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -181,7 +282,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="pythonium" />
+              <option name="myItemId" value="tornado" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -222,42 +323,11 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="todomvc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webalchemy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webalchemy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webalchemy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="examples" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="todomvc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="template" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -266,7 +336,12 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/webalchemy/examples/todomvc/freeze_app.py" />
     <property name="FullScreen" value="false" />
   </component>
-  <component name="RunManager" selected="Python.todomvc - freeze">
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings />
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.todomvc - websocket">
     <configuration default="true" type="tests" factoryName="py.test">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -430,6 +505,23 @@
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="all">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="" />
@@ -504,28 +596,32 @@
       <created>1388486792330</created>
       <updated>1388486792330</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="updated the &quot;what to expect&quot; section">
+      <created>1388489517484</created>
+      <updated>1388489517484</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32968128" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -568,64 +664,16 @@
     <MESSAGE value="added Pythonium license" />
     <MESSAGE value="better README.md" />
     <MESSAGE value="fixed typo" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed typo" />
+    <MESSAGE value="updated the &quot;what to expect&quot; section" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated the &quot;what to expect&quot; section" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="33" selection-start="1243" selection-end="1244" vertical-scroll-proportion="0.0" vertical-offset="698" max-vertical-offset="2178">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/static/template/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="16" selection-start="2664" selection-end="2664" vertical-scroll-proportion="0.0" vertical-offset="1254" max-vertical-offset="2200">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="17" selection-start="474" selection-end="474" vertical-scroll-proportion="0.0" vertical-offset="132" max-vertical-offset="484">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="18" selection-start="1834" selection-end="1834" vertical-scroll-proportion="0.0" vertical-offset="1276" max-vertical-offset="1606">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
         <state line="22" column="9" selection-start="1031" selection-end="1031" vertical-scroll-proportion="0.0" vertical-offset="484" max-vertical-offset="11154">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="33" selection-start="1243" selection-end="1244" vertical-scroll-proportion="0.0" vertical-offset="698" max-vertical-offset="2178">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/static/template/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="16" selection-start="2664" selection-end="2664" vertical-scroll-proportion="0.0" vertical-offset="1254" max-vertical-offset="2200">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="17" selection-start="474" selection-end="474" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="484">
           <folding />
         </state>
       </provider>
@@ -637,10 +685,107 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2178">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/static/template/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="16" selection-start="2664" selection-end="2664" vertical-scroll-proportion="0.0" vertical-offset="1254" max-vertical-offset="2200">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="2" selection-start="24" selection-end="24" vertical-scroll-proportion="0.070063695" vertical-offset="0" max-vertical-offset="628">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/remotedocument.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="11" selection-start="341" selection-end="341" vertical-scroll-proportion="0.5955414" vertical-offset="0" max-vertical-offset="15026">
+          <folding>
+            <element signature="e#0#9#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/tornado/httpserver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="8" selection-start="1985" selection-end="1985" vertical-scroll-proportion="0.0" vertical-offset="777" max-vertical-offset="11902">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/tornado/platform/twisted.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="0" selection-start="2932" selection-end="2932" vertical-scroll-proportion="0.0" vertical-offset="1679" max-vertical-offset="12122">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/tornado/test/escape_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="0" selection-start="24" selection-end="24" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4906">
+          <folding>
+            <element signature="e#24#104#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/tornado/test/import_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="30" selection-start="852" selection-end="852" vertical-scroll-proportion="0.0" vertical-offset="73" max-vertical-offset="1100">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/tornado/iostream.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="651" column="8" selection-start="27781" selection-end="27781" vertical-scroll-proportion="0.3322933" vertical-offset="13779" max-vertical-offset="22792">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="245" selection-end="245" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="352">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="22" selection-start="35" selection-end="35" vertical-scroll-proportion="0.022940563" vertical-offset="0" max-vertical-offset="1606">
+        <state line="7" column="107" selection-start="427" selection-end="427" vertical-scroll-proportion="-5.133333" vertical-offset="0" max-vertical-offset="1672">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/tornado/auth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="37" selection-start="1283" selection-end="1283" vertical-scroll-proportion="0.0" vertical-offset="227" max-vertical-offset="31570">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="1" selection-start="156" selection-end="156" vertical-scroll-proportion="-6.766667" vertical-offset="39" max-vertical-offset="11462">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="21" selection-start="248" selection-end="248" vertical-scroll-proportion="0.41185647" vertical-offset="0" max-vertical-offset="748">
+          <folding>
+            <element signature="e#87#101#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
