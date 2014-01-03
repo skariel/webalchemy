@@ -1,11 +1,9 @@
 ##Webalchemy
-Modern web development with Python
+Modern web development with Python, powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado) (and in the future AsyncIO, AutobahnPython, PyZMQ). it's [MIT licensed](LICENSE.txt)
 
 - See our Angular style [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html). Source [here](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
 - See our Meteor style live editing [demo](https://vimeo.com/74150054). The [source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py)
-- Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado)
 - A cool webgl [demo](http://skariel.org/webalchemy/webglearth.html). See the [source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
-- [MIT licensed](LICENSE.txt)
 
 ##Getting started
 
