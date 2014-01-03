@@ -4,6 +4,7 @@ Modern web development with Python
 - See our Angular style [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html). More info [here](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
 - See our Meteor style live editing [demo](https://vimeo.com/74150054)
 - Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado)
+- A cool webgl [demo](http://skariel.org/webalchemy/webglearth.html)
 - [MIT licensed](LICENSE.txt)
 
 ##Getting started
