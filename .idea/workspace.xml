@@ -2,18 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/static/2_no_clouds_4k.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/static/elev_bump_4k.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/static/fair_clouds_4k.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/static/galaxy_starfield.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/static/water_4k.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/serve_through_websocket.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/webglearth.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/main.html" afterPath="$PROJECT_DIR$/webalchemy/main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/remotedocument.py" afterPath="$PROJECT_DIR$/webalchemy/remotedocument.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/server.py" afterPath="$PROJECT_DIR$/webalchemy/server.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -58,7 +46,7 @@
       <file leaf-file-name="three_d_earth.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="143" column="0" selection-start="5059" selection-end="5059" vertical-scroll-proportion="0.0" vertical-offset="2663" max-vertical-offset="3278">
+            <state line="143" column="0" selection-start="5059" selection-end="5059" vertical-scroll-proportion="0.0" vertical-offset="3146" max-vertical-offset="3278">
               <folding />
             </state>
           </provider>
@@ -67,7 +55,7 @@
       <file leaf-file-name="main.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="12" selection-start="289" selection-end="289" vertical-scroll-proportion="-9.935484" vertical-offset="0" max-vertical-offset="814">
+            <state line="14" column="12" selection-start="289" selection-end="289" vertical-scroll-proportion="0.0" vertical-offset="308" max-vertical-offset="814">
               <folding />
             </state>
           </provider>
@@ -76,7 +64,7 @@
       <file leaf-file-name="remotedocument.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/remotedocument.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="561" column="21" selection-start="17989" selection-end="17989" vertical-scroll-proportion="-17.6" vertical-offset="11550" max-vertical-offset="15114">
+            <state line="561" column="21" selection-start="17989" selection-end="17989" vertical-scroll-proportion="0.0" vertical-offset="12342" max-vertical-offset="15378">
               <folding>
                 <marker date="1388774732485" expanded="true" signature="14583:15871" placeholder="..." />
                 <marker date="1388774732485" expanded="true" signature="15486:15871" placeholder="..." />
@@ -90,7 +78,7 @@
       <file leaf-file-name="serve_through_websocket.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/serve_through_websocket.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="4" selection-start="132" selection-end="132" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="352">
+            <state line="3" column="4" selection-start="132" selection-end="132" vertical-scroll-proportion="0.0" vertical-offset="66" max-vertical-offset="352">
               <folding />
             </state>
           </provider>
@@ -99,7 +87,7 @@
       <file leaf-file-name="freeze_app.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="242">
+            <state line="5" column="0" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0" vertical-offset="110" max-vertical-offset="242">
               <folding />
             </state>
           </provider>
@@ -108,7 +96,7 @@
       <file leaf-file-name="server.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="525" column="0" selection-start="20235" selection-end="20235" vertical-scroll-proportion="0.39186993" vertical-offset="11309" max-vertical-offset="12034">
+            <state line="508" column="65" selection-start="19581" selection-end="19581" vertical-scroll-proportion="0.22964169" vertical-offset="11035" max-vertical-offset="12034">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -119,7 +107,7 @@
       <file leaf-file-name="tictactoe_example.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="0" selection-start="627" selection-end="627" vertical-scroll-proportion="0.0" vertical-offset="67" max-vertical-offset="682">
+            <state line="27" column="0" selection-start="627" selection-end="627" vertical-scroll-proportion="0.0" vertical-offset="594" max-vertical-offset="748">
               <folding />
             </state>
           </provider>
@@ -304,8 +292,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="recentsLimit" value="5" />
-    <property name="restartRequiresConfirmation" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="FullScreen" value="false" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -625,23 +613,27 @@
       <created>1388606512186</created>
       <updated>1388606512186</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="added webgl earth example">
+      <created>1388785405214</created>
+      <updated>1388785405214</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6713147" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39940238" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32868525" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32868525" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32968128" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -667,9 +659,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32968128" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -692,7 +684,8 @@
     <MESSAGE value="updated the &quot;what to expect&quot; section" />
     <MESSAGE value="adding Tornado" />
     <MESSAGE value="fixing a typo" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing a typo" />
+    <MESSAGE value="added webgl earth example" />
+    <option name="LAST_COMMIT_MESSAGE" value="added webgl earth example" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -724,9 +717,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/tornado/iostream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="651" column="8" selection-start="27781" selection-end="27781" vertical-scroll-proportion="0.3322933" vertical-offset="13779" max-vertical-offset="22792">
-          <folding />
-        </state>
+        <state line="651" column="8" selection-start="27781" selection-end="27781" vertical-scroll-proportion="0.3322933" vertical-offset="13779" max-vertical-offset="22792" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py">
@@ -757,9 +748,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/tornado/auth.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="31570">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="31570" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py">
@@ -771,14 +760,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="12" selection-start="289" selection-end="289" vertical-scroll-proportion="-9.935484" vertical-offset="0" max-vertical-offset="814">
+        <state line="14" column="12" selection-start="289" selection-end="289" vertical-scroll-proportion="0.0" vertical-offset="308" max-vertical-offset="814">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/remotedocument.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="561" column="21" selection-start="17989" selection-end="17989" vertical-scroll-proportion="-17.6" vertical-offset="11550" max-vertical-offset="15114">
+        <state line="561" column="21" selection-start="17989" selection-end="17989" vertical-scroll-proportion="0.0" vertical-offset="12342" max-vertical-offset="15378">
           <folding>
             <marker date="1388774732485" expanded="true" signature="14583:15871" placeholder="..." />
             <marker date="1388774732485" expanded="true" signature="15486:15871" placeholder="..." />
@@ -811,7 +800,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="525" column="0" selection-start="20235" selection-end="20235" vertical-scroll-proportion="0.39186993" vertical-offset="11309" max-vertical-offset="12034">
+        <state line="508" column="65" selection-start="19581" selection-end="19581" vertical-scroll-proportion="0.22964169" vertical-offset="11035" max-vertical-offset="12034">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
