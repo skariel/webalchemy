@@ -323,13 +323,13 @@ class Element:
         self.parent = None
 
     def append(self, es):
-        if hasattr(es, '__len__'):
+        try:
             for e in es:
                 self.childs.append(e)
                 e.parent = self
                 s = self.varname + '.appendChild(' + e.varname + ');\n'
                 self.rdoc.inline(s)
-        else:
+        except:
             self.childs.append(es)
             es.parent = self
             s = self.varname + '.appendChild(' + es.varname + ');\n'
@@ -491,6 +491,21 @@ class JSClass:
                 continue
             setattr(self, attr, jsmethod(self, attr))
 
+    def __getattr__(self, item):
+
+        class attr:
+            def __init__(self, rdoc, name):
+                self.rdoc = rdoc
+                self.varname = name
+
+            def __getattr__(self, item):
+                return attr(self.rdoc, self.varname + '.' + item)
+
+            def call(self):
+                self.rdoc.inline(self.varname+'();\n')
+
+        return attr(self.rdoc, self.varname + '.' + item)
+
 
 class _StyleSheet:
     def __init__(self, rdoc):
@@ -531,7 +546,8 @@ class RemoteDocument:
         self.__block_ixs = []
         self.__varname_element_dict = {}
         self.body = Element(self, 'body', '', customvarname='document.body')
-        self.pop_all_code()  # body is special, it's created by static content
+        self.head = Element(self, 'head', '', customvarname='document.head')
+        self.pop_all_code()  # body and head are special: created by static content
         self.app = SimpleProp(self, 'document', 'app', create=True)
         self.props = SimpleProp(self, 'document')
         self.localStorage = SimpleProp(self, 'localStorage')

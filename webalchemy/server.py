@@ -430,6 +430,19 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
                 fnjs = l.split()[1].strip()
                 if fnjs == 'websocket':
                     continue
+                if fnjs == 'include' and hasattr(local_doc_class, 'include'):
+                    for i in local_doc_class.include:
+                        lines.append('<script src="'+i+'"></script>\n')
+                    continue
+                if fnjs == 'meta':
+                    if hasattr(local_doc_class, 'meta'):
+                        for m in local_doc_class.meta:
+                            js = '<meta '
+                            for a, v in m.items():
+                                js += a+'="'+v+'" '
+                            js += '>\n'
+                            lines.append(js)
+                    continue
                 fnjs = os.path.join(mfn, fnjs)
                 with open(fnjs, 'r') as fjs:
                     l = fjs.read()
@@ -492,6 +505,19 @@ def generate_static(App, writefile, main_html_file_path=None):
                     with open(fnjs, 'r') as fjs:
                         l = fjs.read()
                     lines.append(l)
+                    continue
+                if fnjs == 'include' and hasattr(App, 'include'):
+                    for i in App.include:
+                        lines.append('<script src="'+i+'"></script>\n')
+                    continue
+                if fnjs == 'meta':
+                    if hasattr(App, 'meta'):
+                        for m in App.meta:
+                            js = '<meta '
+                            for a, v in m.items():
+                                js += a+'="'+v+'" '
+                            js += '>\n'
+                            lines.append(js)
                     continue
                 if fnjs != 'websocket':
                     continue
