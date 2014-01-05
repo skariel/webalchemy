@@ -15,7 +15,7 @@ class Menu:
     def add_item(self, *varargs):
         for text in varargs:
             i = self.rdoc.element('li', text)
-            self.id_dict[i.att.id] = i
+            self.id_dict[i.att.varname] = i
             self.element.append(i)
             if self.on_add:
                 self.on_add(i)

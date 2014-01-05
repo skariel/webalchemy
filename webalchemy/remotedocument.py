@@ -281,7 +281,7 @@ class Element:
         'svg': {'xmlns': 'http://www.w3.org/2000/svg'},
     }
 
-    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=False, **kwargs):
+    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, **kwargs):
         if not customvarname:
             self.varname = rdoc.get_new_uid()
         else:
@@ -315,6 +315,7 @@ class Element:
         self.cal = CallableProp(self.rdoc, self.varname, None)
         if typ in Element._add_attr_typ_dict:
             self.att(**Element._add_attr_typ_dict[typ])
+        self.att.id = self.varname
 
     def remove(self):
         s = self.varname + '.parentNode.removeChild(' + self.varname + ');\n'
@@ -353,7 +354,7 @@ class Element:
     def __str__(self):
         return self.varname
 
-    def element(self, typ=None, txt=None, app=False, **kwargs):
+    def element(self, typ=None, txt=None, app=True, **kwargs):
         es = self.rdoc.element(typ, txt, app=app, **kwargs)
         self.append(es)
         return es
@@ -580,7 +581,7 @@ class RemoteDocument:
     def getElementById(self, fromid, app=False):
         return Element(self, fromid=fromid, app=app)
 
-    def element(self, typ=None, text=None, app=False, **kwargs):
+    def element(self, typ=None, text=None, app=True, **kwargs):
         elems = []
         if typ:
             e = Element(self, typ, text, app=app)

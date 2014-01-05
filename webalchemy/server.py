@@ -253,13 +253,8 @@ py_to_py_rpcdict = {}
 
 def pyrpc(f):
     log.info('registering function to py->py rpc: ' + f.__name__)
-    try:
-        if f.__name__ in py_to_py_rpcdict:
-            raise Exception('cannot decorate with py->py rpc since name already exists: ' + f.__name__)
-        py_to_py_rpcdict[f.__name__] = f
-        return f
-    except:
-        log.exception('Failed registering py->py RPC function')
+    py_to_py_rpcdict[f.__name__] = f
+    return f
 
 
 def _clean_pyrpc():
@@ -377,7 +372,7 @@ class PrivateDataStore:
         del self.d[uid]
 
 
-def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
+def run(app=None, host='127.0.0.1', port=8080, **kwargs):
 
     static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
     main_html_file_path = kwargs.get('main_html_file_path', None)
@@ -398,7 +393,7 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
         main_route = r'/'+main_explicit_route+r'/(.*)'
 
     if static_path_from_local_doc_base:
-        mdl = sys.modules[local_doc_class.__module__]
+        mdl = sys.modules[app.__module__]
         mdl_fn = mdl.__file__
         static_path = os.path.realpath(mdl_fn)
         static_path = os.path.dirname(static_path)
@@ -411,8 +406,8 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
 
     shared_wshandlers = {}
     shared_data = shared_data_class()
-    if hasattr(local_doc_class, 'initialize_shared_data'):
-        local_doc_class.initialize_shared_data(shared_data)
+    if hasattr(app, 'initialize_shared_data'):
+        app.initialize_shared_data(shared_data)
     session_data_store = session_data_store_class()
     tab_data_store = tab_data_store_class()
 
@@ -430,13 +425,14 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
                 fnjs = l.split()[1].strip()
                 if fnjs == 'websocket':
                     continue
-                if fnjs == 'include' and hasattr(local_doc_class, 'include'):
-                    for i in local_doc_class.include:
-                        lines.append('<script src="'+i+'"></script>\n')
+                if fnjs == 'include':
+                    if hasattr(app, 'include'):
+                        for i in app.include:
+                            lines.append('<script src="'+i+'"></script>\n')
                     continue
                 if fnjs == 'meta':
-                    if hasattr(local_doc_class, 'meta'):
-                        for m in local_doc_class.meta:
+                    if hasattr(app, 'meta'):
+                        for m in app.meta:
                             js = '<meta '
                             for a, v in m.items():
                                 js += a+'="'+v+'" '
@@ -455,7 +451,7 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
 
     # setting-up the webalchemy.tornado server
     application = webalchemy.tornado.web.Application([
-        (ws_route, WebSocketHandler, dict(local_doc_class=local_doc_class,
+        (ws_route, WebSocketHandler, dict(local_doc_class=app,
                                           shared_wshandlers=shared_wshandlers,
                                           shared_data=shared_data,
                                           session_data_store=session_data_store,
@@ -464,13 +460,13 @@ def run(host='127.0.0.1', port=8080, local_doc_class=None, **kwargs):
                                           main_html=main_html)),
         (main_route, _MainHandler, dict(main_html=main_html)),
     ], static_path=static_path)
-    au = _AppUpdater(application, local_doc_class, shared_wshandlers, hn, dreload_blacklist_starting_with,
+    au = _AppUpdater(application, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
     webalchemy.tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     if not ssl:
         application.listen(port)
     else:
-        mdl = sys.modules[local_doc_class.__module__]
+        mdl = sys.modules[app.__module__]
         mdl_fn = mdl.__file__
         lib_dir = os.path.realpath(mdl_fn)
         lib_dir = os.path.dirname(lib_dir)
@@ -506,9 +502,10 @@ def generate_static(App, writefile, main_html_file_path=None):
                         l = fjs.read()
                     lines.append(l)
                     continue
-                if fnjs == 'include' and hasattr(App, 'include'):
-                    for i in App.include:
-                        lines.append('<script src="'+i+'"></script>\n')
+                if fnjs == 'include':
+                    if hasattr(App, 'include'):
+                        for i in App.include:
+                            lines.append('<script src="'+i+'"></script>\n')
                     continue
                 if fnjs == 'meta':
                     if hasattr(App, 'meta'):

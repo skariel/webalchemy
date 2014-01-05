@@ -153,3 +153,7 @@ class ColorsMeteorApp:
         m.add_item(*self.sdata.keys())
         m.sort()
         return m
+
+if __name__ == '__main__':
+    from webalchemy.examples.colors_meteor_example import ColorsMeteorApp
+    server.run(ColorsMeteorApp)
