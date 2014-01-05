@@ -7,7 +7,7 @@ class Earth:
 
         # Earth params
         self.radius = 0.5
-        self.segments = 32
+        self.segments = 64
         self.rotation = 6
 
         self.scene = new(THREE.Scene)
@@ -49,11 +49,8 @@ class Earth:
         self.mdy += e.screenY - self.my
         self.mx = e.screenX
         self.my = e.screenY
-        console.log(self.mdx + ' '+ self.mdy)
 
     def mouseup(self, e):
-        self.mdx = 0
-        self.mdy = 0
         self.renderer.domElement.onmousemove = None
 
     def mousedown(self, e):
@@ -68,16 +65,15 @@ class Earth:
 
     def render(self):
         if Math.abs(self.mdx) > 1.1 or Math.abs(self.mdy) > 1.1:
-            self.angx -= self.mdx/100
-            self.angx -= self.mdx/100
-            if Math.abs(self.angy + self.mdy/100) < 3.14/2:
-                self.angy += self.mdy/100
+            self.angx -= self.mdx/5000
+            self.mdx -= self.mdx/20
+            if Math.abs(self.angy + self.mdy/5000) < 3.14/2:
+                self.angy += self.mdy/10000
+                self.mdy -= self.mdy/20
             self.camera.position.x = 1.5 *Math.sin(self.angx) *Math.cos(self.angy)
             self.camera.position.z = 1.5 *Math.cos(self.angx) *Math.cos(self.angy)
             self.camera.position.y = 1.5 *Math.sin(self.angy)
             self.camera.lookAt(self.scene.position)
-            self.mdx = 0
-            self.mdy = 0
 
         self.sphere.rotation.y += 0.0005
         self.clouds.rotation.y += 0.0004
@@ -88,10 +84,10 @@ class Earth:
     def createSphere(self, radius, segments):
         geometry = new(THREE.SphereGeometry, radius, segments, segments)
         material = new(THREE.MeshPhongMaterial, {
-                        'map':         THREE.ImageUtils.loadTexture('static/2_no_clouds_4k.jpg'),
-                        'bumpMap':     THREE.ImageUtils.loadTexture('static/elev_bump_4k.jpg'),
+                        'map':         THREE.ImageUtils.loadTexture('static/lowres_noclouds.png'),
+                        'bumpMap':     THREE.ImageUtils.loadTexture('static/lowres_elevbump.png'),
                         'bumpScale':   0.005,
-                        'specularMap': THREE.ImageUtils.loadTexture('static/water_4k.png'),
+                        'specularMap': THREE.ImageUtils.loadTexture('static/lowres_water.png'),
                         'specular':    new(THREE.Color, 'grey')
         })
         return new(THREE.Mesh, geometry, material)
@@ -99,7 +95,7 @@ class Earth:
     def createClouds(self, radius, segments):
         geometry = new(THREE.SphereGeometry, radius + 0.005, segments, segments)
         material = new(THREE.MeshPhongMaterial, {
-                        'map':         THREE.ImageUtils.loadTexture('static/fair_clouds_4k.png'),
+                        'map':         THREE.ImageUtils.loadTexture('static/lowres_fairclouds.png'),
                         'transparent': true
         })
         return new(THREE.Mesh, geometry,  material)
@@ -107,7 +103,7 @@ class Earth:
     def createStars(self, radius, segments):
         geometry = new(THREE.SphereGeometry, radius, segments, segments)
         material = new(THREE.MeshBasicMaterial, {
-                        'map':  THREE.ImageUtils.loadTexture('static/galaxy_starfield.png'),
+                        'map':  THREE.ImageUtils.loadTexture('static/lowres_starfield.png'),
                         'side': THREE.BackSide
         })
         return new(THREE.Mesh, geometry, material)

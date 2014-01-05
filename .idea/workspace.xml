@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -37,16 +38,16 @@
       <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="81" selection-start="2207" selection-end="2207" vertical-scroll-proportion="0.0" vertical-offset="642" max-vertical-offset="1628">
+            <state line="57" column="81" selection-start="2557" selection-end="2557" vertical-scroll-proportion="0.0" vertical-offset="620" max-vertical-offset="1606">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="three_d_earth.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="three_d_earth.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="143" column="0" selection-start="5059" selection-end="5059" vertical-scroll-proportion="0.0" vertical-offset="3146" max-vertical-offset="3278">
+            <state line="103" column="47" selection-start="3805" selection-end="3805" vertical-scroll-proportion="0.66994536" vertical-offset="1653" max-vertical-offset="3190">
               <folding />
             </state>
           </provider>
@@ -66,10 +67,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state line="561" column="21" selection-start="17989" selection-end="17989" vertical-scroll-proportion="0.0" vertical-offset="12342" max-vertical-offset="15378">
               <folding>
-                <marker date="1388774732485" expanded="true" signature="14583:15871" placeholder="..." />
-                <marker date="1388774732485" expanded="true" signature="15486:15871" placeholder="..." />
-                <marker date="1388774732485" expanded="true" signature="15507:15812" placeholder="..." />
-                <marker date="1388774732485" expanded="true" signature="15662:15728" placeholder="..." />
+                <marker date="1388786475822" expanded="true" signature="14583:15871" placeholder="..." />
+                <marker date="1388786475822" expanded="true" signature="15486:15871" placeholder="..." />
+                <marker date="1388786475822" expanded="true" signature="15507:15812" placeholder="..." />
+                <marker date="1388786475822" expanded="true" signature="15662:15728" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -93,10 +94,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="server.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="server.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="508" column="65" selection-start="19581" selection-end="19581" vertical-scroll-proportion="0.22964169" vertical-offset="11035" max-vertical-offset="12034">
+            <state line="395" column="0" selection-start="14834" selection-end="14834" vertical-scroll-proportion="0.0" vertical-offset="8316" max-vertical-offset="12034">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -153,9 +154,9 @@
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/serve_through_websocket.py" />
         <option value="$PROJECT_DIR$/webalchemy/remotedocument.py" />
         <option value="$PROJECT_DIR$/webalchemy/main.html" />
-        <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py" />
         <option value="$PROJECT_DIR$/webalchemy/server.py" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
       </list>
     </option>
   </component>
@@ -191,7 +192,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -288,12 +288,13 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py" />
     <property name="restartRequiresConfirmation" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py" />
     <property name="FullScreen" value="false" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -622,26 +623,26 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39940238" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32868525" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32968128" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6713147" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39940238" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28807038" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -659,9 +660,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32968128" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32968128" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -695,8 +696,13 @@
           <line>440</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py</url>
+          <line>67</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -729,7 +735,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="81" selection-start="2207" selection-end="2207" vertical-scroll-proportion="0.0" vertical-offset="642" max-vertical-offset="1628">
+        <state line="57" column="81" selection-start="2557" selection-end="2557" vertical-scroll-proportion="0.0" vertical-offset="620" max-vertical-offset="1606">
           <folding />
         </state>
       </provider>
@@ -769,18 +775,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="561" column="21" selection-start="17989" selection-end="17989" vertical-scroll-proportion="0.0" vertical-offset="12342" max-vertical-offset="15378">
           <folding>
-            <marker date="1388774732485" expanded="true" signature="14583:15871" placeholder="..." />
-            <marker date="1388774732485" expanded="true" signature="15486:15871" placeholder="..." />
-            <marker date="1388774732485" expanded="true" signature="15507:15812" placeholder="..." />
-            <marker date="1388774732485" expanded="true" signature="15662:15728" placeholder="..." />
+            <marker date="1388786475822" expanded="true" signature="14583:15871" placeholder="..." />
+            <marker date="1388786475822" expanded="true" signature="15486:15871" placeholder="..." />
+            <marker date="1388786475822" expanded="true" signature="15507:15812" placeholder="..." />
+            <marker date="1388786475822" expanded="true" signature="15662:15728" placeholder="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="143" column="0" selection-start="5059" selection-end="5059" vertical-scroll-proportion="0.0" vertical-offset="2663" max-vertical-offset="3278">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -800,10 +799,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="508" column="65" selection-start="19581" selection-end="19581" vertical-scroll-proportion="0.22964169" vertical-offset="11035" max-vertical-offset="12034">
+        <state line="395" column="0" selection-start="14834" selection-end="14834" vertical-scroll-proportion="0.0" vertical-offset="8316" max-vertical-offset="12034">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="47" selection-start="3805" selection-end="3805" vertical-scroll-proportion="0.66994536" vertical-offset="1653" max-vertical-offset="3190">
+          <folding />
         </state>
       </provider>
     </entry>
