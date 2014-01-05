@@ -63,7 +63,8 @@ class HellowWorldApp:
         )
 ```
 
-
+Try making a few containers, you can spread them across multiple Python files.
+You can add events, call server functions from client code, use MVC pattern, use existing HTML, and much more. All this missing documentation is WIP.
 
 ####Example 1: Realtime Meteor Colors:
 
