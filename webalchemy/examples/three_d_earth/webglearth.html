@@ -182,14 +182,14 @@ __v0.setAttribute("type","text/css");
 document.body.appendChild(__v0);
 var __v0=document.styleSheets[0];
 document.body.style["backgroundColor"]="#000";
-document.body.style["margin"]=0;
 document.body.style["overflow"]="hidden";
+document.body.style["margin"]=0;
 var Earth = Class.$extend({
     __init__: function() {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.radius = 0.5;
-        this.segments = 32;
+        this.segments = 64;
         this.rotation = 6;
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, (this.width / this.height), 0.01, 1000);
@@ -222,11 +222,8 @@ var Earth = Class.$extend({
         this.mdy = this.mdy + (e.screenY - this.my);
         this.mx = e.screenX;
         this.my = e.screenY;
-        console.log(((this.mdx + " ") + this.mdy));
     },
     mouseup: function(e) {
-        this.mdx = 0;
-        this.mdy = 0;
         this.renderer.domElement.onmousemove = undefined;
     },
     mousedown: function(e) {
@@ -242,17 +239,16 @@ var Earth = Class.$extend({
     },
     render: function() {
         if(((Math.abs(this.mdx) > 1.1)||(Math.abs(this.mdy) > 1.1))) {
-            this.angx = this.angx - (this.mdx / 100);
-            this.angx = this.angx - (this.mdx / 100);
-            if((Math.abs((this.angy + (this.mdy / 100))) < (3.14 / 2))) {
-                this.angy = this.angy + (this.mdy / 100);
+            this.angx = this.angx - (this.mdx / 5000);
+            this.mdx = this.mdx - (this.mdx / 20);
+            if((Math.abs((this.angy + (this.mdy / 5000))) < (3.14 / 2))) {
+                this.angy = this.angy + (this.mdy / 10000);
+                this.mdy = this.mdy - (this.mdy / 20);
             }
             this.camera.position.x = ((1.5 * Math.sin(this.angx)) * Math.cos(this.angy));
             this.camera.position.z = ((1.5 * Math.cos(this.angx)) * Math.cos(this.angy));
             this.camera.position.y = (1.5 * Math.sin(this.angy));
             this.camera.lookAt(this.scene.position);
-            this.mdx = 0;
-            this.mdy = 0;
         }
         this.sphere.rotation.y = this.sphere.rotation.y + 0.0005;
         this.clouds.rotation.y = this.clouds.rotation.y + 0.0004;
@@ -260,21 +256,21 @@ var Earth = Class.$extend({
         this.renderer.render(this.scene, this.camera);
     },
     createSphere: function(radius, segments) {
-        var geometry,material;
+        var material,geometry;
         geometry = new THREE.SphereGeometry(radius, segments, segments);
-        material = new THREE.MeshPhongMaterial({"map":THREE.ImageUtils.loadTexture("static/2_no_clouds_4k.jpg"),"bumpMap":THREE.ImageUtils.loadTexture("static/elev_bump_4k.jpg"),"bumpScale":0.005,"specularMap":THREE.ImageUtils.loadTexture("static/water_4k.png"),"specular":new THREE.Color("grey")});
+        material = new THREE.MeshPhongMaterial({"map":THREE.ImageUtils.loadTexture("static/lowres_noclouds.jpg"),"bumpMap":THREE.ImageUtils.loadTexture("static/lowres_elevbump.jpg"),"bumpScale":0.005,"specularMap":THREE.ImageUtils.loadTexture("static/lowres_water.png"),"specular":new THREE.Color("grey")});
         return new THREE.Mesh(geometry, material);
     },
     createClouds: function(radius, segments) {
-        var geometry,material;
+        var material,geometry;
         geometry = new THREE.SphereGeometry((radius + 0.005), segments, segments);
-        material = new THREE.MeshPhongMaterial({"map":THREE.ImageUtils.loadTexture("static/fair_clouds_4k.png"),"transparent":true});
+        material = new THREE.MeshPhongMaterial({"map":THREE.ImageUtils.loadTexture("static/lowres_fairclouds.png"),"transparent":true});
         return new THREE.Mesh(geometry, material);
     },
     createStars: function(radius, segments) {
-        var geometry,material;
+        var material,geometry;
         geometry = new THREE.SphereGeometry(radius, segments, segments);
-        material = new THREE.MeshBasicMaterial({"map":THREE.ImageUtils.loadTexture("static/galaxy_starfield.png"),"side":THREE.BackSide});
+        material = new THREE.MeshBasicMaterial({"map":THREE.ImageUtils.loadTexture("static/lowres_starfield.png"),"side":THREE.BackSide});
         return new THREE.Mesh(geometry, material);
     },
 });
@@ -287,9 +283,9 @@ __v2.style["color"]="#FFF";
 var __v3=document.createElement("p");
 document.body.appendChild(__v3);
 __v3["innerHTML"]="Powered by <a href='https://github.com/skariel/webalchemy'>Webalchemy</a><br/>Adapted from <a href='https://github.com/turban/webgl-earth/blob/master/index.html'>this</a>";
+__v3.style["top"]="10px";
 __v3.style["left"]="10px";
 __v3.style["color"]="#FFF";
-__v3.style["top"]="10px";
 __v3.style["position"]="absolute";
 __v1.render();
 </script>
