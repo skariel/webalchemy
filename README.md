@@ -1,9 +1,9 @@
 ##Webalchemy
 Modern web development with Python, powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado) (and in the future AsyncIO, AutobahnPython, PyZMQ). it's [MIT licensed](LICENSE.txt)
 
-- Angular style [TodoMVC implementation](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
-- Meteor style live editing [demo](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py)
-- WebGL Earth [demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
+- Angular style TodoMVC [live demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
+- Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py)
+- WebGL Earth [live demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
 
 ##Getting Started
 
@@ -14,7 +14,11 @@ Modern web development with Python, powered by [Pythonium](https://github.com/py
 
 ###Tutorial and Documentation
 
-There is not much yet except a few examples. See below how to run them:
+There is not much yet except a few examples to learn from.
+
+A Webalchemy application is a regular Python class (no need to inherit anything) that provides relevant methods used by the Webalchemy server.
+The only required method is `initialize`, which is called when the client side is ready for automation. Here we create a header and
+append it to the document body:
 
 ```python
 class HellowWorldApp:
@@ -22,18 +26,48 @@ class HellowWorldApp:
         kwargs['remote_document'].body.element(h1='Hello World!!!')
 ```
 
-to run just do:
+to serve through a websocket just feed it to the run function and set your browser to http://127.0.0.1:8080
 
 ```python
 from webalchemy import server
 server.run(HellowWorldApp)
 ```
 
-set your browser to http://127.0.0.1:8080
+Try to change the header text content and save the file, see how the client changes accordingly. Lets put some style:
+
+```Python
+class HellowWorldApp:
+    def initialize(self, **kwargs):
+        h1 = kwargs['remote_document'].body.element(h1='Hello World!!!')
+        h1.style(
+            color='#FF0000',
+            marginLeft='75px',
+            marginTop='75px',
+            background='#00FF00'
+        )
+```
+
+Want to use css rules to style all h1`s? no problem!
+
+```Python
+class HellowWorldApp:
+    def initialize(self, **kwargs):
+        self.rdoc = kwargs['remote_document']
+        self.rdoc.body.element(h1='Hello World!!!')
+        self.rdoc.body.element(h1='--------------')
+        self.rdoc.stylesheet.rule('h1').style(
+            color='#FF0000',
+            marginLeft='75px',
+            marginTop='75px',
+            background='#00FF00'
+        )
+```
+
+
 
 ####Example 1: Realtime Meteor Colors:
 
-We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory, it can be executed like this:
+We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory ([here])(https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py), it can be executed like this:
 
 ```python
 from webalchemy import server
@@ -41,13 +75,27 @@ from webalchemy.examples.colors_meteor_example import ColorsMeteorApp
 server.run(ColorsMeteorApp)
 ```
 
-####Example 2: "Static" TodoMVC:
+Note this example still contains a bit of JS, it will be translated to pure Python soon.
+
+####Example 2: TodoMVC:
+
+This is a client-only app. It can be served from a websocket like this:
 
 ```python
 from webalchemy import server
 from webalchemy.examples.todomvc.todomvc import AppTodoMvc as app
 server.run(app, main_html_file_path='static/template/index.html')
 ```
+
+or it can be "frozen" to be served from a static folder (see [live demo](http://skariel.org/webalchemy/todomvc.html))like this:
+
+```Python
+from webalchemy import server
+from webalchemy.examples.todomvc.todomvc import AppTodoMvc as app
+server.generate_static(app, writefile='todomvc.html', main_html_file_path='static/template/index.html')
+```
+
+more on this app [here](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
 
 ####Example 3: WebGL Earth:
 
@@ -57,7 +105,7 @@ from webalchemy.examples.three_d_earth.three_d_earth import ThreeDEarth
 server.run(ThreeDEarth)
 ```
 
-there is a file in the same directory that serves to freeze the app into a single html file
+see frozen app [here](http://skariel.org/webalchemy/webglearth.html) and source [here](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
 
 ##Philosophy
 
