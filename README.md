@@ -67,7 +67,7 @@ class HellowWorldApp:
 
 ####Example 1: Realtime Meteor Colors:
 
-We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory ([here])(https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py), it can be executed like this:
+We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory ([here](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py)), it can be executed like this:
 
 ```python
 from webalchemy import server
