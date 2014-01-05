@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
+      <change type="DELETED" beforePath="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\examples\three_d_earth\static\2_no_clouds_4k.jpg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\examples\three_d_earth\static\elev_bump_4k.jpg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\examples\three_d_earth\static\fair_clouds_4k.png" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\examples\three_d_earth\static\galaxy_starfield.png" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\examples\three_d_earth\static\water_4k.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -47,7 +52,7 @@
       <file leaf-file-name="three_d_earth.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="103" column="47" selection-start="3805" selection-end="3805" vertical-scroll-proportion="0.66994536" vertical-offset="1653" max-vertical-offset="3190">
+            <state line="87" column="94" selection-start="3053" selection-end="3053" vertical-scroll-proportion="0.2852459" vertical-offset="1653" max-vertical-offset="3190">
               <folding />
             </state>
           </provider>
@@ -618,28 +623,32 @@
       <created>1388785405214</created>
       <updated>1388785405214</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="better control to 3d-Earth example">
+      <created>1388916591700</created>
+      <updated>1388916591700</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
     <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6713147" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.6703187" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39940238" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28807038" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17372182" sideWeight="0.32968128" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -686,7 +695,8 @@
     <MESSAGE value="adding Tornado" />
     <MESSAGE value="fixing a typo" />
     <MESSAGE value="added webgl earth example" />
-    <option name="LAST_COMMIT_MESSAGE" value="added webgl earth example" />
+    <MESSAGE value="better control to 3d-Earth example" />
+    <option name="LAST_COMMIT_MESSAGE" value="better control to 3d-Earth example" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -808,7 +818,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="47" selection-start="3805" selection-end="3805" vertical-scroll-proportion="0.66994536" vertical-offset="1653" max-vertical-offset="3190">
+        <state line="87" column="94" selection-start="3053" selection-end="3053" vertical-scroll-proportion="0.2852459" vertical-offset="1653" max-vertical-offset="3190">
           <folding />
         </state>
       </provider>

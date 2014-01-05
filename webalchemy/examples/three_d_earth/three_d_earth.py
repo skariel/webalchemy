@@ -84,8 +84,8 @@ class Earth:
     def createSphere(self, radius, segments):
         geometry = new(THREE.SphereGeometry, radius, segments, segments)
         material = new(THREE.MeshPhongMaterial, {
-                        'map':         THREE.ImageUtils.loadTexture('static/lowres_noclouds.png'),
-                        'bumpMap':     THREE.ImageUtils.loadTexture('static/lowres_elevbump.png'),
+                        'map':         THREE.ImageUtils.loadTexture('static/lowres_noclouds.jpg'),
+                        'bumpMap':     THREE.ImageUtils.loadTexture('static/lowres_elevbump.jpg'),
                         'bumpScale':   0.005,
                         'specularMap': THREE.ImageUtils.loadTexture('static/lowres_water.png'),
                         'specular':    new(THREE.Color, 'grey')
