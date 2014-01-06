@@ -121,7 +121,7 @@ class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
                     yield self.handle_js_to_py_rpc_message(message)
                 elif message.startswith('msg: '):
                     log.info('Passing message to document inmessage...')
-                    r = self.local_doc.inmessage(message)
+                    r = self.local_doc.inmessage(message[5:])
                     if r is not None:
                         yield r
                 elif message != 'done':
