@@ -119,12 +119,12 @@ class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
             else:
                 if message.startswith('rpc: '):
                     yield self.handle_js_to_py_rpc_message(message)
-                elif message.startswith('msg: ') and message != 'msg: done':
+                elif message != 'done':
                     log.info('Passing message to document inmessage...')
-                    r = self.local_doc.inmessage(message[5:])
+                    r = self.local_doc.inmessage(message)
                     if r is not None:
                         yield r
-                elif message != 'msg: done':
+                elif message != 'done':
                     raise Exception('bad message received: '+str(message))
 
             yield self.flush_dom()
@@ -225,7 +225,6 @@ class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
 
     @gen.coroutine
     def rpc(self, f, *varargs, send_to_self=False, to_session_ids=None, **kwargs):
-        # TODO: reconsider the whole py->py RPC. Methods should get a self arg, not document...
         log.info('Sending py->py rpc: ' + f.__name__)
         log.info('PARAMS: varargs: ' + str(varargs) + ' kwargs: ' + str(kwargs))
         if not to_session_ids:
@@ -238,28 +237,12 @@ class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
             h = self.sharedhandlers[k]
             if h is not self or send_to_self:
                 try:
-                    r = py_to_py_rpcdict[f.__name__](h.local_doc, self.id, *varargs, **kwargs)
+                    r = getattr(h.local_doc, f.__name__)(self.id, *varargs, **kwargs)
                     if r is not None:
                         yield r
                     yield h.flush_dom()
                 except:
                     log.exception('PY RPC call failed for target session: ' + k)
-
-
-# decorator to register functions for js->py rpc
-# TODO: put this global state in 'Run' function...
-py_to_py_rpcdict = {}
-
-
-def pyrpc(f):
-    log.info('registering function to py->py rpc: ' + f.__name__)
-    py_to_py_rpcdict[f.__name__] = f
-    return f
-
-
-def _clean_pyrpc():
-    global py_to_py_rpcdict
-    py_to_py_rpcdict = {}
 
 
 @gen.coroutine
@@ -338,7 +321,6 @@ class _AppUpdater:
             pass
         log.info('Reloading document!')
         self.last_time_modified = {fn: os.stat(fn).st_mtime for fn in self.monitored_files}
-        _clean_pyrpc()
         data = None
         if hasattr(self.cls, 'prepare_app_for_general_reload'):
             data = self.cls.prepare_app_for_general_reload()

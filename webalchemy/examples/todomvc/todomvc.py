@@ -91,5 +91,3 @@ class AppTodoMvc:
 
         controller(self.rdoc, kwargs['main_html'], m=self.datamodel, vm=self.viewmodel,
                    prerender=self.datamodel.calc_completed_and_remaining)
-
-        self.datamodel.itemlist[0].text = '123'

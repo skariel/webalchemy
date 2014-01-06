@@ -1,7 +1,7 @@
 message= function (s) {
     console.log('sending message:')
     console.log(s)
-    ws.send('msg: '+s)
+    ws.send(s)
 }
 rpcfy= function () {
     var s=''

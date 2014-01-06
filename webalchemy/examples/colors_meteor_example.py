@@ -71,7 +71,6 @@ class ColorsMeteorApp:
             #rpc{self.color_liked, #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1};
         '''))
 
-    @server.pyrpc
     def color_liked(self, sender_com_id, item_id, color, amount):
         if sender_com_id == self.com.id:
             # button clicked on this session
