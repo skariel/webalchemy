@@ -467,9 +467,9 @@ class JSFunction:
 class JSClass:
     # TODO: cache the creation of classes!
     def __init__(self, rdoc, cls):
-        self.rdoc = rdoc
-        self.classname = cls.__name__
-        self.varname = rdoc.get_new_uid()
+        super().__setattr__('rdoc', rdoc)
+        super().__setattr__('classname', cls.__name__)
+        super().__setattr__('varname', rdoc.get_new_uid())
 
         js = vtranslate(getsource(cls))
         js += '\n' + self.varname + ' = new '+self.classname + '();\n'
@@ -481,31 +481,40 @@ class JSClass:
                 self.jsclass = jsclass
                 self.varname = jsclass.varname + '.' + name
 
-            # TODO: enable parameters!
-            def __call__(self):
-                self.jsclass.rdoc.inline(self.varname+'();\n')
+            def __call__(self, *varargs):
+                self.jsclass.rdoc.inline(self.varname+'('+','.join(varargs)+');\n')
 
         for attr in dir(cls):
             if attr.startswith('__'):
                 continue
             if not isinstance(getattr(cls, attr), FunctionType):
                 continue
-            setattr(self, attr, jsmethod(self, attr))
+            super().__setattr__(attr, jsmethod(self, attr))
 
     def __getattr__(self, item):
-
         class attr:
             def __init__(self, rdoc, name):
-                self.rdoc = rdoc
-                self.varname = name
+                super().__setattr__('rdoc', rdoc)
+                super().__setattr__('varname', name)
 
             def __getattr__(self, item):
                 return attr(self.rdoc, self.varname + '.' + item)
 
-            def call(self):
-                self.rdoc.inline(self.varname+'();\n')
+            def __setattr__(self, item, val):
+                js = self.varname + '.' + item + '=' + self.rdoc.stringify(val)
+                self.rdoc.inline(js)
+
+            def __getitem__(self, key):
+                return attr(self.rdoc, self.varname + '[' + str(key) + ']')
+
+            def call(self, *varargs):
+                self.rdoc.inline(self.varname+'('+','.join(varargs)+');\n')
 
         return attr(self.rdoc, self.varname + '.' + item)
+
+    def __setattr__(self, item, val):
+        js = self.varname + '.' + item + '=' + self.rdoc.stringify(val)
+        self.rdoc.inline(js)
 
 
 class _StyleSheet:

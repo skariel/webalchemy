@@ -119,12 +119,12 @@ class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
             else:
                 if message.startswith('rpc: '):
                     yield self.handle_js_to_py_rpc_message(message)
-                elif message.startswith('msg: '):
+                elif message.startswith('msg: ') and message != 'msg: done':
                     log.info('Passing message to document inmessage...')
                     r = self.local_doc.inmessage(message[5:])
                     if r is not None:
                         yield r
-                elif message != 'done':
+                elif message != 'msg: done':
                     raise Exception('bad message received: '+str(message))
 
             yield self.flush_dom()
