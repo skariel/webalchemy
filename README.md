@@ -118,6 +118,6 @@ This is like the opposite of what Meteor does, but seems to have several advanta
 - Documentation :)
 - Major cleanup
 - [asyncio](http://docs.python.org/3.4/library/asyncio.html) to replace Tornado in Python3.4
-- [ZMQ](http://docs.python.org/3.4/library/asyncio.html) (for some real scalability, like with IPython)
+- [ZMQ](http://zeromq.org/) (for some real scalability, like with IPython)
 - Data binding for general usage, not just the DOM. Use it with [pixi.js](https://github.com/GoodBoyDigital/pixi.js/) sprites, use it to bind server-side model with client side model, etc.
 
