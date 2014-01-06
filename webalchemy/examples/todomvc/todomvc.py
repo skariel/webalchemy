@@ -80,7 +80,6 @@ class ViewModel:
 
 from webalchemy.mvc import controller
 
-
 class AppTodoMvc:
 
     def initialize(self, **kwargs):

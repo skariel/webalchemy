@@ -374,6 +374,16 @@ class Veloce(NodeVisitor):
             object = args[0]
             args = ', '.join(args[1:])
             return 'new {}({})'.format(object, args)
+        # WEBA HERE!
+        elif name == 'rpc':
+            args = list(map(self.visit, node.args))
+            args = ', '.join(args)
+            return '#rpc{{{}}}'.format(args)
+        elif name == 'srv':
+            args = list(map(self.visit, node.args))
+            args = ', '.join(args)
+            return '#{{{}}}'.format(args)
+        # END OF WEBA MANIPULATIONS!
         elif name == 'super':
             args = ', '.join(map(self.visit, node.args))
             return 'this.$super({})'.format(args)

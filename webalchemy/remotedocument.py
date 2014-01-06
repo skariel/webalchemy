@@ -6,6 +6,7 @@ import logging
 from ast import parse
 from types import FunctionType
 from inspect import getsource
+from textwrap import dedent
 
 from webalchemy.pythonium.veloce.veloce import Veloce
 
@@ -324,15 +325,22 @@ class Element:
         self.parent = None
 
     def append(self, es):
-        try:
-            for e in es:
-                self.childs.append(e)
-                e.parent = self
-                s = self.varname + '.appendChild(' + e.varname + ');\n'
-                self.rdoc.inline(s)
-        except:
+        handled = False
+        if not hasattr(es, 'varname'):
+            try:
+                for e in es:
+                    self.childs.append(e)
+                    if isinstance(e, Element):
+                        es.parent = self
+                    s = self.varname + '.appendChild(' + e.varname + ');\n'
+                    self.rdoc.inline(s)
+                handled = True
+            except:
+                pass
+        if not handled:
             self.childs.append(es)
-            es.parent = self
+            if isinstance(es, Element):
+                es.parent = self
             s = self.varname + '.appendChild(' + es.varname + ');\n'
             self.rdoc.inline(s)
 
@@ -390,7 +398,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None, **kwargs):
     if rpcweakrefs is not None:
         for item in _rec2_rpc.findall(code):
             sitem = item.split(',')
-            litem = sitem[0].strip()
+            litem = sitem[0].strip().replace('this.', 'self.')
             ritem = ','.join(sitem[1:])
             fnc = eval(litem, glo, loc)
             rep = str(random.randint(0, 1e16))
@@ -466,15 +474,18 @@ class JSFunction:
 
 class JSClass:
     # TODO: cache the creation of classes!
-    def __init__(self, rdoc, cls):
+    def __init__(self, rdoc, cls, level=2, new=True):
         super().__setattr__('rdoc', rdoc)
         super().__setattr__('classname', cls.__name__)
         super().__setattr__('varname', rdoc.get_new_uid())
 
-        js = vtranslate(getsource(cls))
-        js += '\n' + self.varname + ' = new '+self.classname + '();\n'
+        js = vtranslate(dedent(getsource(cls)))
+        if new:
+            js += '\n' + self.varname + ' = new '+self.classname + '();\n'
+        else:
+            js += '\n' + self.varname + ' = '+self.classname + ';\n'
 
-        self.rdoc.inline(js)
+        self.rdoc.JS(js, level=level)
 
         class jsmethod:
             def __init__(self, jsclass, name):
@@ -507,7 +518,7 @@ class JSClass:
             def __getitem__(self, key):
                 return attr(self.rdoc, self.varname + '[' + str(key) + ']')
 
-            def call(self, *varargs):
+            def __call__(self, *varargs):
                 self.rdoc.inline(self.varname+'('+','.join(varargs)+');\n')
 
         return attr(self.rdoc, self.varname + '.' + item)
@@ -515,6 +526,9 @@ class JSClass:
     def __setattr__(self, item, val):
         js = self.varname + '.' + item + '=' + self.rdoc.stringify(val)
         self.rdoc.inline(js)
+
+    def __call__(self, *varargs):
+        self.rdoc.inline(self.varname+'('+','.join(varargs)+');\n')
 
 
 class _StyleSheet:
@@ -609,8 +623,8 @@ class RemoteDocument:
     def startinterval(self, ms, exp=None):
         return Interval(self, ms, exp, level=3)
 
-    def jsfunction(self, *varargs, body=None, **kwargs):
-        return JSFunction(self, *varargs, body=body, level=3, **kwargs)
+    def jsfunction(self, *varargs, body=None, level=3, **kwargs):
+        return JSFunction(self, *varargs, body=body, level=level, **kwargs)
 
     def get_new_uid(self):
         uid = '__v' + str(self.__uid_count)
@@ -647,8 +661,8 @@ class RemoteDocument:
             text = text.format(*(v.varname for v in varargs))
         self.__code_strings.append(text)
 
-    def JS(self, text, encapsulate_strings=True):
-        self.__code_strings.append(_inline(text, level=2, stringify=self.stringify, rpcweakrefs=self.jsrpcweakrefs, encapsulate_strings=encapsulate_strings))
+    def JS(self, text, encapsulate_strings=True, level=2):
+        self.__code_strings.append(_inline(text, level=level, stringify=self.stringify, rpcweakrefs=self.jsrpcweakrefs, encapsulate_strings=encapsulate_strings))
 
     def msg(self, text):
         self.inline('message("' + text + '");')
@@ -696,8 +710,8 @@ class RemoteDocument:
         return str(val)
 
     def new(self, cls):
-        return JSClass(self, cls)
+        return JSClass(self, cls, level=4)
 
     def translate(self, cls):
-        self.inline(vtranslate(getsource(cls)))
+        return JSClass(self, cls, level=4, new=False)
 
