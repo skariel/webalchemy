@@ -180,11 +180,14 @@ class EventListener:
         self.varname = varname
         self.level = level
 
-    def add(self, **kwargs):
+    def add(self, translate=False, **kwargs):
         for event, listener in kwargs.items():
-            l = self.rdoc.stringify(listener, encapsulate_strings=False, pop_line=False)
+            l = self.rdoc.stringify(listener, encapsulate_strings=False, pop_line=False, translate=translate)
             l = _inline(l, level=self.level, stringify=self.rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs)
-            js = self.varname + '.addEventListener("' + event + '",' + l + ',false);\n'
+            if not translate:
+                js = self.varname + '.addEventListener("' + event + '",' + l + ',false);\n'
+            else:
+                js = l + '\n' + self.varname + '.addEventListener("' + event + '",' + listener.__name__ + ',false);\n'
             self.rdoc.inline(js)
 
     def remove(self, event, listener):
@@ -673,7 +676,7 @@ class RemoteDocument:
     def dict(self):
         return SimpleProp(self)
 
-    def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True, vars=None):
+    def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True, vars=None, translate=False):
         if type(val) is bool:
             if val:
                 return 'true'
@@ -686,21 +689,24 @@ class RemoteDocument:
                 return '"' + str(val) + '"'
             return val
         if callable(val):
-            self.begin_block()
-            if vars:
-                tmp = val(*vars)
+            if translate:
+                return vtranslate(dedent(getsource(val)))
             else:
-                tmp = val()
-            if tmp:
-                self.cancel_block()
-            else:
-                tmp = self.pop_block()
-            if not vars:
-                return 'function(){' + tmp + '}'
-            else:
-                for v in vars:
-                    tmp = tmp.replace('"'+v+'"', v)
-                return 'function('+','.join(v for v in vars)+'){' + tmp + '}'
+                self.begin_block()
+                if vars:
+                    tmp = val(*vars)
+                else:
+                    tmp = val()
+                if tmp:
+                    self.cancel_block()
+                else:
+                    tmp = self.pop_block()
+                if not vars:
+                    return 'function(){' + tmp + '}'
+                else:
+                    for v in vars:
+                        tmp = tmp.replace('"'+v+'"', v)
+                    return 'function('+','.join(v for v in vars)+'){' + tmp + '}'
         if val is None:
             if pop_line:
                 return self.pop_line()

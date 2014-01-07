@@ -302,7 +302,11 @@ class Veloce(NodeVisitor):
 
     # Subscript(expr value, slice slice, expr_context ctx)
     def visit_Subscript(self, node):
-        return '{}[{}]'.format(self.visit(node.value), self.visit(node.slice))
+        slice = self.visit(node.slice)
+        if not slice.startswith('slice('):
+            return '{}[{}]'.format(self.visit(node.value), slice)
+        else:
+            return '{}.{}'.format(self.visit(node.value), slice)
 
     # arguments = (arg* args, identifier? vararg, expr? varargannotation,
     #              arg* kwonlyargs, identifier? kwarg, expr? kwargannotation, 
