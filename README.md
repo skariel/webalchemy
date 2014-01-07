@@ -112,11 +112,30 @@ class HellowWorldApp:
         self.rdoc.body.element(h1=m1+m2)
 ```
 
-This demonstrated how to push and pull data from the client. Isn't is dangerous that the client can call any function on the server?
-Well, no: the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
+This demonstrated how to push and pull data from the client. Now you may wonder if it's dangerous for the client to be able to call any function on the server.
+Well actually the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
 
-Try making a few containers, you can spread them across multiple Python files.
-You can use MVC pattern, use existing HTML, include 3rd party JS libraries and much more. All this missing documentation is WIP.
+####Including external scripts
+
+no need to require :)
+
+```Python
+class ThreeDEarth:
+
+    include = ['https://rawgithub.com/mrdoob/three.js/master/build/three.min.js']
+
+    def initialize(self, **kwargs):
+        # do something cool here!
+```
+
+####Further help
+
+Join the [mailing list](https://groups.google.com/forum/#!forum/webalchemy).
+
+webalchemy supports the MVC pattern, usage of existing HTML, and much more. All this missing documentation is WIP.
+Meanwhile take a look in the examples below.
+I also suggest you play a bit, try making a few containers - you can spread them across multiple Python files. You'll se it's not too complicated :)
+
 
 See examples below, they demonstrate a lot more than the above. Further docs and tutorials are WIP
 

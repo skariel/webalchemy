@@ -82,6 +82,8 @@ from webalchemy.mvc import controller
 
 class AppTodoMvc:
 
+    main_html_file_path = 'static/template/index.html'
+
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
         self.datamodel = self.rdoc.new(DataModel)

@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" afterPath="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/remotedocument.py" afterPath="$PROJECT_DIR$/webalchemy/remotedocument.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/VERSION" afterPath="$PROJECT_DIR$/VERSION" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" afterPath="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/server.py" afterPath="$PROJECT_DIR$/webalchemy/server.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" afterPath="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -28,6 +30,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="todomvc.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="85" column="0" selection-start="2414" selection-end="2469" vertical-scroll-proportion="0.0" vertical-offset="1184" max-vertical-offset="2200">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="serve_through_websocket.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="0" selection-start="174" selection-end="174" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="352">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="hello_world_example.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -37,10 +57,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="three_d_earth.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="121" column="9" selection-start="4085" selection-end="4397" vertical-scroll-proportion="0.0" vertical-offset="2218" max-vertical-offset="3190">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="114" column="0" selection-start="4091" selection-end="4091" vertical-scroll-proportion="0.52763295" vertical-offset="2002" max-vertical-offset="4026">
+            <state line="119" column="21" selection-start="4474" selection-end="4474" vertical-scroll-proportion="0.0" vertical-offset="2390" max-vertical-offset="4444">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VERSION" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/VERSION">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="3" selection-start="3" selection-end="3" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="945">
               <folding />
             </state>
           </provider>
@@ -57,17 +95,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="veloce.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="307" column="13" selection-start="11296" selection-end="11296" vertical-scroll-proportion="0.0" vertical-offset="6564" max-vertical-offset="17908">
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="colors_meteor_example.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -75,6 +102,15 @@
               <folding>
                 <element signature="e#54#83#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="server.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="470" column="30" selection-start="18018" selection-end="18018" vertical-scroll-proportion="0.0" vertical-offset="9925" max-vertical-offset="11396">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -106,22 +142,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/webalchemy/tornado/auth.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py" />
         <option value="$PROJECT_DIR$/webalchemy/main.html" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
         <option value="$PROJECT_DIR$/webalchemy/widgets/basic/menu.py" />
-        <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/serve_through_websocket.py" />
         <option value="$PROJECT_DIR$/webalchemy/js/comm.js" />
-        <option value="$PROJECT_DIR$/webalchemy/server.py" />
-        <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
         <option value="$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" />
         <option value="$PROJECT_DIR$/webalchemy/remotedocument.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" />
+        <option value="$PROJECT_DIR$/webalchemy/server.py" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/VERSION" />
       </list>
     </option>
   </component>
@@ -248,6 +284,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webalchemy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webalchemy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webalchemy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="examples" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="three_d_earth" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -268,7 +326,7 @@
       <recent name="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\examples\three_d_earth" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.three_d_earth - websocket">
+  <component name="RunManager" selected="Python.todomvc - websocket">
     <configuration default="true" type="tests" factoryName="py.test">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -673,7 +731,11 @@
       <created>1389086742785</created>
       <updated>1389086742785</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="colors app translated to Python">
+      <created>1389090610231</created>
+      <updated>1389090610231</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -707,7 +769,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="added pythonium 0.6.3" />
     <MESSAGE value="pure Python todomvc. WORKING!!" />
     <MESSAGE value="bug fix" />
     <MESSAGE value="bug fix in Pythonium" />
@@ -732,16 +793,12 @@
     <MESSAGE value="refactored js-&gt;py rpc" />
     <MESSAGE value="- fixed Pythonium slice&#10;- added translation for events" />
     <MESSAGE value="added RPC to readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="added RPC to readme" />
+    <MESSAGE value="colors app translated to Python" />
+    <option name="LAST_COMMIT_MESSAGE" value="colors app translated to Python" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/webalchemy/server.py</url>
-          <line>418</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py</url>
           <line>67</line>
@@ -757,16 +814,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="53" selection-start="191" selection-end="191" vertical-scroll-proportion="0.2037037" vertical-offset="0" max-vertical-offset="972" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/freeze_app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="27" selection-end="239" vertical-scroll-proportion="0.09053498" vertical-offset="0" max-vertical-offset="972" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/js/comm.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="12" selection-start="91" selection-end="91" vertical-scroll-proportion="0.0" vertical-offset="66" max-vertical-offset="1100">
@@ -777,13 +824,6 @@
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/serve_through_websocket.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="9" selection-start="186" selection-end="186" vertical-scroll-proportion="0.13580246" vertical-offset="0" max-vertical-offset="972">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="20" selection-start="4418" selection-end="4418" vertical-scroll-proportion="0.47942388" vertical-offset="2218" max-vertical-offset="3190">
           <folding />
         </state>
       </provider>
@@ -800,23 +840,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="0" selection-start="5040" selection-end="5040" vertical-scroll-proportion="0.313786" vertical-offset="2577" max-vertical-offset="11572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/tornado/gen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="12804">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="0" selection-start="2355" selection-end="2355" vertical-scroll-proportion="1.7880658" vertical-offset="0" max-vertical-offset="2156">
           <folding />
         </state>
       </provider>
@@ -862,9 +888,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="470" column="30" selection-start="18018" selection-end="18018" vertical-scroll-proportion="0.0" vertical-offset="9925" max-vertical-offset="11396">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="0" selection-start="2414" selection-end="2469" vertical-scroll-proportion="0.0" vertical-offset="1184" max-vertical-offset="2200">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="0" selection-start="174" selection-end="174" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="352">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="121" column="9" selection-start="4085" selection-end="4397" vertical-scroll-proportion="0.0" vertical-offset="2218" max-vertical-offset="3190">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="0" selection-start="4091" selection-end="4091" vertical-scroll-proportion="0.52763295" vertical-offset="2002" max-vertical-offset="4026">
+        <state line="119" column="21" selection-start="4474" selection-end="4474" vertical-scroll-proportion="0.0" vertical-offset="2390" max-vertical-offset="4444">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/VERSION">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="3" selection-start="3" selection-end="3" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="945">
           <folding />
         </state>
       </provider>

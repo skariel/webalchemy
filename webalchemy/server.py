@@ -357,7 +357,6 @@ class PrivateDataStore:
 def run(app=None, host='127.0.0.1', port=8080, **kwargs):
 
     static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
-    main_html_file_path = kwargs.get('main_html_file_path', None)
     dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'webalchemy.tornado'))
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
@@ -373,6 +372,11 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
         main_route = r'/(.*)'
     else:
         main_route = r'/'+main_explicit_route+r'/(.*)'
+
+    if hasattr(app, 'main_html_file_path'):
+        main_html_file_path = app.main_html_file_path
+    else:
+        main_html_file_path = None
 
     if static_path_from_local_doc_base:
         mdl = sys.modules[app.__module__]
@@ -461,10 +465,16 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     webalchemy.tornado.ioloop.IOLoop.instance().start()
 
 
-def generate_static(App, writefile, main_html_file_path=None):
+def generate_static(App, writefile):
     # prepare main_html ...
     mfn = os.path.realpath(__file__)
     mfn = os.path.dirname(mfn)
+
+    if hasattr(app, 'main_html_file_path'):
+        main_html_file_path = app.main_html_file_path
+    else:
+        main_html_file_path = None
+
     if not main_html_file_path:
         ffn = os.path.join(mfn, 'main.html')
     else:
