@@ -1,5 +1,5 @@
 ##Webalchemy
-Modern web development with Python, powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado) (and in the future AsyncIO, AutobahnPython, PyZMQ). it's [MIT licensed](LICENSE.txt)
+Modern web development with Python, powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado). it's [MIT licensed](LICENSE.txt)
 
 - Angular style TodoMVC [live demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
 - Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py) (this screencast is old, still containing some JS. a new one is WIP)
@@ -9,8 +9,9 @@ Modern web development with Python, powered by [Pythonium](https://github.com/py
 
 ###Installation
 
-* Use Python3
+* Make sure you use Python3
 * Copy the webalchemy directory to your project root directory (yeah, poorman's install, never fails!)
+* no external dependencies, all Pure Python, all included. Arriving to PIP soon :)
 
 ###Tutorial and Documentation
 
@@ -158,7 +159,7 @@ This is a client-only app. It can be served from a websocket like this:
 ```python
 from webalchemy import server
 from webalchemy.examples.todomvc.todomvc import AppTodoMvc as app
-server.run(app, main_html_file_path='static/template/index.html')
+server.run(app)
 ```
 
 or it can be "frozen" to be served from a static folder (see [live demo](http://skariel.org/webalchemy/todomvc.html))like this:
@@ -166,7 +167,7 @@ or it can be "frozen" to be served from a static folder (see [live demo](http://
 ```Python
 from webalchemy import server
 from webalchemy.examples.todomvc.todomvc import AppTodoMvc as app
-server.generate_static(app, writefile='todomvc.html', main_html_file_path='static/template/index.html')
+server.generate_static(app, writefile='todomvc.html')
 ```
 
 more on this app [here](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
