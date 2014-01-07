@@ -388,7 +388,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None, **kwargs):
     loc = prev_frame.f_locals
     glo = prev_frame.f_globals
     for item in _rec1_inline.findall(code):
-        rep = eval(item, glo, loc)
+        rep = eval(item.replace('this.', 'self.'), glo, loc)
         if not stringify:
             if hasattr(rep, 'varname'):
                 rep = rep.varname
@@ -522,7 +522,7 @@ class JSClass:
                 return attr(self.rdoc, self.varname + '[' + str(key) + ']')
 
             def __call__(self, *varargs):
-                self.rdoc.inline(self.varname+'('+','.join(varargs)+');\n')
+                self.rdoc.inline(self.varname+'('+','.join([self.rdoc.stringify(a) for a in varargs])+');\n')
 
         return attr(self.rdoc, self.varname + '.' + item)
 
@@ -531,7 +531,7 @@ class JSClass:
         self.rdoc.inline(js)
 
     def __call__(self, *varargs):
-        self.rdoc.inline(self.varname+'('+','.join(varargs)+');\n')
+        self.rdoc.inline(self.varname+'('+','.join([self.rdoc.stringify(a) for a in varargs])+');\n')
 
 
 class _StyleSheet:

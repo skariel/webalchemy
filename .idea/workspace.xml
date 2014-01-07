@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" afterPath="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" afterPath="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/remotedocument.py" afterPath="$PROJECT_DIR$/webalchemy/remotedocument.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -39,7 +40,7 @@
       <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="120" column="98" selection-start="4628" selection-end="4628" vertical-scroll-proportion="0.68821687" vertical-offset="1980" max-vertical-offset="4026">
+            <state line="114" column="0" selection-start="4091" selection-end="4091" vertical-scroll-proportion="0.52763295" vertical-offset="2002" max-vertical-offset="4026">
               <folding />
             </state>
           </provider>
@@ -48,7 +49,7 @@
       <file leaf-file-name="remotedocument.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/remotedocument.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="698" column="0" selection-start="22772" selection-end="22772" vertical-scroll-proportion="-10.133333" vertical-offset="15052" max-vertical-offset="16038">
+            <state line="524" column="35" selection-start="16894" selection-end="16894" vertical-scroll-proportion="15.366667" vertical-offset="11989" max-vertical-offset="16038">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -63,6 +64,26 @@
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="colors_meteor_example.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="0" selection-start="156" selection-end="156" vertical-scroll-proportion="-6.6" vertical-offset="0" max-vertical-offset="3916">
+              <folding>
+                <element signature="e#54#83#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="menu.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webalchemy/widgets/basic/menu.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="0" selection-start="786" selection-end="786" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="594">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -93,13 +114,13 @@
         <option value="$PROJECT_DIR$/webalchemy/widgets/basic/menu.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/serve_through_websocket.py" />
-        <option value="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" />
         <option value="$PROJECT_DIR$/webalchemy/js/comm.js" />
         <option value="$PROJECT_DIR$/webalchemy/server.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
-        <option value="$PROJECT_DIR$/webalchemy/remotedocument.py" />
         <option value="$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" />
+        <option value="$PROJECT_DIR$/webalchemy/remotedocument.py" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" />
         <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
@@ -247,7 +268,7 @@
       <recent name="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\examples\three_d_earth" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.hello_world">
+  <component name="RunManager" selected="Python.three_d_earth - websocket">
     <configuration default="true" type="tests" factoryName="py.test">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -648,7 +669,11 @@
       <created>1389084262310</created>
       <updated>1389084262310</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="added RPC to readme">
+      <created>1389086742785</created>
+      <updated>1389086742785</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -661,7 +686,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16987355" sideWeight="0.59960157" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56363636" sideWeight="0.39979756" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16987355" sideWeight="0.39940238" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16987355" sideWeight="0.39940238" order="3" side_tool="true" content_ui="tabs" />
@@ -682,7 +707,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="added classy.js" />
     <MESSAGE value="added pythonium 0.6.3" />
     <MESSAGE value="pure Python todomvc. WORKING!!" />
     <MESSAGE value="bug fix" />
@@ -707,7 +731,8 @@
     <MESSAGE value="Fixed py-&gt;py rpc" />
     <MESSAGE value="refactored js-&gt;py rpc" />
     <MESSAGE value="- fixed Pythonium slice&#10;- added translation for events" />
-    <option name="LAST_COMMIT_MESSAGE" value="- fixed Pythonium slice&#10;- added translation for events" />
+    <MESSAGE value="added RPC to readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="added RPC to readme" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -728,7 +753,7 @@
           <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="19" />
+      <option name="time" value="20" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -740,13 +765,6 @@
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/todomvc/freeze_app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4" column="0" selection-start="27" selection-end="239" vertical-scroll-proportion="0.09053498" vertical-offset="0" max-vertical-offset="972" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/widgets/basic/menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="633" selection-end="633" vertical-scroll-proportion="0.0" vertical-offset="23" max-vertical-offset="594">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/js/comm.js">
@@ -766,13 +784,6 @@
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="122" column="20" selection-start="4418" selection-end="4418" vertical-scroll-proportion="0.47942388" vertical-offset="2218" max-vertical-offset="3190">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="16" selection-start="2859" selection-end="2859" vertical-scroll-proportion="0.0" vertical-offset="1782" max-vertical-offset="3608">
           <folding />
         </state>
       </provider>
@@ -810,15 +821,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/remotedocument.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="698" column="0" selection-start="22772" selection-end="22772" vertical-scroll-proportion="-10.133333" vertical-offset="15052" max-vertical-offset="16038">
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="307" column="13" selection-start="11296" selection-end="11296" vertical-scroll-proportion="0.0" vertical-offset="6564" max-vertical-offset="17908">
@@ -835,9 +837,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/widgets/basic/menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="786" selection-end="786" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="594">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/remotedocument.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="524" column="35" selection-start="16894" selection-end="16894" vertical-scroll-proportion="15.366667" vertical-offset="11989" max-vertical-offset="16038">
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="156" selection-end="156" vertical-scroll-proportion="-6.6" vertical-offset="0" max-vertical-offset="3916">
+          <folding>
+            <element signature="e#54#83#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="120" column="98" selection-start="4628" selection-end="4628" vertical-scroll-proportion="0.68821687" vertical-offset="1980" max-vertical-offset="4026">
+        <state line="114" column="0" selection-start="4091" selection-end="4091" vertical-scroll-proportion="0.52763295" vertical-offset="2002" max-vertical-offset="4026">
           <folding />
         </state>
       </provider>

@@ -53,11 +53,14 @@ class ColorsMeteorApp:
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='1.5em',
         )
-        button.events.add(click=self.rdoc.jsfunction(body='''
-            if (!#{self.menu.element}.app.selected) return;
-            #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,1);
-            #rpc{self.color_liked, #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, 1};
-        '''))
+
+        def button_click_p():
+            if srv(self.menu.element).app.selected is None: return
+            srv(self.menu.increase_count_by)(srv(self.menu.element).app.selected, 1)
+            rpc(self.color_liked, srv(self.menu.element).app.selected.id,
+                srv(self.menu.element).app.selected.app.color, 1)
+
+        button.events.add(click=button_click_p, translate=True)
 
         # insert another button !!
         button2 = self.rdoc.body.element(button='UNLike!')
@@ -65,11 +68,13 @@ class ColorsMeteorApp:
             fontFamily='Arial, Verdana, Sans-serif',
             fontSize='1.5em',
         )
-        button2.events.add(click=self.rdoc.jsfunction(body='''
-            if (!#{self.menu.element}.app.selected) return;
-            #{self.menu.increase_count_by}(#{self.menu.element}.app.selected,-1);
-            #rpc{self.color_liked, #{self.menu.element}.app.selected.id, #{self.menu.element}.app.selected.app.color, -1};
-        '''))
+        def button_click_n():
+            if srv(self.menu.element).app.selected is None: return
+            srv(self.menu.increase_count_by)(srv(self.menu.element).app.selected, -1)
+            rpc(self.color_liked, srv(self.menu.element).app.selected.id,
+                srv(self.menu.element).app.selected.app.color, -1)
+
+        button2.events.add(click=button_click_n, translate=True)
 
     def color_liked(self, sender_com_id, item_id, color, amount):
         if sender_com_id == self.com.id:
@@ -97,30 +102,39 @@ class ColorsMeteorApp:
 
         # create a menu element with the above item initializer
         m = Menu(self.rdoc, on_add)
+
         # function to increase the count in front-end
-        m.sort = self.rdoc.jsfunction(body='''
-            e=#{m.element}
-            var arr = Array.prototype.slice.call( e.children ).sort(function (a,b) {
-                if (a.app.clickedcount < b.app.clickedcount) return -1;
-                if (a.app.clickedcount > b.app.clickedcount) return 1;
-                return 0;                
-            });
-            for(i=0;i<arr.length;i++)
-                e.appendChild(arr[i])
-        ''')
-        m.increase_count_by = self.rdoc.jsfunction('element', 'amount', body='''
-            element.app.clickedcount+= amount;
-            #{m.sort}();
-            element.textContent= '('+element.app.clickedcount+') '+element.app.color;
-        ''')
-        m.select_color = self.rdoc.jsfunction('element', body='''
-            if (element.target) element = element.target;
-            element.classList.add('selected');
-            if ((#{m.element}.app.selected)&&(#{m.element}.app.selected!=element))
-                #{m.element}.app.selected.classList.remove('selected');
-            #{m.element}.app.selected= element;
-            #rpc{self.color_selected, element.app.color};
-        ''')
+
+        def menu_sort():
+            def srt_func(a, b):
+                if a.app.clickedcount < b.app.clickedcount: return -1
+                if a.app.clickedcount > b.app.clickedcount: return 1
+                return 0
+            e = srv(m.element)
+            arr = Array.prototype.slice.call(e.children).sort(srt_func)
+            for item in arr:
+                e.appendChild(item)
+
+        m.sort = self.rdoc.translate(menu_sort)
+
+        def increase_count_by(element, amount):
+            element.app.clickedcount += amount
+            srv(m.sort)()
+            element.textContent = '(' + element.app.clickedcount + ') ' + element.app.color
+
+        m.increase_count_by = self.rdoc.translate(increase_count_by)
+
+        def select_color(element):
+            if element.target is not None:
+                element = element.target
+            element.classList.add('selected')
+            if srv(m.element).app.selected and srv(m.element).app.selected!=element:
+                srv(m.element).app.selected.classList.remove('selected')
+            srv(m.element).app.selected = element
+            rpc(self.color_selected, element.app.color)
+
+        m.select_color = self.rdoc.translate(select_color)
+
         m.element.events.add(click=m.select_color)
 
         # style the menu

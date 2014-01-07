@@ -2,7 +2,7 @@
 Modern web development with Python, powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado) (and in the future AsyncIO, AutobahnPython, PyZMQ). it's [MIT licensed](LICENSE.txt)
 
 - Angular style TodoMVC [live demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
-- Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py)
+- Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py) (this screencast is old, still containing some JS. a new one is WIP)
 - WebGL Earth [live demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
 
 ##Getting Started
@@ -171,7 +171,7 @@ This is like the opposite of what Meteor does, but seems to have several advanta
 
 - Documentation :)
 - Major cleanup
-- [asyncio](http://docs.python.org/3.4/library/asyncio.html) to replace Tornado in Python3.4
-- [ZMQ](http://zeromq.org/) (for some real scalability, like with IPython)
+- [asyncio](http://docs.python.org/3.4/library/asyncio.html) and [AutobahnPython](http://autobahn.ws/python/) to replace Tornado in Python3.4
+- [pyzmq](https://github.com/zeromq/pyzmq) for some real scalability, like with IPython
 - Data binding for general usage, not just the DOM. Use it with [pixi.js](https://github.com/GoodBoyDigital/pixi.js/) sprites, use it to bind server-side model with client side model, etc.
 
