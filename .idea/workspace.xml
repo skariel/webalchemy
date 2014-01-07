@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" afterPath="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/remotedocument.py" afterPath="$PROJECT_DIR$/webalchemy/remotedocument.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py" afterPath="$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -31,7 +30,16 @@
       <file leaf-file-name="hello_world_example.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="701" selection-end="701" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="616">
+            <state line="17" column="40" selection-start="0" selection-end="706" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="682">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="120" column="98" selection-start="4628" selection-end="4628" vertical-scroll-proportion="0.68821687" vertical-offset="1980" max-vertical-offset="4026">
               <folding />
             </state>
           </provider>
@@ -48,10 +56,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="veloce.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="veloce.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="308" column="30" selection-start="11327" selection-end="11327" vertical-scroll-proportion="0.6135881" vertical-offset="6198" max-vertical-offset="17908">
+            <state line="307" column="13" selection-start="11296" selection-end="11296" vertical-scroll-proportion="0.0" vertical-offset="6564" max-vertical-offset="17908">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -85,14 +93,14 @@
         <option value="$PROJECT_DIR$/webalchemy/widgets/basic/menu.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/serve_through_websocket.py" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/webalchemy/examples/colors_meteor_example.py" />
         <option value="$PROJECT_DIR$/webalchemy/js/comm.js" />
         <option value="$PROJECT_DIR$/webalchemy/server.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
         <option value="$PROJECT_DIR$/webalchemy/remotedocument.py" />
-        <option value="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" />
         <option value="$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py" />
+        <option value="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -636,13 +644,18 @@
       <created>1389046604541</created>
       <updated>1389046604541</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="- fixed Pythonium slice&#10;- added translation for events">
+      <created>1389084262310</created>
+      <updated>1389084262310</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
     <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -657,7 +670,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -670,7 +682,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="better readme" />
     <MESSAGE value="added classy.js" />
     <MESSAGE value="added pythonium 0.6.3" />
     <MESSAGE value="pure Python todomvc. WORKING!!" />
@@ -695,7 +706,8 @@
     <MESSAGE value="better proxy for JSClass" />
     <MESSAGE value="Fixed py-&gt;py rpc" />
     <MESSAGE value="refactored js-&gt;py rpc" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactored js-&gt;py rpc" />
+    <MESSAGE value="- fixed Pythonium slice&#10;- added translation for events" />
+    <option name="LAST_COMMIT_MESSAGE" value="- fixed Pythonium slice&#10;- added translation for events" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -730,14 +742,11 @@
         <state line="4" column="0" selection-start="27" selection-end="239" vertical-scroll-proportion="0.09053498" vertical-offset="0" max-vertical-offset="972" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="52" selection-start="4083" selection-end="4083" vertical-scroll-proportion="0.0" vertical-offset="1852" max-vertical-offset="2838" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/widgets/basic/menu.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="633" selection-end="633" vertical-scroll-proportion="0.0" vertical-offset="23" max-vertical-offset="594" />
+        <state line="16" column="0" selection-start="633" selection-end="633" vertical-scroll-proportion="0.0" vertical-offset="23" max-vertical-offset="594">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/js/comm.js">
@@ -810,19 +819,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="307" column="13" selection-start="11296" selection-end="11296" vertical-scroll-proportion="0.0" vertical-offset="6564" max-vertical-offset="17908">
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="701" selection-end="701" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="616">
+        <state line="17" column="40" selection-start="0" selection-end="706" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="682">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webalchemy/pythonium/veloce/veloce.py">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="308" column="30" selection-start="11327" selection-end="11327" vertical-scroll-proportion="0.6135881" vertical-offset="6198" max-vertical-offset="17908">
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+        <state line="120" column="98" selection-start="4628" selection-end="4628" vertical-scroll-proportion="0.68821687" vertical-offset="1980" max-vertical-offset="4026">
+          <folding />
         </state>
       </provider>
     </entry>

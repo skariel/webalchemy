@@ -14,8 +14,6 @@ Modern web development with Python, powered by [Pythonium](https://github.com/py
 
 ###Tutorial and Documentation
 
-There is not much yet except a few examples to learn from.
-
 A Webalchemy application is a regular Python class (no need to inherit anything) that provides relevant methods used by the Webalchemy server.
 The only required method is `initialize`, which is called when the client side is ready for automation. Here we create a header and
 append it to the document body:
@@ -63,8 +61,64 @@ class HellowWorldApp:
         )
 ```
 
+Lets add a click listener now by using the elements `events` property like this:
+
+ ```Python
+self.rdoc.body.element(h1='Hello World!!!').events.add(click=self.clicked, translate=True)
+ ```
+
+lets define a simple event in which each click deletes the 1st letter in the heading:
+
+```Python
+def clicked(self):
+    self.textContent = self.textContent[1:]
+```
+
+lets also notify the server that the button was clicked:
+
+```Python
+def clicked(self):
+    self.textContent = self.textContent[1:]
+    rpc(self.handle_click_on_backend, 'some message', 'just so you see how to pass paramaters')
+```
+
+The above function is run in the client. In the server we'll do the following:
+
+```Python
+def handle_click_on_backend(self, sender_id, m1, m2):
+    self.rdoc.body.element(h1=m1+m2)
+```
+
+The whole program look like this:
+
+```Python
+class HellowWorldApp:
+    def initialize(self, **kwargs):
+        self.rdoc = kwargs['remote_document']
+        self.rdoc.body.element(h1='Hello World!!!').events.add(click=self.clicked, translate=True)
+        self.rdoc.body.element(h2='--------------')
+        self.rdoc.stylesheet.rule('h1').style(
+            color='#FF0000',
+            marginLeft='75px',
+            marginTop='75px',
+            background='#00FF00'
+        )
+
+    def clicked(self):
+        self.textContent = self.textContent[1:]
+        rpc(self.handle_click_on_backend, 'some message', 'just so you see how to pass paramaters')
+
+    def handle_click_on_backend(self, sender_id, m1, m2):
+        self.rdoc.body.element(h1=m1+m2)
+```
+
+This demonstrated how to push and pull data from the client. Isn't is dangerous that the client can call any function on the server?
+Well, no: the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
+
 Try making a few containers, you can spread them across multiple Python files.
-You can add events, call server functions from client code, use MVC pattern, use existing HTML, and much more. All this missing documentation is WIP.
+You can use MVC pattern, use existing HTML, include 3rd party JS libraries and much more. All this missing documentation is WIP.
+
+See examples below, they demonstrate a lot more than the above. Further docs and tutorials are WIP
 
 ####Example 1: Realtime Meteor Colors:
 
