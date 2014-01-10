@@ -49,8 +49,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="586.91614"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="865.18896"
      inkscape:cy="519.545"
      inkscape:document-units="px"
      inkscape:current-layer="g3915"
@@ -68,6 +68,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -88,7 +89,10 @@
              y="466.18561"
              x="236.13855"
              style="font-size:16.49258232px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-             xml:space="preserve"><tspan
+             xml:space="preserve"
+             inkscape:export-filename="C:\Users\jkeselma\Documents\GitHub\webalchemy\logo.png"
+             inkscape:export-xdpi="90.040001"
+             inkscape:export-ydpi="90.040001"><tspan
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sans;-inkscape-font-specification:Sans"
                y="466.18561"
                x="236.13855"
@@ -104,25 +108,36 @@
              sodipodi:cx="201.42857"
              id="path3831"
              style="fill:none;stroke:none"
-             sodipodi:type="arc" />
+             sodipodi:type="arc"
+             inkscape:export-filename="C:\Users\jkeselma\Documents\GitHub\webalchemy\logo.png"
+             inkscape:export-xdpi="90.040001"
+             inkscape:export-ydpi="90.040001" />
           <flowRoot
-             transform="translate(-79.816831,39.999999)"
+             transform="translate(49.417909,8.4533439)"
              style="font-size:11px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
              id="flowRoot3843"
-             xml:space="preserve"><flowRegion
+             xml:space="preserve"
+             inkscape:export-filename="C:\Users\jkeselma\Documents\GitHub\webalchemy\logo.png"
+             inkscape:export-xdpi="90.040001"
+             inkscape:export-ydpi="90.040001"><flowRegion
                id="flowRegion3845"><rect
                  style="font-size:11px"
                  y="438.43362"
                  x="264.64285"
-                 height="29.955355"
-                 width="324.548"
+                 height="93.097794"
+                 width="182.99339"
                  id="rect3847" /></flowRegion><flowPara
-               style="text-align:start;text-anchor:start"
-               id="flowPara3881">Because modern web development with Python.</flowPara><flowPara
-               style="text-align:start;text-anchor:start"
+               style="font-size:6.42003775px;text-align:start;text-anchor:start"
+               id="flowPara3937">Because modern web</flowPara><flowPara
+               style="font-size:6.42003775px;text-align:start;text-anchor:start"
+               id="flowPara3941">development with Python.</flowPara><flowPara
+               style="font-size:6.42003775px;text-align:start;text-anchor:start"
                id="flowPara3935">That's why ;)</flowPara></flowRoot>          <g
              clip-path="url(#clipPath3871)"
-             id="g3837">
+             id="g3837"
+             inkscape:export-filename="C:\Users\jkeselma\Documents\GitHub\webalchemy\logo.png"
+             inkscape:export-xdpi="90.040001"
+             inkscape:export-ydpi="90.040001">
             <path
                style="fill:#ffffaf;fill-opacity:1;stroke:#000000;stroke-width:1.42873371;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
                d="m 208.16072,432.88839 -9.90625,17.90625 -12.5625,-8.9375 0,27.78125 c 6.24219,1.47844 14.34374,2.375 23.21875,2.375 9.40907,0 17.96154,-1.01556 24.34375,-2.65625 l 0,-29.625 -15.25,11.0625 -9.84375,-17.90625 z"
@@ -139,6 +154,13 @@
                  id="textPath3833"><tspan
    id="tspan3800">                                WEB</tspan></textPath></text>
           </g>
+          <rect
+             style="fill:#000000;fill-opacity:1;stroke:none"
+             id="rect3943"
+             width="1.2380869"
+             height="31.364868"
+             x="305.82019"
+             y="438.2916" />
         </g>
       </g>
     </g>
