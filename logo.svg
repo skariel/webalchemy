@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="New document 1">
+  <defs
+     id="defs4">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3871">
+      <rect
+         style="fill:#ffffaf;fill-opacity:1;stroke:none"
+         id="rect3873"
+         width="63.57143"
+         height="55.357143"
+         x="176.78572"
+         y="417.71933" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3875">
+      <rect
+         style="fill:#ffffaf;fill-opacity:1;stroke:none"
+         id="rect3877"
+         width="69.73494"
+         height="55.265087"
+         x="165.97346"
+         y="-468.02536"
+         transform="scale(1,-1)" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="315.71429"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1846"
+     inkscape:window-height="1058"
+     inkscape:window-x="66"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:16.49258232px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="236.13855"
+       y="466.18561"
+       id="text2989"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2991"
+         x="236.13855"
+         y="466.18561"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sans;-inkscape-font-specification:Sans">Alchemy</tspan></text>
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:none;stroke-width:1.50000000000000000;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path3831"
+       sodipodi:cx="201.42857"
+       sodipodi:cy="437.36218"
+       sodipodi:rx="58.214287"
+       sodipodi:ry="20"
+       d="m 259.64286,437.36218 a 58.214287,20 0 1 1 -116.42857,0 58.214287,20 0 1 1 116.42857,0 z"
+       transform="matrix(0.91161522,0,0,-1.0016657,25.48179,886.52429)"
+       clip-path="url(#clipPath3875)" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3843"
+       style="font-size:11px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(-88.571431,39.999999)"><flowRegion
+         id="flowRegion3845"><rect
+           id="rect3847"
+           width="131.07143"
+           height="69.64286"
+           x="264.64285"
+           y="438.43362"
+           style="font-size:11px" /></flowRegion><flowPara
+         id="flowPara3853"
+         style="text-align:center;text-anchor:middle">Because modern web</flowPara><flowPara
+         id="flowPara3879"
+         style="text-align:center;text-anchor:middle">development with Python.</flowPara><flowPara
+         id="flowPara3881"
+         style="text-align:center;text-anchor:middle">Thats why</flowPara></flowRoot>    <g
+       id="g3837"
+       clip-path="url(#clipPath3871)">
+      <path
+         inkscape:connector-curvature="0"
+         id="rect3018"
+         d="m 208.16072,432.88839 -9.90625,17.90625 -12.5625,-8.9375 0,27.78125 c 6.24219,1.47844 14.34374,2.375 23.21875,2.375 9.40907,0 17.96154,-1.01556 24.34375,-2.65625 l 0,-29.625 -15.25,11.0625 -9.84375,-17.90625 z"
+         style="fill:#ffffaf;stroke:#000000;stroke-width:1.42873370999999990;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1" />
+      <text
+         inkscape:transform-center-y="39.955399"
+         inkscape:transform-center-x="-3.7289155"
+         sodipodi:linespacing="125%"
+         id="text3798"
+         style="font-size:18.03644562px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><textPath
+           id="textPath3833"
+           xlink:href="#path3831"><tspan
+   id="tspan3800">                                WEB</tspan></textPath></text>
+    </g>
+  </g>
+</svg>
