@@ -69,14 +69,14 @@ Lets add a click listener now by using the elements `events` property like this:
 self.rdoc.body.element(h1='Hello World!!!').events.add(click=self.clicked, translate=True)
  ```
 
-lets define a simple event in which each click deletes the 1st letter in the heading:
+lets define a simple event in which each click deletes the 1st letter in the heading. This is run on the client, it is translated to JS behind the scenes:
 
 ```Python
 def clicked(self):
     self.textContent = self.textContent[1:]
 ```
 
-lets also notify the server that the button was clicked:
+In addition, if we want to notify the server that the button was clicked we could use an RPC call from the client to the server. The function above should be added one line:
 
 ```Python
 def clicked(self):
@@ -84,14 +84,14 @@ def clicked(self):
     rpc(self.handle_click_on_backend, 'some message', 'just so you see how to pass paramaters')
 ```
 
-The above function is run in the client. In the server we'll do the following:
+In the server we can do somthing like this:
 
 ```Python
 def handle_click_on_backend(self, sender_id, m1, m2):
     self.rdoc.body.element(h1=m1+m2)
 ```
 
-The whole program look like this:
+The program looks like this:
 
 ```Python
 class HellowWorldApp:
@@ -114,7 +114,7 @@ class HellowWorldApp:
         self.rdoc.body.element(h1=m1+m2)
 ```
 
-This demonstrated how to push and pull data from the client. Now you may wonder if it's dangerous for the client to be able to call any function on the server.
+This how you push and pull data to and from the client. Now you may wonder if it's dangerous for the client to be able to call any function on the server.
 Well actually the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
 
 ####Including external scripts
