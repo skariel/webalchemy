@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/logo.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logo.svg" afterPath="$PROJECT_DIR$/logo.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -65,7 +66,7 @@
       <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="85" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4488">
+            <state line="6" column="12" selection-start="684" selection-end="684" vertical-scroll-proportion="0.14634146" vertical-offset="0" max-vertical-offset="4488">
               <folding />
             </state>
           </provider>
@@ -755,7 +756,11 @@
       <created>1389375467396</created>
       <updated>1389375467396</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="fixing logo">
+      <created>1389375868484</created>
+      <updated>1389375868484</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -789,7 +794,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="better README.md" />
     <MESSAGE value="fixed typo" />
     <MESSAGE value="updated the &quot;what to expect&quot; section" />
     <MESSAGE value="adding Tornado" />
@@ -814,7 +818,8 @@
     <MESSAGE value="added a logo" />
     <MESSAGE value="typo fixed" />
     <MESSAGE value="logo" />
-    <option name="LAST_COMMIT_MESSAGE" value="logo" />
+    <MESSAGE value="fixing logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing logo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -929,7 +934,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="85" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4488">
+        <state line="6" column="12" selection-start="684" selection-end="684" vertical-scroll-proportion="0.14634146" vertical-offset="0" max-vertical-offset="4488">
           <folding />
         </state>
       </provider>
