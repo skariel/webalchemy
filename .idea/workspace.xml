@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logo.svg" afterPath="$PROJECT_DIR$/logo.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -747,7 +747,11 @@
       <created>1389375140812</created>
       <updated>1389375140812</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="typo fixed">
+      <created>1389375185905</created>
+      <updated>1389375185905</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -781,7 +785,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="fixing a bug in todomvc" />
     <MESSAGE value="added Pythonium license" />
     <MESSAGE value="better README.md" />
     <MESSAGE value="fixed typo" />
@@ -806,7 +809,8 @@
     <MESSAGE value="bump to v0.2.0" />
     <MESSAGE value="fixed examples in readme" />
     <MESSAGE value="added a logo" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a logo" />
+    <MESSAGE value="typo fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="typo fixed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

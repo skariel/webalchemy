@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="logo.svg">
   <defs
      id="defs4">
     <clipPath
@@ -49,11 +49,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
+     inkscape:zoom="1"
      inkscape:cx="315.71429"
      inkscape:cy="520"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g3899"
      showgrid="false"
      inkscape:window-width="1846"
      inkscape:window-height="1058"
@@ -68,7 +68,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -76,64 +75,74 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <text
-       xml:space="preserve"
-       style="font-size:16.49258232px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="236.13855"
-       y="466.18561"
-       id="text2989"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan2991"
-         x="236.13855"
-         y="466.18561"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sans;-inkscape-font-specification:Sans">Alchemy</tspan></text>
-    <path
-       sodipodi:type="arc"
-       style="fill:none;stroke:none;stroke-width:1.50000000000000000;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       id="path3831"
-       sodipodi:cx="201.42857"
-       sodipodi:cy="437.36218"
-       sodipodi:rx="58.214287"
-       sodipodi:ry="20"
-       d="m 259.64286,437.36218 a 58.214287,20 0 1 1 -116.42857,0 58.214287,20 0 1 1 116.42857,0 z"
-       transform="matrix(0.91161522,0,0,-1.0016657,25.48179,886.52429)"
-       clip-path="url(#clipPath3875)" />
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot3843"
-       style="font-size:11px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(-88.571431,39.999999)"><flowRegion
-         id="flowRegion3845"><rect
-           id="rect3847"
-           width="131.07143"
-           height="69.64286"
-           x="264.64285"
-           y="438.43362"
-           style="font-size:11px" /></flowRegion><flowPara
-         id="flowPara3853"
-         style="text-align:center;text-anchor:middle">Because modern web</flowPara><flowPara
-         id="flowPara3879"
-         style="text-align:center;text-anchor:middle">development with Python.</flowPara><flowPara
-         id="flowPara3881"
-         style="text-align:center;text-anchor:middle">Thats why</flowPara></flowRoot>    <g
-       id="g3837"
-       clip-path="url(#clipPath3871)">
-      <path
-         inkscape:connector-curvature="0"
-         id="rect3018"
-         d="m 208.16072,432.88839 -9.90625,17.90625 -12.5625,-8.9375 0,27.78125 c 6.24219,1.47844 14.34374,2.375 23.21875,2.375 9.40907,0 17.96154,-1.01556 24.34375,-2.65625 l 0,-29.625 -15.25,11.0625 -9.84375,-17.90625 z"
-         style="fill:#ffffaf;stroke:#000000;stroke-width:1.42873370999999990;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1" />
-      <text
-         inkscape:transform-center-y="39.955399"
-         inkscape:transform-center-x="-3.7289155"
-         sodipodi:linespacing="125%"
-         id="text3798"
-         style="font-size:18.03644562px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><textPath
-           id="textPath3833"
-           xlink:href="#path3831"><tspan
+    <g
+       id="g3883"
+       transform="matrix(3.4267711,0,0,3.4267711,-507.01848,-1277.5772)">
+      <g
+         id="g3899">
+        <g
+           id="g3915">
+          <text
+             sodipodi:linespacing="125%"
+             id="text2989"
+             y="466.18561"
+             x="236.13855"
+             style="font-size:16.49258232px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+             xml:space="preserve"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Sans;-inkscape-font-specification:Sans"
+               y="466.18561"
+               x="236.13855"
+               id="tspan2991"
+               sodipodi:role="line">Alchemy</tspan></text>
+          <path
+             clip-path="url(#clipPath3875)"
+             transform="matrix(0.91161522,0,0,-1.0016657,25.48179,886.52429)"
+             d="m 259.64286,437.36218 c 0,11.0457 -26.06342,20 -58.21429,20 -32.15086,0 -58.21428,-8.9543 -58.21428,-20 0,-11.04569 26.06342,-20 58.21428,-20 32.15087,0 58.21429,8.95431 58.21429,20 z"
+             sodipodi:ry="20"
+             sodipodi:rx="58.214287"
+             sodipodi:cy="437.36218"
+             sodipodi:cx="201.42857"
+             id="path3831"
+             style="fill:none;stroke:none"
+             sodipodi:type="arc" />
+          <flowRoot
+             transform="translate(-79.816831,39.999999)"
+             style="font-size:11px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+             id="flowRoot3843"
+             xml:space="preserve"><flowRegion
+               id="flowRegion3845"><rect
+                 style="font-size:11px"
+                 y="438.43362"
+                 x="264.64285"
+                 height="69.64286"
+                 width="131.07143"
+                 id="rect3847" /></flowRegion><flowPara
+               style="text-align:start;text-anchor:start"
+               id="flowPara3853">Because modern web</flowPara><flowPara
+               style="text-align:start;text-anchor:start"
+               id="flowPara3879">development with Python.</flowPara><flowPara
+               style="text-align:start;text-anchor:start"
+               id="flowPara3881">That's why ;)</flowPara></flowRoot>          <g
+             clip-path="url(#clipPath3871)"
+             id="g3837">
+            <path
+               style="fill:#ffffaf;fill-opacity:1;stroke:#000000;stroke-width:1.42873371;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+               d="m 208.16072,432.88839 -9.90625,17.90625 -12.5625,-8.9375 0,27.78125 c 6.24219,1.47844 14.34374,2.375 23.21875,2.375 9.40907,0 17.96154,-1.01556 24.34375,-2.65625 l 0,-29.625 -15.25,11.0625 -9.84375,-17.90625 z"
+               id="rect3018"
+               inkscape:connector-curvature="0" />
+            <text
+               xml:space="preserve"
+               style="font-size:18.03644562px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+               id="text3798"
+               sodipodi:linespacing="125%"
+               inkscape:transform-center-x="-3.7289155"
+               inkscape:transform-center-y="39.955399"><textPath
+                 xlink:href="#path3831"
+                 id="textPath3833"><tspan
    id="tspan3800">                                WEB</tspan></textPath></text>
+          </g>
+        </g>
+      </g>
     </g>
   </g>
 </svg>
