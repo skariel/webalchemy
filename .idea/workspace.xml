@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logo.png" afterPath="$PROJECT_DIR$/logo.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logo.svg" afterPath="$PROJECT_DIR$/logo.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -66,7 +65,7 @@
       <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="9" selection-start="377" selection-end="377" vertical-scroll-proportion="0.19264448" vertical-offset="0" max-vertical-offset="4488">
+            <state line="1" column="19" selection-start="110" selection-end="110" vertical-scroll-proportion="0.036605656" vertical-offset="0" max-vertical-offset="4488">
               <folding />
             </state>
           </provider>
@@ -764,7 +763,11 @@
       <created>1389376338045</created>
       <updated>1389376338045</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="fixing logo">
+      <created>1389377054017</created>
+      <updated>1389377054017</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -821,9 +824,9 @@
     <MESSAGE value="added a logo" />
     <MESSAGE value="typo fixed" />
     <MESSAGE value="logo" />
-    <MESSAGE value="fixing logo" />
     <MESSAGE value="png logo&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="png logo&#10;" />
+    <MESSAGE value="fixing logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing logo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -938,7 +941,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="9" selection-start="377" selection-end="377" vertical-scroll-proportion="0.19264448" vertical-offset="0" max-vertical-offset="4488">
+        <state line="1" column="19" selection-start="110" selection-end="110" vertical-scroll-proportion="0.036605656" vertical-offset="0" max-vertical-offset="4488">
           <folding />
         </state>
       </provider>
