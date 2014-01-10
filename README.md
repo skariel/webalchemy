@@ -1,4 +1,4 @@
-<img align="center" src="logo.svg" alt="Webalchemy">
+[Webalchemy]: https://github.com/skariel/webalchemy/blob/master/logo.svg "Webalchemy"
 
 powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado). it's [MIT licensed](LICENSE.txt)
 
