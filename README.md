@@ -1,5 +1,5 @@
-[Webalchemy]: logo.svg "Webalchemy"
-
+![Alt Webalchemy](https://raw2.github.com/skariel/webalchemy/master/logo.png "Webalchemy")
+                   
 powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado). it's [MIT licensed](LICENSE.txt)
 
 - Angular style TodoMVC [live demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
