@@ -470,8 +470,8 @@ def generate_static(App, writefile):
     mfn = os.path.realpath(__file__)
     mfn = os.path.dirname(mfn)
 
-    if hasattr(app, 'main_html_file_path'):
-        main_html_file_path = app.main_html_file_path
+    if hasattr(App, 'main_html_file_path'):
+        main_html_file_path = App.main_html_file_path
     else:
         main_html_file_path = None
 
