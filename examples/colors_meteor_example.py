@@ -1,6 +1,4 @@
-#
-# trying to reconstruct Meteor color application
-#
+'''trying to reconstruct Meteor color application'''
 
 import sys
 import os

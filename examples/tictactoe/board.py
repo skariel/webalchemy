@@ -116,7 +116,6 @@ class board:
         self.draw_x = self.rdoc.jsfunction('event')
         self.svg.events.add(click=self.draw_x)
 
-
     def __create_styles(self):
         self.stylesheet = self.rdoc.stylesheet
         vn = '#' + self.svg.varname
@@ -156,4 +155,3 @@ class board:
             stroke='green',
             strokeWidth=15
         )
-

@@ -1,8 +1,8 @@
-#
-# a massive multiplayer tictactoe server
-#
-# This is WIP, no quite working yet...
-#
+'''
+a massive multiplayer tictactoe server
+
+This is WIP, no quite working yet...
+'''
 
 import logging
 from tornado import gen

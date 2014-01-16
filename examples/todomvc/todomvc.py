@@ -1,3 +1,15 @@
+import sys
+import os
+
+PACKAGE_PARENT = '../../'
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
+
+from webalchemy.mvc import controller
+
+from os.path import dirname, join, normpath
+BASE_DIR = dirname(__file__)
+
 
 class Item:
     def __init__(self, text):
@@ -78,11 +90,9 @@ class ViewModel:
             self.itembeingedited = None
 
 
-from webalchemy.mvc import controller
-
 class AppTodoMvc:
 
-    main_html_file_path = 'static/template/index.html'
+    main_html_file_path = join(BASE_DIR, 'static/template/index.html')
 
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
