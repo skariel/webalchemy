@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\tornado\LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\jkeselma\Documents\GitHub\webalchemy\webalchemy\tornado\test\gettext_translations\extract_me.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/__init__.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/platform/asyncio.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/asyncio.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/auth.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/auth.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/test/csv_translations/fr_FR.csv" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/csv_translations/fr_FR.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/gen.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/gen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/test/gen_test.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/gen_test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/ioloop.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/ioloop.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/test/ioloop_test.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/ioloop_test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/log.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/log.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/test/log_test.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/log_test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/platform/twisted.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/platform/twisted.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/test/twisted_test.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/twisted_test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/test/templates/utf8.html" afterPath="$PROJECT_DIR$/webalchemy/tornado/test/templates/utf8.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/tornado/web.py" afterPath="$PROJECT_DIR$/webalchemy/tornado/web.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/webglearth.html" afterPath="$PROJECT_DIR$/webalchemy/examples/three_d_earth/webglearth.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -69,10 +53,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="8" selection-start="1154" selection-end="1154" vertical-scroll-proportion="0.0" vertical-offset="352" max-vertical-offset="4488">
+            <state line="8" column="76" selection-start="971" selection-end="971" vertical-scroll-proportion="0.19512194" vertical-offset="0" max-vertical-offset="4532">
               <folding />
             </state>
           </provider>
@@ -105,10 +89,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="auth.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="auth.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/tornado/auth.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="62" column="17" selection-start="2395" selection-end="2395" vertical-scroll-proportion="0.44973546" vertical-offset="939" max-vertical-offset="31746">
+            <state line="62" column="17" selection-start="2395" selection-end="2395" vertical-scroll-proportion="0.0" vertical-offset="939" max-vertical-offset="31746">
               <folding />
             </state>
           </provider>
@@ -162,10 +146,10 @@
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/serve_through_websocket.py" />
         <option value="$PROJECT_DIR$/webalchemy/examples/todomvc/todomvc.py" />
         <option value="$PROJECT_DIR$/VERSION" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
         <option value="$PROJECT_DIR$/webalchemy/server.py" />
         <option value="$PROJECT_DIR$/webalchemy/tornado/auth.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -781,13 +765,18 @@
       <created>1389791418188</created>
       <updated>1389791418188</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="update Tornado to 3.2">
+      <created>1389872973791</created>
+      <updated>1389872973791</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
     <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -797,12 +786,11 @@
       <window_info id="Debug" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16987355" sideWeight="0.39940238" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24738868" sideWeight="0.35756972" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24738868" sideWeight="0.35756972" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -815,7 +803,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="fixing a typo" />
     <MESSAGE value="added webgl earth example" />
     <MESSAGE value="better control to 3d-Earth example" />
     <MESSAGE value="low resolution for earth 3d" />
@@ -840,7 +827,8 @@
     <MESSAGE value="logo" />
     <MESSAGE value="typos in readme" />
     <MESSAGE value="a few fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="a few fixes" />
+    <MESSAGE value="update Tornado to 3.2" />
+    <option name="LAST_COMMIT_MESSAGE" value="update Tornado to 3.2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -927,13 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="8" selection-start="1154" selection-end="1154" vertical-scroll-proportion="0.0" vertical-offset="286" max-vertical-offset="4488">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="118" column="21" selection-start="4321" selection-end="4321" vertical-scroll-proportion="0.0" vertical-offset="2245" max-vertical-offset="3212">
@@ -957,7 +938,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/tornado/auth.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="17" selection-start="2395" selection-end="2395" vertical-scroll-proportion="0.44973546" vertical-offset="939" max-vertical-offset="31746">
+        <state line="62" column="17" selection-start="2395" selection-end="2395" vertical-scroll-proportion="0.0" vertical-offset="939" max-vertical-offset="31746">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="76" selection-start="971" selection-end="971" vertical-scroll-proportion="0.19512194" vertical-offset="0" max-vertical-offset="4532">
           <folding />
         </state>
       </provider>
