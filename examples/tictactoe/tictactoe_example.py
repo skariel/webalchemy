@@ -5,9 +5,9 @@
 #
 
 import logging
-from webalchemy.tornado import gen
+from tornado import gen
 
-from webalchemy.examples.tictactoe.board import board
+from board import board
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -23,6 +23,3 @@ class TickTackToeApp:
 
         self.board = board(self.rdoc, 13, 500.0)
         self.rdoc.body.append(self.board.svg)
-
-
-

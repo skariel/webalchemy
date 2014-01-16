@@ -16,7 +16,7 @@ import tornado.websocket
 
 from tornado import gen
 
-from webalchemy.remotedocument import RemoteDocument
+from .remotedocument import RemoteDocument
 
 # logger for internal purposes
 log = logging.getLogger(__name__)
@@ -125,7 +125,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     if r is not None:
                         yield r
                 elif message != 'done':
-                    raise Exception('bad message received: '+str(message))
+                    raise Exception('bad message received: ' + str(message))
 
             yield self.flush_dom()
         except:
@@ -366,12 +366,12 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     ssl_cert_file = kwargs.get('cert_file', 'mydomain.crt')
     ssl_key_file = kwargs.get('ket_file', 'mydomain.key')
     ws_explicit_route = kwargs.get('ws_explicit_route', r'websocket')
-    ws_route = r'/'+ws_explicit_route+r'/(.*)'
+    ws_route = r'/' + ws_explicit_route + r'/(.*)'
     main_explicit_route = kwargs.get('main_route', None)
     if not main_explicit_route:
         main_route = r'/(.*)'
     else:
-        main_route = r'/'+main_explicit_route+r'/(.*)'
+        main_route = r'/' + main_explicit_route + r'/(.*)'
 
     if hasattr(app, 'main_html_file_path'):
         main_html_file_path = app.main_html_file_path
@@ -414,14 +414,14 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
                 if fnjs == 'include':
                     if hasattr(app, 'include'):
                         for i in app.include:
-                            lines.append('<script src="'+i+'"></script>\n')
+                            lines.append('<script src="' + i + '"></script>\n')
                     continue
                 if fnjs == 'meta':
                     if hasattr(app, 'meta'):
                         for m in app.meta:
                             js = '<meta '
                             for a, v in m.items():
-                                js += a+'="'+v+'" '
+                                js += a + '="' + v + '" '
                             js += '>\n'
                             lines.append(js)
                     continue
@@ -497,14 +497,14 @@ def generate_static(App, writefile):
                 if fnjs == 'include':
                     if hasattr(App, 'include'):
                         for i in App.include:
-                            lines.append('<script src="'+i+'"></script>\n')
+                            lines.append('<script src="' + i + '"></script>\n')
                     continue
                 if fnjs == 'meta':
                     if hasattr(App, 'meta'):
                         for m in App.meta:
                             js = '<meta '
                             for a, v in m.items():
-                                js += a+'="'+v+'" '
+                                js += a + '="' + v + '" '
                             js += '>\n'
                             lines.append(js)
                     continue
@@ -525,6 +525,3 @@ def generate_static(App, writefile):
 
     with open(writefile, 'w') as f:
         f.write(static_html)
-
-
-
