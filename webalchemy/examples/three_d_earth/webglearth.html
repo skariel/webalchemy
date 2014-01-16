@@ -258,19 +258,19 @@ var Earth = Class.$extend({
         this.renderer.render(this.scene, this.camera);
     },
     createSphere: function(radius, segments) {
-        var geometry,material;
+        var material,geometry;
         geometry = new THREE.SphereGeometry(radius, segments, segments);
         material = new THREE.MeshPhongMaterial({"map":THREE.ImageUtils.loadTexture("static/lowres_noclouds.jpg"),"bumpMap":THREE.ImageUtils.loadTexture("static/lowres_elevbump.jpg"),"bumpScale":0.005,"specularMap":THREE.ImageUtils.loadTexture("static/lowres_water.png"),"specular":new THREE.Color("grey")});
         return new THREE.Mesh(geometry, material);
     },
     createClouds: function(radius, segments) {
-        var geometry,material;
+        var material,geometry;
         geometry = new THREE.SphereGeometry((radius + 0.005), segments, segments);
         material = new THREE.MeshPhongMaterial({"map":THREE.ImageUtils.loadTexture("static/lowres_fairclouds.png"),"transparent":true});
         return new THREE.Mesh(geometry, material);
     },
     createStars: function(radius, segments) {
-        var geometry,material;
+        var material,geometry;
         geometry = new THREE.SphereGeometry(radius, segments, segments);
         material = new THREE.MeshBasicMaterial({"map":THREE.ImageUtils.loadTexture("static/lowres_starfield.png"),"side":THREE.BackSide});
         return new THREE.Mesh(geometry, material);
@@ -287,10 +287,10 @@ __v3.app= {};
 __v3.setAttribute("id","__v3");
 document.body.appendChild(__v3);
 __v3["innerHTML"]="Powered by <a href='https://github.com/skariel/webalchemy'>Webalchemy</a><br/>Adapted from <a href='https://github.com/turban/webgl-earth/blob/master/index.html'>this</a><br/>Pure Python source is <a href='https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py'>here</a>";
-__v3.style["top"]="10px";
-__v3.style["position"]="absolute";
-__v3.style["color"]="#FFF";
 __v3.style["left"]="10px";
+__v3.style["top"]="10px";
+__v3.style["color"]="#FFF";
+__v3.style["position"]="absolute";
 __v1.render();
 </script>
 </html> 

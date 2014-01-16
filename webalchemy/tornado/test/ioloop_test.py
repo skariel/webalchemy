@@ -5,13 +5,14 @@ from __future__ import absolute_import, division, print_function, with_statement
 import contextlib
 import datetime
 import functools
+import logging
 import socket
 import sys
 import threading
 import time
 
 from webalchemy.tornado import gen
-from webalchemy.tornado.ioloop import IOLoop, TimeoutError
+from webalchemy.tornado.ioloop import IOLoop, PollIOLoop, TimeoutError
 from webalchemy.tornado.stack_context import ExceptionStackContext, StackContext, wrap, NullContext
 from webalchemy.tornado.testing import AsyncTestCase, bind_unused_port
 from webalchemy.tornado.test.util import unittest, skipIfNonUnix, skipOnTravis
@@ -328,6 +329,7 @@ class TestIOLoopRunSync(unittest.TestCase):
         def f():
             yield gen.Task(self.io_loop.add_timeout, self.io_loop.time() + 1)
         self.assertRaises(TimeoutError, self.io_loop.run_sync, f, timeout=0.01)
+
 
 if __name__ == "__main__":
     unittest.main()
