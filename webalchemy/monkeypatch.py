@@ -1,4 +1,3 @@
-import copy
 from pythonium.veloce.veloce import Veloce
 
 def monkeypatch_pythonium():
