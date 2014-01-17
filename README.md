@@ -2,17 +2,15 @@
 
 [MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/tornado). Some examples:
 
-- Angular style TodoMVC [live demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
-- Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py) (this screencast is old, still containing some JS. a new one is WIP)
-- WebGL Earth [live demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
+- Angular style TodoMVC [demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
+- Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor_example.py) (this screencast is old, new code contains no JS)
+- WebGL Earth [demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py)
 
 ##Getting Started
 
 ###Installation
 
-* Make sure you use Python3
-* Copy the webalchemy directory to your project root directory (yeah, poorman's install, never fails!)
-* no external dependencies, all Pure Python, all included. Arriving to PIP soon :)
+Make sure you are using Python3. Then`pip install webalchemy`. Note this doesn't installs the examples. For this please download the [zip](https://github.com/skariel/webalchemy/archive/master.zip)
 
 ###Tutorial and Documentation
 
@@ -30,10 +28,14 @@ to serve through a websocket just feed it to the run function and set your brows
 
 ```python
 from webalchemy import server
+from myapp import HelloWorldApp
 server.run(HellowWorldApp)
 ```
 
-Try to change the header text content and save the file, see how the client changes accordingly. Lets put some style:
+Try to change the header text content and save the file, see how the client changes accordingly.
+Note that the App has to be imported for the live-editing to work correctly.
+
+Lets put some style:
 
 ```Python
 class HellowWorldApp:
@@ -47,7 +49,7 @@ class HellowWorldApp:
         )
 ```
 
-Want to use css rules to style all h1`s? no problem!
+Want to use CSS rules to style all h1`s? no problem!
 
 ```Python
 class HellowWorldApp:
@@ -84,7 +86,7 @@ def clicked(self):
     rpc(self.handle_click_on_backend, 'some message', 'just so you see how to pass paramaters')
 ```
 
-In the server we can do somthing like this:
+In the server we can do something like this:
 
 ```Python
 def handle_click_on_backend(self, sender_id, m1, m2):
@@ -139,7 +141,7 @@ Meanwhile take a look in the examples below.
 I also suggest you play a bit, try making a few containers - you can spread them across multiple Python files. It's not too complicated :)
 
 
-See examples below, they demonstrate a lot more than the above. Further docs and tutorials are WIP
+The examples below demonstrate a few more features.
 
 ####Example 1: Realtime Meteor Colors:
 
@@ -147,11 +149,9 @@ We "translated" Meteor colors app to webalchemy. The app can be seen in action [
 
 ```python
 from webalchemy import server
-from webalchemy.examples.colors_meteor_example import ColorsMeteorApp
+from examples.colors_meteor_example import ColorsMeteorApp
 server.run(ColorsMeteorApp)
 ```
-
-Note this example still contains a bit of JS, it will be translated to pure Python soon.
 
 ####Example 2: TodoMVC:
 
@@ -159,7 +159,7 @@ This is a client-only app. It can be served from a websocket like this:
 
 ```python
 from webalchemy import server
-from webalchemy.examples.todomvc.todomvc import AppTodoMvc as app
+from examples.todomvc.todomvc import AppTodoMvc as app
 server.run(app)
 ```
 
@@ -167,7 +167,7 @@ or it can be "frozen" to be served from a static folder (see [live demo](http://
 
 ```Python
 from webalchemy import server
-from webalchemy.examples.todomvc.todomvc import AppTodoMvc as app
+from examples.todomvc.todomvc import AppTodoMvc as app
 server.generate_static(app, writefile='todomvc.html')
 ```
 
@@ -177,7 +177,7 @@ more on this app [here](https://github.com/skariel/webalchemy/tree/master/webalc
 
 ```python
 from webalchemy import server
-from webalchemy.examples.three_d_earth.three_d_earth import ThreeDEarth
+from examples.three_d_earth.three_d_earth import ThreeDEarth
 server.run(ThreeDEarth)
 ```
 

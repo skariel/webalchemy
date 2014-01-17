@@ -4,13 +4,11 @@ from setuptools import setup
 
 
 def readme():
-    with open('README.md') as f:
-        return f.read()
+    return '''Modern web development with Python3. Check the homepage for details'''
 
 
 def version():
-    with open('VERSION') as f:
-        return f.read()
+    return '0.2.3'
 
 setup(
     name='Webalchemy',
@@ -39,3 +37,4 @@ setup(
     include_package_data=True,
     zip_safe=False,
 )
+
