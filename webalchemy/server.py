@@ -9,14 +9,14 @@ import os.path
 from types import ModuleType
 from collections import OrderedDict
 
-import webalchemy.tornado
-import webalchemy.tornado.web
-import webalchemy.tornado.ioloop
-import webalchemy.tornado.websocket
+import tornado
+import tornado.web
+import tornado.ioloop
+import tornado.websocket
 
-from webalchemy.tornado import gen
+from tornado import gen
 
-from webalchemy.remotedocument import RemoteDocument
+from .remotedocument import RemoteDocument
 
 # logger for internal purposes
 log = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def _generate_session_id():
     return str(random.randint(0, 1e16))
 
 
-class _MainHandler(webalchemy.tornado.web.RequestHandler):
+class _MainHandler(tornado.web.RequestHandler):
 
     def initialize(self, **kwargs):
         log.info('Initiallizing new app!')
@@ -41,7 +41,7 @@ class _MainHandler(webalchemy.tornado.web.RequestHandler):
         self.write(self.main_html)
 
 
-class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
+class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     @gen.coroutine
     def initialize(self, **kwargs):
@@ -125,7 +125,7 @@ class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
                     if r is not None:
                         yield r
                 elif message != 'done':
-                    raise Exception('bad message received: '+str(message))
+                    raise Exception('bad message received: ' + str(message))
 
             yield self.flush_dom()
         except:
@@ -247,7 +247,7 @@ class WebSocketHandler(webalchemy.tornado.websocket.WebSocketHandler):
 
 @gen.coroutine
 def async_delay(secs):
-    yield gen.Task(webalchemy.tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
+    yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
 
 
 def _dreload(module, dreload_blacklist_starting_with, just_visit=False):
@@ -357,7 +357,7 @@ class PrivateDataStore:
 def run(app=None, host='127.0.0.1', port=8080, **kwargs):
 
     static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
-    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'webalchemy.tornado'))
+    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'tornado'))
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
     session_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
@@ -366,12 +366,12 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     ssl_cert_file = kwargs.get('cert_file', 'mydomain.crt')
     ssl_key_file = kwargs.get('ket_file', 'mydomain.key')
     ws_explicit_route = kwargs.get('ws_explicit_route', r'websocket')
-    ws_route = r'/'+ws_explicit_route+r'/(.*)'
+    ws_route = r'/' + ws_explicit_route + r'/(.*)'
     main_explicit_route = kwargs.get('main_route', None)
     if not main_explicit_route:
         main_route = r'/(.*)'
     else:
-        main_route = r'/'+main_explicit_route+r'/(.*)'
+        main_route = r'/' + main_explicit_route + r'/(.*)'
 
     if hasattr(app, 'main_html_file_path'):
         main_html_file_path = app.main_html_file_path
@@ -414,14 +414,14 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
                 if fnjs == 'include':
                     if hasattr(app, 'include'):
                         for i in app.include:
-                            lines.append('<script src="'+i+'"></script>\n')
+                            lines.append('<script src="' + i + '"></script>\n')
                     continue
                 if fnjs == 'meta':
                     if hasattr(app, 'meta'):
                         for m in app.meta:
                             js = '<meta '
                             for a, v in m.items():
-                                js += a+'="'+v+'" '
+                                js += a + '="' + v + '" '
                             js += '>\n'
                             lines.append(js)
                     continue
@@ -435,8 +435,8 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     if ssl:
         main_html = main_html.replace('ws://', 'wss://')
 
-    # setting-up the webalchemy.tornado server
-    application = webalchemy.tornado.web.Application([
+    # setting-up the tornado server
+    application = tornado.web.Application([
         (ws_route, WebSocketHandler, dict(local_doc_class=app,
                                           shared_wshandlers=shared_wshandlers,
                                           shared_data=shared_data,
@@ -448,7 +448,7 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     ], static_path=static_path)
     au = _AppUpdater(application, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
-    webalchemy.tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
+    tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     if not ssl:
         application.listen(port)
     else:
@@ -462,7 +462,7 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
         })
 
     log.info('starting Tornado event loop')
-    webalchemy.tornado.ioloop.IOLoop.instance().start()
+    tornado.ioloop.IOLoop.instance().start()
 
 
 def generate_static(App, writefile):
@@ -497,14 +497,14 @@ def generate_static(App, writefile):
                 if fnjs == 'include':
                     if hasattr(App, 'include'):
                         for i in App.include:
-                            lines.append('<script src="'+i+'"></script>\n')
+                            lines.append('<script src="' + i + '"></script>\n')
                     continue
                 if fnjs == 'meta':
                     if hasattr(App, 'meta'):
                         for m in App.meta:
                             js = '<meta '
                             for a, v in m.items():
-                                js += a+'="'+v+'" '
+                                js += a + '="' + v + '" '
                             js += '>\n'
                             lines.append(js)
                     continue
@@ -525,6 +525,3 @@ def generate_static(App, writefile):
 
     with open(writefile, 'w') as f:
         f.write(static_html)
-
-
-

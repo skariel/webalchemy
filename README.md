@@ -1,12 +1,10 @@
 ![Alt Webalchemy](https://raw2.github.com/skariel/webalchemy/master/logo.png "Webalchemy")
-                   
-[MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/webalchemy.tornado). Some examples:
+
+[MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/tornado). Some examples:
 
 - Angular style TodoMVC [live demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
 - Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py) (this screencast is old, still containing some JS. a new one is WIP)
 - WebGL Earth [live demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
-
-Contributions and feedback are welcome! Open a pull request, open an issue, mail me, or just post on the [mailing list](https://groups.google.com/forum/#!forum/webalchemy).
 
 ##Getting Started
 
@@ -35,7 +33,7 @@ from webalchemy import server
 server.run(HellowWorldApp)
 ```
 
-Try changing the header text and save the file, see how the client changes accordingly. Lets put some style:
+Try to change the header text content and save the file, see how the client changes accordingly. Lets put some style:
 
 ```Python
 class HellowWorldApp:
@@ -65,20 +63,20 @@ class HellowWorldApp:
         )
 ```
 
-Lets add a click listener by using the `events` property of elements:
+Lets add a click listener now by using the elements `events` property like this:
 
  ```Python
 self.rdoc.body.element(h1='Hello World!!!').events.add(click=self.clicked, translate=True)
  ```
 
-in the following simple event each click deletes the 1st letter of the heading. This is run client side, it is translated to JS behind the scenes:
+lets define a simple event in which each click deletes the 1st letter in the heading. This is run on the client, it is translated to JS behind the scenes:
 
 ```Python
 def clicked(self):
     self.textContent = self.textContent[1:]
 ```
 
-If we want to notify the server that the button was clicked we can use an RPC call from the client to the server. The function above should be added one line:
+In addition, if we want to notify the server that the button was clicked we could use an RPC call from the client to the server. The function above should be added one line:
 
 ```Python
 def clicked(self):
@@ -86,14 +84,14 @@ def clicked(self):
     rpc(self.handle_click_on_backend, 'some message', 'just so you see how to pass paramaters')
 ```
 
-In the server we can do something like this:
+In the server we can do somthing like this:
 
 ```Python
 def handle_click_on_backend(self, sender_id, m1, m2):
     self.rdoc.body.element(h1=m1+m2)
 ```
 
-Now the whole program looks like this:
+The program looks like this:
 
 ```Python
 class HellowWorldApp:

@@ -8,7 +8,7 @@ from types import FunctionType
 from inspect import getsource
 from textwrap import dedent
 
-from webalchemy.pythonium.veloce.veloce import Veloce
+from pythonium.veloce.veloce import Veloce
 
 from webalchemy.saferef import safeRef
 from webalchemy.htmlparser import get_element_ids
