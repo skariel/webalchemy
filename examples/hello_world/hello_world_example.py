@@ -1,12 +1,4 @@
-import sys
-import os
-
-PACKAGE_PARENT = '../../'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-
 from webalchemy import server
-
 
 class HellowWorldApp:
     def initialize(self, **kwargs):
@@ -28,6 +20,8 @@ class HellowWorldApp:
         self.rdoc.body.element(h1=m1+m2)
 
 if __name__ == '__main__':
+    # this import is necessary because of the live editing. Everything else works OK without it
+    from hello_world_example import HellowWorldApp
     server.run(HellowWorldApp)
 
 

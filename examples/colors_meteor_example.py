@@ -1,13 +1,5 @@
 '''trying to reconstruct Meteor color application'''
 
-import sys
-import os
-
-PACKAGE_PARENT = '..'
-SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-
-
 from webalchemy import server
 from webalchemy.widgets.basic.menu import Menu
 
@@ -21,7 +13,7 @@ class ColorsMeteorApp:
             for k, v in d2.items():
                 d1[k] = d1.get(k, 0) + v
         add_update(sdata, {
-            'fooooo': 0,
+            'boo': 0,
             'baar': 0,
             'wowowowowo!!!': 0,
             'this is cool': 0,
@@ -174,4 +166,6 @@ class ColorsMeteorApp:
         return m
 
 if __name__ == '__main__':
+    # this self import is needed to do live-editing. Everything else works without it
+    from colors_meteor_example import ColorsMeteorApp
     server.run(ColorsMeteorApp)

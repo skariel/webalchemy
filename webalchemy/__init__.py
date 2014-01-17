@@ -1,5 +1,4 @@
-import pythonium
-import .monkeypatch import monkeypatch
+from .monkeypatch import monkeypatch
 
 monkeypatch()
 

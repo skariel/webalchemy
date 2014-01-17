@@ -10,4 +10,4 @@ from todomvc import AppTodoMvc as app
 
 
 if __name__ == '__main__':
-    server.generate_static(app, writefile='todomvc.html', main_html_file_path='static/template/index.html')
+    server.generate_static(app, writefile='todomvc.html')

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-import sys
 
 
 def readme():
@@ -32,8 +31,8 @@ setup(
     author="Jose Ariel Keselman",
     author_email='skariel@gmail.com',
     install_requires=[
-        "tornado==3.2",
-        "pythonium==0.6.2"
+        "tornado>=3.2",
+        "pythonium>=0.6.2"
     ],
     license="MIT",
     packages=['webalchemy'],
