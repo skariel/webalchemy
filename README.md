@@ -1,4 +1,4 @@
-![Alt Webalchemy](https://raw2.github.com/skariel/webalchemy/master/logo.png "Webalchemy")
+![Alt Webalchemy](https://i.imgur.com/su7TdAd.png "Webalchemy")
 
 [MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/tornado). Some examples:
 
