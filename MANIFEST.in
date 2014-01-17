@@ -1,0 +1,2 @@
+include webalchemy/*
+include webalchemy/js/*

@@ -8,7 +8,7 @@ def readme():
 
 
 def version():
-    return '0.2.4'
+    return '0.2.6'
 
 setup(
     name='Webalchemy',
