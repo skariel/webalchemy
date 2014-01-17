@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-
+from glob import glob
 
 def readme():
     return '''Modern web development with Python3. Check the homepage for details'''
 
 
 def version():
-    return '0.2.3'
+    return '0.2.4'
 
 setup(
     name='Webalchemy',
@@ -16,6 +16,10 @@ setup(
     description='Modern web development with Python',
     long_description=readme(),
     keywords='web development, websocket',
+    data_files=[
+        ('webalchemy', ['webalchemy/main.html']),
+        ('webalchemy/js', glob('webalchemy/js/*'))
+    ],
     classifiers=[
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',

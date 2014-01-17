@@ -2,4 +2,4 @@ from .monkeypatch import monkeypatch
 
 monkeypatch()
 
-version = "0.2.3"
+version = "0.2.4"
