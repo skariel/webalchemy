@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webalchemy.iws" />
@@ -56,7 +55,7 @@
       <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="76" selection-start="971" selection-end="971" vertical-scroll-proportion="0.19512194" vertical-offset="0" max-vertical-offset="4532">
+            <state line="106" column="5" selection-start="4153" selection-end="4153" vertical-scroll-proportion="0.09756097" vertical-offset="2244" max-vertical-offset="4532">
               <folding />
             </state>
           </provider>
@@ -769,12 +768,16 @@
       <created>1389872973791</created>
       <updated>1389872973791</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="request for contributions in readme">
+      <created>1389873245679</created>
+      <updated>1389873245679</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -786,7 +789,7 @@
       <window_info id="Debug" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16987355" sideWeight="0.39940238" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24738868" sideWeight="0.35756972" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24738868" sideWeight="0.35756972" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -803,7 +806,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="added webgl earth example" />
     <MESSAGE value="better control to 3d-Earth example" />
     <MESSAGE value="low resolution for earth 3d" />
     <MESSAGE value="all examples working" />
@@ -828,7 +830,8 @@
     <MESSAGE value="typos in readme" />
     <MESSAGE value="a few fixes" />
     <MESSAGE value="update Tornado to 3.2" />
-    <option name="LAST_COMMIT_MESSAGE" value="update Tornado to 3.2" />
+    <MESSAGE value="request for contributions in readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="request for contributions in readme" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -945,7 +948,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="76" selection-start="971" selection-end="971" vertical-scroll-proportion="0.19512194" vertical-offset="0" max-vertical-offset="4532">
+        <state line="106" column="5" selection-start="4153" selection-end="4153" vertical-scroll-proportion="0.09756097" vertical-offset="2244" max-vertical-offset="4532">
           <folding />
         </state>
       </provider>
