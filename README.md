@@ -6,6 +6,8 @@
 - Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor_example.py) (this screencast is old, new code contains no JS)
 - WebGL Earth [demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py)
 
+Contributions are welcome! open a pull request, open an issue, mail me code, or post in the [mailin list](https://groups.google.com/forum/#!forum/webalchemy)
+
 ##Getting Started
 
 ###Installation
@@ -145,7 +147,7 @@ The examples below demonstrate a few more features.
 
 ####Example 1: Realtime Meteor Colors:
 
-We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory ([here](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/colors_meteor_example.py)), it can be executed like this:
+We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory ([here](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor_example.py)), it can be executed like this:
 
 ```python
 from webalchemy import server
@@ -171,7 +173,7 @@ from examples.todomvc.todomvc import AppTodoMvc as app
 server.generate_static(app, writefile='todomvc.html')
 ```
 
-more on this app [here](https://github.com/skariel/webalchemy/tree/master/webalchemy/examples/todomvc)
+more on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
 
 ####Example 3: WebGL Earth:
 
@@ -181,7 +183,7 @@ from examples.three_d_earth.three_d_earth import ThreeDEarth
 server.run(ThreeDEarth)
 ```
 
-see frozen app [here](http://skariel.org/webalchemy/webglearth.html) and source [here](https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py)
+see frozen app [here](http://skariel.org/webalchemy/webglearth.html) and source [here](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py)
 
 ##Philosophy
 
