@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="" />
+    <list default="true" id="6e981ed9-3bd4-47fc-8b4e-caf2282861d0" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="webalchemy.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -50,10 +53,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="server.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="server.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="505" column="25" selection-start="19197" selection-end="19197" vertical-scroll-proportion="0.40443507" vertical-offset="10331" max-vertical-offset="11330">
+            <state line="505" column="25" selection-start="19197" selection-end="19197" vertical-scroll-proportion="-14.24" vertical-offset="10358" max-vertical-offset="11330">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="6" selection-start="226" selection-end="226" vertical-scroll-proportion="0.6111111" vertical-offset="0" max-vertical-offset="972">
               <folding />
             </state>
           </provider>
@@ -86,7 +98,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/webalchemy/examples/tictactoe/tictactoe_example.py" />
         <option value="$PROJECT_DIR$/webalchemy/main.html" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/freeze_app.py" />
         <option value="$PROJECT_DIR$/webalchemy/widgets/basic/menu.py" />
@@ -102,6 +113,7 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/webalchemy/examples/three_d_earth/three_d_earth.py" />
         <option value="$PROJECT_DIR$/webalchemy/server.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -176,8 +188,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="recentsLimit" value="5" />
-    <property name="restartRequiresConfirmation" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/webalchemy/examples/hello_world/hello_world_example.py" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="FullScreen" value="false" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -664,7 +676,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="66" y="-8" width="1862" height="1096" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32968128" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -738,6 +750,20 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="505" column="25" selection-start="19197" selection-end="19197" vertical-scroll-proportion="0.0" vertical-offset="11110" max-vertical-offset="11330">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webalchemy/widgets/basic/menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="786" selection-end="786" vertical-scroll-proportion="0.0" vertical-offset="440" max-vertical-offset="594">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="8" selection-start="1124" selection-end="1124" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4488">
@@ -818,7 +844,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webalchemy/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="505" column="25" selection-start="19197" selection-end="19197" vertical-scroll-proportion="0.40443507" vertical-offset="10331" max-vertical-offset="11330">
+        <state line="505" column="25" selection-start="19197" selection-end="19197" vertical-scroll-proportion="-14.24" vertical-offset="10358" max-vertical-offset="11330">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="6" selection-start="226" selection-end="226" vertical-scroll-proportion="0.6111111" vertical-offset="0" max-vertical-offset="972">
           <folding />
         </state>
       </provider>

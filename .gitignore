@@ -24,3 +24,5 @@ develop-eggs/
 #Translations
 *.mo
 
+# IDEs
+.idea/
