@@ -1,2 +1,2 @@
-tornado==3.2
-pythonium==0.6.2
+tornado>=3.1
+pythonium>=0.6.2
