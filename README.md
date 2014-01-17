@@ -6,7 +6,7 @@
 - Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor_example.py) (this screencast is old, new code contains no JS)
 - WebGL Earth [demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py)
 
-Contributions are welcome! open a pull request, open an issue, mail me code, or post in the [mailin list](https://groups.google.com/forum/#!forum/webalchemy)
+Contributions are welcome! open a pull request, open an issue, mail me code, or post in the [mailing list](https://groups.google.com/forum/#!forum/webalchemy)
 
 ##Getting Started
 
