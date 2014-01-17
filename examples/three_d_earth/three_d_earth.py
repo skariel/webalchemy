@@ -127,7 +127,7 @@ class ThreeDEarth:
         e = self.rdoc.body.element('p')
         e.prop.innerHTML = "Powered by <a href='https://github.com/skariel/webalchemy'>Webalchemy</a><br/>" +\
             "Adapted from <a href='https://github.com/turban/webgl-earth/blob/master/index.html'>this</a><br/>" +\
-            "Pure Python source is <a href='https://github.com/skariel/webalchemy/blob/master/webalchemy/examples/three_d_earth/three_d_earth.py'>here</a>"
+            "Pure Python source is <a href='https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py'>here</a>"
         e.style(
             color='#FFF',
             position='absolute',
