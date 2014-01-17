@@ -1,0 +1,14 @@
+setup.py
+Webalchemy.egg-info/PKG-INFO
+Webalchemy.egg-info/SOURCES.txt
+Webalchemy.egg-info/dependency_links.txt
+Webalchemy.egg-info/not-zip-safe
+Webalchemy.egg-info/requires.txt
+Webalchemy.egg-info/top_level.txt
+webalchemy/__init__.py
+webalchemy/htmlparser.py
+webalchemy/monkeypatch.py
+webalchemy/mvc.py
+webalchemy/remotedocument.py
+webalchemy/saferef.py
+webalchemy/server.py

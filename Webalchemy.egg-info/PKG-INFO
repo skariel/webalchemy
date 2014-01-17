@@ -1,0 +1,18 @@
+Metadata-Version: 1.1
+Name: Webalchemy
+Version: 0.2.3
+Summary: Modern web development with Python
+Home-page: https://github.com/skariel/webalchemy
+Author: Jose Ariel Keselman
+Author-email: skariel@gmail.com
+License: MIT
+Description: Modern web development with Python3. Check the homepage for details
+Keywords: web development,websocket
+Platform: UNKNOWN
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
