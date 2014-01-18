@@ -649,8 +649,8 @@ class RemoteDocument:
 
     def pop_all_code(self):
         code = ''.join(self.__code_strings)
-        self.__code_strings.clear()
-        self.__block_ixs.clear()
+        del self.__code_strings[:]
+        del self.__block_ixs[:]
         return code
 
     def pop_line(self):
