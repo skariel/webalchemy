@@ -1,3 +1,4 @@
+import io
 import os
 import imp
 import sys
@@ -354,6 +355,82 @@ class PrivateDataStore:
         del self.d[uid]
 
 
+class HtmlWriter:
+
+    def __init__(self, output):
+        self.output = output
+
+    def write(self, text):
+        self.output.write(text)
+
+    def writeline(self, line):
+        self.write(line + '\n')
+
+    def write_script_tag(self, source, type='text/javascript'):
+        line = '<script type="' + type + '" src="' + source + '"></script>'
+        self.writeline(line)
+
+    def write_meta_tag(self, attributes):
+        self.write('<meta')
+        for attr, value in attributes:
+            self.write(' ' + attr + '="' + value + '"')
+        self.writeline('>')
+
+    def include(self, file_path):
+        with open(file_path, 'r') as f:
+            self.writeline(f.read())
+
+
+class MainHtml:
+
+    def __init__(self, app, file_path):
+        self.app = app
+        self.file_path = file_path
+        self.basedir = os.path.dirname(file_path)
+
+    def translate(self, writer, translator):
+        with open(self.file_path, 'r') as input_file:
+            for line in input_file:
+                if line.lstrip().startswith('-->'):
+                    tag = line.split()[1].strip()
+                    translator(writer, self.app, tag, self.basedir)
+                else:
+                    writer.writeline(line.rstrip('\r\n'))
+
+
+def main_html_translator(writer, app, tag, basedir):
+    if tag == 'websocket':
+        return
+
+    if tag == 'include':
+        if hasattr(app, 'include'):
+            for i in app.include:
+                writer.write_script_tag(i)
+        return
+
+    if tag == 'meta':
+        if hasattr(app, 'meta'):
+            for m in app.meta:
+                writer.write_meta_tag(m.items())
+        return
+
+    writer.include(os.path.join(basedir, tag))
+
+
+def get_main_html_for_app(app):
+    main_html_file_path = get_main_html_file_path(app)
+    return MainHtml(app, main_html_file_path)
+
+
+def get_main_html_file_path(app):
+    if hasattr(app, 'main_html_file_path'):
+        return app.main_html_file_path
+
+    main_dir = os.path.realpath(__file__)
+    main_dir = os.path.dirname(main_dir)
+    return os.path.join(main_dir, 'main.html')
+
+
 def run(app=None, host='127.0.0.1', port=8080, **kwargs):
 
     static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
@@ -372,11 +449,6 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
         main_route = r'/(.*)'
     else:
         main_route = r'/' + main_explicit_route + r'/(.*)'
-
-    if hasattr(app, 'main_html_file_path'):
-        main_html_file_path = app.main_html_file_path
-    else:
-        main_html_file_path = None
 
     if static_path_from_local_doc_base:
         mdl = sys.modules[app.__module__]
@@ -398,38 +470,11 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     tab_data_store = tab_data_store_class()
 
     # prepare main_html ...
-    mfn = os.path.realpath(__file__)
-    mfn = os.path.dirname(mfn)
-    if not main_html_file_path:
-        ffn = os.path.join(mfn, 'main.html')
-    else:
-        ffn = main_html_file_path
-    lines = []
-    with open(ffn, 'r') as f:
-        for l in f:
-            if l.lstrip().startswith('-->'):
-                fnjs = l.split()[1].strip()
-                if fnjs == 'websocket':
-                    continue
-                if fnjs == 'include':
-                    if hasattr(app, 'include'):
-                        for i in app.include:
-                            lines.append('<script src="' + i + '"></script>\n')
-                    continue
-                if fnjs == 'meta':
-                    if hasattr(app, 'meta'):
-                        for m in app.meta:
-                            js = '<meta '
-                            for a, v in m.items():
-                                js += a + '="' + v + '" '
-                            js += '>\n'
-                            lines.append(js)
-                    continue
-                fnjs = os.path.join(mfn, fnjs)
-                with open(fnjs, 'r') as fjs:
-                    l = fjs.read()
-            lines.append(l)
-    main_html = ''.join(lines)
+    template = get_main_html_for_app(app)
+    output = io.StringIO()
+    writer = HtmlWriter(output)
+    template.translate(writer, main_html_translator)
+    main_html = output.getvalue()
     main_html = main_html.replace('__WEBSOCKET__', ws_explicit_route)
     main_html = main_html.replace('__PORT__', str(port)).replace('__HOST__', host)
     if ssl:
