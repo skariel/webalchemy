@@ -39,7 +39,7 @@ class MainHtml:
     def __init__(self, app, file_path):
         self.app = app
         self.file_path = file_path
-        self.basedir = os.path.dirname(file_path)
+        self.basedir = os.path.dirname(__file__)
 
     def translate(self, writer, translator=_default_translator,
             line_processor=None):
