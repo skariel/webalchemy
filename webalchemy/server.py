@@ -17,6 +17,7 @@ import tornado.websocket
 from tornado import gen
 
 from .remotedocument import RemoteDocument
+from .mainhtml import generate_main_html_for_server, generate_static_main_html
 
 # logger for internal purposes
 log = logging.getLogger(__name__)
@@ -373,11 +374,6 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     else:
         main_route = r'/' + main_explicit_route + r'/(.*)'
 
-    if hasattr(app, 'main_html_file_path'):
-        main_html_file_path = app.main_html_file_path
-    else:
-        main_html_file_path = None
-
     if static_path_from_local_doc_base:
         mdl = sys.modules[app.__module__]
         mdl_fn = mdl.__file__
@@ -398,42 +394,8 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     tab_data_store = tab_data_store_class()
 
     # prepare main_html ...
-    mfn = os.path.realpath(__file__)
-    mfn = os.path.dirname(mfn)
-    if not main_html_file_path:
-        ffn = os.path.join(mfn, 'main.html')
-    else:
-        ffn = main_html_file_path
-    lines = []
-    with open(ffn, 'r') as f:
-        for l in f:
-            if l.lstrip().startswith('-->'):
-                fnjs = l.split()[1].strip()
-                if fnjs == 'websocket':
-                    continue
-                if fnjs == 'include':
-                    if hasattr(app, 'include'):
-                        for i in app.include:
-                            lines.append('<script src="' + i + '"></script>\n')
-                    continue
-                if fnjs == 'meta':
-                    if hasattr(app, 'meta'):
-                        for m in app.meta:
-                            js = '<meta '
-                            for a, v in m.items():
-                                js += a + '="' + v + '" '
-                            js += '>\n'
-                            lines.append(js)
-                    continue
-                fnjs = os.path.join(mfn, fnjs)
-                with open(fnjs, 'r') as fjs:
-                    l = fjs.read()
-            lines.append(l)
-    main_html = ''.join(lines)
-    main_html = main_html.replace('__WEBSOCKET__', ws_explicit_route)
-    main_html = main_html.replace('__PORT__', str(port)).replace('__HOST__', host)
-    if ssl:
-        main_html = main_html.replace('ws://', 'wss://')
+    main_html = generate_main_html_for_server(app, ws_explicit_route, port,
+            host, ssl)
 
     # setting-up the tornado server
     application = tornado.web.Application([
@@ -465,63 +427,8 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     tornado.ioloop.IOLoop.instance().start()
 
 
-def generate_static(App, writefile):
-    # prepare main_html ...
-    mfn = os.path.realpath(__file__)
-    mfn = os.path.dirname(mfn)
-
-    if hasattr(App, 'main_html_file_path'):
-        main_html_file_path = App.main_html_file_path
-    else:
-        main_html_file_path = None
-
-    if not main_html_file_path:
-        ffn = os.path.join(mfn, 'main.html')
-    else:
-        ffn = main_html_file_path
-    lines = []
-    with open(ffn, 'r') as f:
-        for l in f:
-            if l.strip() == '<body onload="init_communication()">':
-                l = '<body>'
-            if l.lstrip().startswith('-->'):
-                fnjs = l.split()[1].strip()
-                if fnjs in ['js/classy.js', 'js/weba.js']:
-                    mfn = os.path.realpath(__file__)
-                    mfn = os.path.dirname(mfn)
-                    fnjs = os.path.join(mfn, fnjs)
-                    with open(fnjs, 'r') as fjs:
-                        l = fjs.read()
-                    lines.append(l)
-                    continue
-                if fnjs == 'include':
-                    if hasattr(App, 'include'):
-                        for i in App.include:
-                            lines.append('<script src="' + i + '"></script>\n')
-                    continue
-                if fnjs == 'meta':
-                    if hasattr(App, 'meta'):
-                        for m in App.meta:
-                            js = '<meta '
-                            for a, v in m.items():
-                                js += a + '="' + v + '" '
-                            js += '>\n'
-                            lines.append(js)
-                    continue
-                if fnjs != 'websocket':
-                    continue
-            lines.append(l)
-    main_html = ''.join(lines)
-
-    static_html = []
-    for l in lines:
-        if l.lstrip().startswith('-->'):
-            rdoc = RemoteDocument()
-            app = App()
-            app.initialize(remote_document=rdoc, main_html=main_html)
-            l = rdoc.pop_all_code()
-        static_html.append(l)
-    static_html = ''.join(static_html)
-
+def generate_static(app, writefile):
+    static_html = generate_static_main_html(app)
     with open(writefile, 'w') as f:
         f.write(static_html)
+
