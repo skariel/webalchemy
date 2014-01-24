@@ -24,6 +24,10 @@ class HtmlWriter:
         for attr, value in attributes:
             self.write(' ' + attr + '="' + value + '"')
         self.writeline('>')
+        
+    def write_stylesheet_tag(self, source):
+        line = '<link rel="stylesheet" href="' + source + '">'
+        self.writeline(line)
 
     def include(self, file_path):
         with open(file_path, 'r') as f:
@@ -81,6 +85,11 @@ def generate_main_html_for_server(app, ws_explicit_route, port, host, ssl):
             if hasattr(app, 'meta'):
                 for m in app.meta:
                     writer.write_meta_tag(m.items())
+            return
+        if tag == 'stylesheets':
+            if hasattr(app, 'stylesheets'):
+                for s in app.stylesheets:
+                    writer.write_stylesheet_tag(s)
             return
         writer.include(os.path.join(basedir, tag))
 
