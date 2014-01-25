@@ -16,3 +16,16 @@ def read_config_from_app(app):
         settings.update(app.config)
     return settings
 
+def from_object(objname):
+    objname = str(objname)
+    if '.' in objname:
+        module, objname = objname.rsplit('.', 1)
+        obj = getattr(__import__(module, None, None, [objname]), objname)
+    else:
+        obj = __import__(objname)
+    cfg = dict()
+    for key in dir(obj):
+        if key.isupper():
+            cfg[key] = getattr(obj, key)
+    return cfg
+

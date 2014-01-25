@@ -30,7 +30,7 @@ class AppDummyWithConfig:
         pass
 
 
-class TestConfig(unittest.TestCase):
+class TestReadConfigFromApp(unittest.TestCase):
 
     def test_default_settings(self):
         cfg = config.read_config_from_app(AppDummyWithoutConfig)
@@ -46,6 +46,41 @@ class TestConfig(unittest.TestCase):
                 self.assertEqual(cfg[key], app.config[key])
             else:
                 self.assertEqual(cfg[key], config.DEFAULT_SETTINGS[key])
+
+
+class TestFromObject(unittest.TestCase):
+
+    def test_from_module(self):
+        cfg = config.from_object('settingsmodule')
+        self.assertEqual(3, len(cfg))
+        self.assertEqual('one', cfg['TEST_SETTING_1'])
+        self.assertEqual('two', cfg['TEST_SETTING_2'])
+        self.assertEqual(3, cfg['TEST_SETTING_3'])
+
+    def test_from_class(self):
+        cfg = config.from_object('settingsmodule.TestSettings')
+        self.assertEqual(3, len(cfg))
+        self.assertEqual(1, cfg['TEST_SETTING_1'])
+        self.assertEqual(2, cfg['TEST_SETTING_2'])
+        self.assertEqual('three', cfg['TEST_SETTING_3'])
+
+    def test_converts_objname_to_string(self):
+        class ModuleName:
+            def __str__(self):
+                return 'settingsmodule'
+        moduleName = ModuleName()
+        cfg = config.from_object(moduleName)
+        self.assertEqual(3, len(cfg))
+        self.assertEqual('one', cfg['TEST_SETTING_1'])
+        self.assertEqual('two', cfg['TEST_SETTING_2'])
+        self.assertEqual(3, cfg['TEST_SETTING_3'])
+
+    def test_module_from_package(self):
+        cfg = config.from_object('settings.module')
+        self.assertEqual(3, len(cfg))
+        self.assertEqual('one', cfg['TEST_SETTING_1'])
+        self.assertEqual('two', cfg['TEST_SETTING_2'])
+        self.assertEqual(3, cfg['TEST_SETTING_3'])
 
 
 if __name__ == '__main__':
