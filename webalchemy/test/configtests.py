@@ -108,5 +108,48 @@ class TestFromDict(unittest.TestCase):
         self.assertEqual(2, cfg['TEST_SETTING_2'])
 
 
+class TestConfig(unittest.TestCase):
+
+    def setUp(self):
+        self.cfg = config.from_dict(dict(
+                TEST_SETTING_1='eins',
+                TEST_SETTING_2='zwei',
+                TEST_SETTING_3='drei',
+                TEST_SETTING_4='vier',
+                TEST_SETTING_5='fünf',
+            ))
+
+    def test_from_object(self):
+        self.cfg.from_object('settingsmodule')
+        self.assertEqual(5, len(self.cfg))
+        self.assertEqual('one', self.cfg['TEST_SETTING_1'])
+        self.assertEqual('two', self.cfg['TEST_SETTING_2'])
+        self.assertEqual(3, self.cfg['TEST_SETTING_3'])
+        self.assertEqual('vier', self.cfg['TEST_SETTING_4'])
+        self.assertEqual('fünf', self.cfg['TEST_SETTING_5'])
+
+    def test_from_pyfile(self):
+        rootpath = os.path.join(os.path.dirname(__file__), 'settings')
+        self.cfg.from_pyfile('module.py', root=rootpath)
+        self.assertEqual('one', self.cfg['TEST_SETTING_1'])
+        self.assertEqual('two', self.cfg['TEST_SETTING_2'])
+        self.assertEqual(3, self.cfg['TEST_SETTING_3'])
+        self.assertEqual('vier', self.cfg['TEST_SETTING_4'])
+        self.assertEqual('fünf', self.cfg['TEST_SETTING_5'])
+
+    def test_from_dict(self):
+        d = {
+            'TEST_SETTING_1': 'one',
+            'TEST_SETTING_2': 'two',
+            'TEST_SETTING_3': 3,
+        }
+        self.cfg.from_dict(d)
+        self.assertEqual('one', self.cfg['TEST_SETTING_1'])
+        self.assertEqual('two', self.cfg['TEST_SETTING_2'])
+        self.assertEqual(3, self.cfg['TEST_SETTING_3'])
+        self.assertEqual('vier', self.cfg['TEST_SETTING_4'])
+        self.assertEqual('fünf', self.cfg['TEST_SETTING_5'])
+
+
 if __name__ == '__main__':
     unittest.main()

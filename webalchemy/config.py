@@ -63,3 +63,15 @@ class Config(dict):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def from_object(self, obj):
+        self.update(from_object(obj))
+
+    def from_pyfile(self, filename, root=None):
+        self.update(from_pyfile(filename, root))
+
+    def from_envvar(self, variable_name):
+        self.update(from_envvar(variable_name))
+
+    def from_dict(self, d):
+        self.update(from_dict(d))
+
