@@ -24,7 +24,7 @@ def read_config_from_app(app):
 def from_object(obj):
     if isinstance(obj, str):
         obj = _import_object(obj)
-    cfg = dict()
+    cfg = Config()
     for key in dir(obj):
         if key.isupper():
             cfg[key] = getattr(obj, key)
@@ -45,4 +45,21 @@ def from_pyfile(filename, root=None):
     with open(filename) as config_file:
         exec(compile(config_file.read(), filename, 'exec'), mod.__dict__)
     return from_object(mod)
+
+def from_envvar(variable_name):
+    value = os.environ.get(variable_name)
+    if not value:
+        return dict()
+    return from_pyfile(value)
+
+def from_dict(d):
+    cfg = Config()
+    cfg.update(d)
+    return cfg
+
+
+class Config(dict):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 

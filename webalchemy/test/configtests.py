@@ -98,5 +98,15 @@ class TestFromPyfile(unittest.TestCase):
         self.assertEqual(3, cfg['TEST_SETTING_3'])
 
 
+class TestFromDict(unittest.TestCase):
+
+    def test_from_dict(self):
+        orig = dict(TEST_SETTING_1='one', TEST_SETTING_2=2)
+        cfg = config.from_dict(orig)
+        self.assertEqual(2, len(cfg))
+        self.assertEqual('one', cfg['TEST_SETTING_1'])
+        self.assertEqual(2, cfg['TEST_SETTING_2'])
+
+
 if __name__ == '__main__':
     unittest.main()
