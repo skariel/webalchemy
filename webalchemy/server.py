@@ -5,6 +5,7 @@ import time
 import random
 import logging
 import os.path
+import linecache
 
 from types import ModuleType
 from collections import OrderedDict
@@ -283,6 +284,7 @@ def _dreload(module, dreload_blacklist_starting_with, just_visit=False):
         _reloaded_files.append(os.path.realpath(mdl.__file__))
         if not just_visit:
             log.info('reloading: ' + str(mdl.__name__))
+            linecache.clearcache()
             imp.reload(mdl)
         else:
             log.info('visiting: ' + str(mdl.__name__))
