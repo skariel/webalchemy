@@ -365,11 +365,9 @@ def run(app=None, **kwargs):
     port = settings['SERVER_PORT']
 
     static_path_from_local_doc_base = settings['SERVER_STATIC_PATH']
-    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'tornado'))
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
     session_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
-    additional_monitored_files = settings['SERVER_MONITORED_FILES']
     ssl = not (settings['SERVER_SSL_CERT'] is None)
     ssl_cert_file = settings['SERVER_SSL_CERT']
     ssl_key_file = settings['SERVER_SSL_KEY']
@@ -415,6 +413,8 @@ def run(app=None, **kwargs):
                                           main_html=main_html)),
         (main_route, _MainHandler, dict(main_html=main_html)),
     ], static_path=static_path)
+    dreload_blacklist_starting_with = ('webalchemy', 'tornado')
+    additional_monitored_files = settings['SERVER_MONITORED_FILES']
     au = _AppUpdater(application, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
