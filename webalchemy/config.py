@@ -1,3 +1,7 @@
+import imp
+import os.path
+
+
 DEFAULT_SETTINGS = {
         'SERVER_STATIC_PATH': 'static',
         'SERVER_WS_ROUTE': 'websocket',
@@ -10,22 +14,35 @@ DEFAULT_SETTINGS = {
         'FREEZE_OUTPUT': None,
 }
 
+
 def read_config_from_app(app):
     settings = DEFAULT_SETTINGS.copy()
     if hasattr(app, 'config'):
         settings.update(app.config)
     return settings
 
-def from_object(objname):
-    objname = str(objname)
-    if '.' in objname:
-        module, objname = objname.rsplit('.', 1)
-        obj = getattr(__import__(module, None, None, [objname]), objname)
-    else:
-        obj = __import__(objname)
+def from_object(obj):
+    if isinstance(obj, str):
+        obj = _import_object(obj)
     cfg = dict()
     for key in dir(obj):
         if key.isupper():
             cfg[key] = getattr(obj, key)
     return cfg
+
+def _import_object(objname):
+    if '.' in objname:
+        module, objname = objname.rsplit('.', 1)
+        return getattr(__import__(module, None, None, [objname]), objname)
+    else:
+        return __import__(objname)
+
+def from_pyfile(filename, root=None):
+    if not (root is None):
+        filename = os.path.join(root, filename)
+    mod = imp.new_module('config')
+    mod.__file__ = filename
+    with open(filename) as config_file:
+        exec(compile(config_file.read(), filename, 'exec'), mod.__dict__)
+    return from_object(mod)
 

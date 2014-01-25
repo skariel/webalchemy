@@ -64,19 +64,34 @@ class TestFromObject(unittest.TestCase):
         self.assertEqual(2, cfg['TEST_SETTING_2'])
         self.assertEqual('three', cfg['TEST_SETTING_3'])
 
-    def test_converts_objname_to_string(self):
-        class ModuleName:
-            def __str__(self):
-                return 'settingsmodule'
-        moduleName = ModuleName()
-        cfg = config.from_object(moduleName)
+    def test_module_from_package(self):
+        cfg = config.from_object('settings.module')
         self.assertEqual(3, len(cfg))
         self.assertEqual('one', cfg['TEST_SETTING_1'])
         self.assertEqual('two', cfg['TEST_SETTING_2'])
         self.assertEqual(3, cfg['TEST_SETTING_3'])
 
-    def test_module_from_package(self):
-        cfg = config.from_object('settings.module')
+    def test_from_module_instance(self):
+        import settingsmodule
+        cfg = config.from_object(settingsmodule)
+        self.assertEqual(3, len(cfg))
+        self.assertEqual('one', cfg['TEST_SETTING_1'])
+        self.assertEqual('two', cfg['TEST_SETTING_2'])
+        self.assertEqual(3, cfg['TEST_SETTING_3'])
+
+
+class TestFromPyfile(unittest.TestCase):
+
+    def test_from_py_file(self):
+        cfg = config.from_pyfile('./settingsmodule.py')
+        self.assertEqual(3, len(cfg))
+        self.assertEqual('one', cfg['TEST_SETTING_1'])
+        self.assertEqual('two', cfg['TEST_SETTING_2'])
+        self.assertEqual(3, cfg['TEST_SETTING_3'])
+
+    def test_from_py_file_with_root_path(self):
+        rootpath = os.path.join(os.path.dirname(__file__), 'settings')
+        cfg = config.from_pyfile('module.py', root=rootpath)
         self.assertEqual(3, len(cfg))
         self.assertEqual('one', cfg['TEST_SETTING_1'])
         self.assertEqual('two', cfg['TEST_SETTING_2'])
