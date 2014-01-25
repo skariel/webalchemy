@@ -4,11 +4,11 @@ from setuptools import setup
 from glob import glob
 
 def readme():
-    return '''Modern web development with Python3. Check the homepage for details'''
+    return '''Check the homepage for details'''
 
 
 def version():
-    return '0.2.8'
+    return '0.2.9'
 
 setup(
     name='Webalchemy',
