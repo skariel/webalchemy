@@ -361,14 +361,9 @@ class PrivateDataStore:
 def run(app=None, **kwargs):
 
     settings = read_config_from_app(app)
-    update_settings = kwargs.get('update_settings', None)
-
-    if update_settings:
-        settings.update(update_settings)
 
     host = settings['SERVER_HOST']
     port = settings['SERVER_PORT']
-
     static_path_from_local_doc_base = settings['SERVER_STATIC_PATH']
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
@@ -439,14 +434,8 @@ def run(app=None, **kwargs):
     tornado.ioloop.IOLoop.instance().start()
 
 
-def generate_static(app, **kwargs):
+def generate_static(app):
     settings = read_config_from_app(app)
-
-    update_settings = kwargs.get('update_settings', None)
-
-    if update_settings:
-        settings.update(update_settings)
-
     writefile = settings['FREEZE_OUTPUT']
     static_html = generate_static_main_html(app)
     with open(writefile, 'w') as f:
