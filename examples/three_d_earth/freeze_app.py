@@ -11,4 +11,4 @@ from three_d_earth import ThreeDEarth as app
 
 if __name__ == '__main__':
 
-    server.generate_static(app, writefile='webglearth.html')
+    server.generate_static(app)

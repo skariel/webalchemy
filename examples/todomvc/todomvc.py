@@ -5,6 +5,7 @@ PACKAGE_PARENT = '../../'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
+from webalchemy import config
 from webalchemy.mvc import controller
 
 from os.path import dirname, join, normpath
@@ -90,9 +91,14 @@ class ViewModel:
             self.itembeingedited = None
 
 
+class Settings:
+    FREEZE_OUTPUT = 'todomvc.html'
+
+
 class AppTodoMvc:
 
     main_html_file_path = join(BASE_DIR, 'static/template/index.html')
+    config = config.from_object(Settings)
 
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
@@ -102,3 +108,4 @@ class AppTodoMvc:
 
         controller(self.rdoc, kwargs['main_html'], m=self.datamodel, vm=self.viewmodel,
                    prerender=self.datamodel.calc_completed_and_remaining)
+
