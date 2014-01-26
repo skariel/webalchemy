@@ -30,7 +30,7 @@ to serve through a websocket just feed it to the run function and set your brows
 
 ```python
 from webalchemy import server
-from myapp import HelloWorldApp
+from myapp import HellowWorldApp
 server.run(HellowWorldApp)
 ```
 
