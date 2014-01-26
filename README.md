@@ -192,9 +192,10 @@ This is like the opposite of what Meteor does, but seems to have several advanta
 
 ##What to expect:
 
-- Documentation :)
+- Documentation, tutorials :)
 - Major cleanup
-- [asyncio](http://docs.python.org/3.4/library/asyncio.html) and [AutobahnPython](http://autobahn.ws/python/) to replace Tornado in Python3.4
 - [pyzmq](https://github.com/zeromq/pyzmq) for some real scalability, like with IPython
 - Data binding for general usage, not just the DOM. Use it with [pixi.js](https://github.com/GoodBoyDigital/pixi.js/) sprites, use it to bind server-side model with client side model, etc.
+- A few API changes (the project is still very young)
+- A Community!
 
