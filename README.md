@@ -170,10 +170,10 @@ or it can be "frozen" to be served from a static folder (see [live demo](http://
 ```Python
 from webalchemy import server
 from examples.todomvc.todomvc import AppTodoMvc as app
-server.generate_static(app, writefile='todomvc.html')
+server.generate_static(app)
 ```
 
-more on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
+This will generate `todomvc.html` as defined in the configuration in `app`. More on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
 
 ####Example 3: WebGL Earth:
 

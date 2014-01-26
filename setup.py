@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from glob import glob
 
 def readme():
@@ -8,7 +8,7 @@ def readme():
 
 
 def version():
-    return '0.2.10'
+    return '0.2.16'
 
 setup(
     name='Webalchemy',
@@ -37,7 +37,7 @@ setup(
         "pythonium>=0.6.2"
     ],
     license="MIT",
-    packages=['webalchemy'],
+    packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
 )
