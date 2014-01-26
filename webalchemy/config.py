@@ -1,5 +1,6 @@
 import imp
 import os.path
+import importlib
 
 
 DEFAULT_SETTINGS = {
@@ -23,19 +24,12 @@ def read_config_from_app(app):
 
 def from_object(obj):
     if isinstance(obj, str):
-        obj = _import_object(obj)
+        obj = importlib.import_module(obj)
     cfg = Config()
     for key in dir(obj):
         if key.isupper():
             cfg[key] = getattr(obj, key)
     return cfg
-
-def _import_object(objname):
-    if '.' in objname:
-        module, objname = objname.rsplit('.', 1)
-        return getattr(__import__(module, None, None, [objname]), objname)
-    else:
-        return __import__(objname)
 
 def from_pyfile(filename, root=None):
     if not (root is None):
