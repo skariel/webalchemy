@@ -138,7 +138,7 @@ class ThreeDEarth:
 
 Join the [mailing list](https://groups.google.com/forum/#!forum/webalchemy).
 
-webalchemy supports the MVC pattern, usage of existing HTML, and much more. All this missing documentation is WIP.
+webalchemy supports the MVC pattern, usage of existing HTML, several configuration options and much more. All this missing documentation is WIP.
 Meanwhile take a look in the examples below.
 I also suggest you play a bit, try making a few containers - you can spread them across multiple Python files. It's not too complicated :)
 
