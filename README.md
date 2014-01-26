@@ -9,19 +9,17 @@ Modern web development with Python3, [MIT licensed](LICENSE.txt). Powered by [Py
 - Meteor style realtime and live editing [video](https://vimeo.com/74150054) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor/colors_meteor_example.py) (this screencast is old, new code contains no JS)
 - WebGL Earth [demo](http://skariel.org/webalchemy/webglearth.html) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py)
 
-Contributions are welcome! open a pull request, open an issue, mail me code, or post in the [mailing list](https://groups.google.com/forum/#!forum/webalchemy)
+Contributions are welcome! Open a pull request, open an issue, mail me code, or post in the [mailing list](https://groups.google.com/forum/#!forum/webalchemy).
 
 ##Getting Started
 
 ###Installation
 
-Make sure you are using Python3. Then`pip install webalchemy`. Note this doesn't installs the examples. For this please download the [zip](https://github.com/skariel/webalchemy/archive/master.zip)
+Make sure you are using Python3. Then`pip install webalchemy`. Note that this does not install the examples. You can download the examples from the [zip](https://github.com/skariel/webalchemy/archive/master.zip).
 
 ###Tutorial and Documentation
 
-A Webalchemy application is a regular Python class (no need to inherit anything) that provides relevant methods used by the Webalchemy server.
-The only required method is `initialize`, which is called when the client side is ready for automation. Here we create a header and
-append it to the document body:
+A Webalchemy application is a regular Python class (no need to inherit anything) that provides relevant methods used by the Webalchemy server. The only required method is `initialize`, which is called when the client side is ready for automation. Here we create a header and append it to the document body:
 
 ```python
 class HellowWorldApp:
@@ -29,7 +27,7 @@ class HellowWorldApp:
         kwargs['remote_document'].body.element(h1='Hello World!!!')
 ```
 
-to serve through a websocket just feed it to the run function and set your browser to http://127.0.0.1:8080
+To serve through a websocket just feed it to the run function and set your browser to http://127.0.0.1:8080.
 
 ```python
 from webalchemy import server
@@ -37,10 +35,9 @@ from myapp import HellowWorldApp
 server.run(HellowWorldApp)
 ```
 
-Try to change the header text content and save the file, see how the client changes accordingly.
-Note that the App has to be imported for the live-editing to work correctly.
+Try to change the header text content and save the file to see how the client changes accordingly. Note that the App has to be imported for the live-editing to work correctly.
 
-Lets put some style:
+It is also possible to add some styles:
 
 ```Python
 class HellowWorldApp:
@@ -54,7 +51,7 @@ class HellowWorldApp:
         )
 ```
 
-Want to use CSS rules to style all h1`s? no problem!
+Want to use CSS rules to style all h1's? No problem!
 
 ```Python
 class HellowWorldApp:
@@ -70,20 +67,20 @@ class HellowWorldApp:
         )
 ```
 
-Lets add a click listener now by using the elements `events` property like this:
+Adding event listerners is also possible. Let's add a click listener using the elements `events` property like this:
 
  ```Python
 self.rdoc.body.element(h1='Hello World!!!').events.add(click=self.clicked, translate=True)
  ```
 
-lets define a simple event in which each click deletes the 1st letter in the heading. This is run on the client, it is translated to JS behind the scenes:
+Let's define a simple event in which each click deletes the 1st letter of the heading. This is run on the client and it is translated to JS behind the scenes:
 
 ```Python
 def clicked(self):
     self.textContent = self.textContent[1:]
 ```
 
-In addition, if we want to notify the server that the button was clicked we could use an RPC call from the client to the server. The function above should be added one line:
+In addition, if we want to notify the server that the button was clicked we could use an RPC call from the client to the server. We just need to add one line:
 
 ```Python
 def clicked(self):
@@ -121,12 +118,13 @@ class HellowWorldApp:
         self.rdoc.body.element(h1=m1+m2)
 ```
 
-This how you push and pull data to and from the client. Now you may wonder if it's dangerous for the client to be able to call any function on the server.
-Well actually the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
+This how you push and pull data to and from the client. 
+
+Now you may wonder if it's dangerous for the client to be able to call any function on the server. Actually the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
 
 ####Including external scripts
 
-no need to require :)
+Use `include` to import external scripts into your project.
 
 ```Python
 class ThreeDEarth:
@@ -137,21 +135,47 @@ class ThreeDEarth:
         # do something cool here!
 ```
 
+####Including external stylesheets
+
+Use `stylesheets` to import external stylesheets.
+
+```Python
+class JQueryMobileExample:
+
+    # Include the jQuery mobile stylesheet and the jQuery/jQuery mobile scripts
+    stylesheets = ['http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css']
+    
+    include = ['http://code.jquery.com/jquery-1.10.2.min.js',
+               'http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js']
+
+    def initialize(self, **kwargs):
+        # do something cool here!
+```
+
+This will produce the following html in your client:
+
+```html
+<!DOCTYPE html>
+<html>
+   <head>
+       <base href="http://127.0.0.1:8080/"></base>
+       <link href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" rel="stylesheet"></link>
+       <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+       <script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js" type="text/javascript"></script>
+```
+
+
 ####Further help
 
 Join the [mailing list](https://groups.google.com/forum/#!forum/webalchemy).
 
-webalchemy supports the MVC pattern, usage of existing HTML, several configuration options and much more. All this missing documentation is WIP.
-Meanwhile take a look in the examples below.
-I also suggest you play a bit, try making a few containers - you can spread them across multiple Python files. It's not too complicated :)
-
+Webalchemy supports the MVC pattern, usage of existing HTML, several configuration options and much more. All this missing documentation is WIP. We also suggest you play a bit, try making a few containers - you can spread them across multiple Python files. It's not too complicated :)
 
 The examples below demonstrate a few more features.
 
 ####Example 1: Realtime Meteor Colors:
 
 We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory ([here](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor/colors_meteor_example.py)), it can be executed like this:
-
 ```python
 from webalchemy import server
 from examples.colors_meteor.colors_meteor_example import ColorsMeteorApp
@@ -168,7 +192,7 @@ from examples.todomvc.todomvc import AppTodoMvc as app
 server.run(app)
 ```
 
-or it can be "frozen" to be served from a static folder (see [live demo](http://skariel.org/webalchemy/todomvc.html))like this:
+or it can be "frozen" to be served from a static folder (see [live demo](http://skariel.org/webalchemy/todomvc.html)) like this:
 
 ```Python
 from webalchemy import server
@@ -176,7 +200,7 @@ from examples.todomvc.todomvc import AppTodoMvc as app
 server.generate_static(app)
 ```
 
-This will generate `todomvc.html` as defined in the configuration in `app`. Note the references to static files in the HTML, you have to place the file where these are accessible or just change the paths. More on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
+This will generate `todomvc.html` as defined in the configuration in `app`. Note the references to static files in the HTML, you have to place the file where these are accessible or just change the paths. More on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc).
 
 ####Example 3: WebGL Earth:
 
@@ -186,19 +210,20 @@ from examples.three_d_earth.three_d_earth import ThreeDEarth
 server.run(ThreeDEarth)
 ```
 
-see frozen app [here](http://skariel.org/webalchemy/webglearth.html) and source [here](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py)
+See the frozen app [here](http://skariel.org/webalchemy/webglearth.html) and the source [here](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py).
 
 ##Philosophy
 
-The main idea is to write all server-side code and automate the client using proxy objects. This works well for all kinds of apps. For e.g. if you want 100% client side, just tell the server to generate or serve the client code. If you want 99% server then don't use any client code except for passing events to the server, which will decide what to do.
-This is like the opposite of what Meteor does, but seems to have several advantages. The best advantage is that you get to enjoy all the Python ecosystem on the server. Want to do some number crunching, machine learning, natural language analysis, or cartography? No problem! Other advantages are server-side code and HTML generation, Python on client side, scaling with ZMQ, etc.
+The main idea is to write all server-side code and automate the client using proxy objects. This works well for all kinds of apps. For e.g. if you want 100% client side, just tell the server to generate or serve the client code. If you want 99% server then don't use any client code except for passing events to the server, which will decide what to do. This is like the opposite of what Meteor does, but seems to have several advantages. 
+
+The best advantage is that you get to enjoy all the Python ecosystem on the server. Want to do some number crunching, machine learning, natural language analysis, or cartography? No problem! Other advantages are server-side code and HTML generation, Python on client side, scaling with ZMQ, etc.
 
 ##What to expect:
 
 - Documentation, tutorials :)
-- Major cleanup
-- [pyzmq](https://github.com/zeromq/pyzmq) for some real scalability, like with IPython
+- Major cleanup.
+- [pyzmq](https://github.com/zeromq/pyzmq) for some real scalability, like with IPython.
 - Data binding for general usage, not just the DOM. Use it with [pixi.js](https://github.com/GoodBoyDigital/pixi.js/) sprites, use it to bind server-side model with client side model, etc.
-- A few API changes (the project is still very young)
+- A few API changes (the project is still very young).
 - A Community!
 
