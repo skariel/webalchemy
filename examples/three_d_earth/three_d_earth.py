@@ -1,3 +1,7 @@
+from webalchemy import config
+
+FREEZE_OUTPUT = 'webglearth.html'
+
 
 class Earth:
 
@@ -112,6 +116,7 @@ class Earth:
 class ThreeDEarth:
 
     include = ['https://rawgithub.com/mrdoob/three.js/master/build/three.min.js']
+    config = config.from_object(__name__)
 
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']

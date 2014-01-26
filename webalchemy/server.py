@@ -19,6 +19,7 @@ from tornado import gen
 
 from .remotedocument import RemoteDocument
 from .mainhtml import generate_main_html_for_server, generate_static_main_html
+from .config import read_config_from_app
 
 # logger for internal purposes
 log = logging.getLogger(__name__)
@@ -357,20 +358,22 @@ class PrivateDataStore:
         del self.d[uid]
 
 
-def run(app=None, host='127.0.0.1', port=8080, **kwargs):
+def run(app=None, **kwargs):
 
-    static_path_from_local_doc_base = kwargs.get('static_path_from_local_doc_base', 'static')
-    dreload_blacklist_starting_with = kwargs.get('', ('webalchemy', 'tornado'))
+    settings = read_config_from_app(app)
+    host = settings['SERVER_HOST']
+    port = settings['SERVER_PORT']
+
+    static_path_from_local_doc_base = settings['SERVER_STATIC_PATH']
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
     tab_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
     session_data_store_class = kwargs.get('private_data_store_class', PrivateDataStore)
-    additional_monitored_files = kwargs.get('additional_monitored_files', None)
-    ssl = kwargs.get('ssl', False)
-    ssl_cert_file = kwargs.get('cert_file', 'mydomain.crt')
-    ssl_key_file = kwargs.get('ket_file', 'mydomain.key')
-    ws_explicit_route = kwargs.get('ws_explicit_route', r'websocket')
+    ssl = not (settings['SERVER_SSL_CERT'] is None)
+    ssl_cert_file = settings['SERVER_SSL_CERT']
+    ssl_key_file = settings['SERVER_SSL_KEY']
+    ws_explicit_route = settings['SERVER_WS_ROUTE']
     ws_route = r'/' + ws_explicit_route + r'/(.*)'
-    main_explicit_route = kwargs.get('main_route', None)
+    main_explicit_route = settings['SERVER_MAIN_ROUTE']
     if not main_explicit_route:
         main_route = r'/(.*)'
     else:
@@ -410,6 +413,8 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
                                           main_html=main_html)),
         (main_route, _MainHandler, dict(main_html=main_html)),
     ], static_path=static_path)
+    dreload_blacklist_starting_with = ('webalchemy', 'tornado')
+    additional_monitored_files = settings['SERVER_MONITORED_FILES']
     au = _AppUpdater(application, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
@@ -429,7 +434,9 @@ def run(app=None, host='127.0.0.1', port=8080, **kwargs):
     tornado.ioloop.IOLoop.instance().start()
 
 
-def generate_static(app, writefile):
+def generate_static(app):
+    settings = read_config_from_app(app)
+    writefile = settings['FREEZE_OUTPUT']
     static_html = generate_static_main_html(app)
     with open(writefile, 'w') as f:
         f.write(static_html)
