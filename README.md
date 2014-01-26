@@ -173,7 +173,7 @@ from examples.todomvc.todomvc import AppTodoMvc as app
 server.generate_static(app)
 ```
 
-This will generate `todomvc.html` as defined in the configuration in `app`. More on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
+This will generate `todomvc.html` as defined in the configuration in `app`. Note the references to static files in the HTML, you have to place the file where these are accessible or just change the paths. More on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
 
 ####Example 3: WebGL Earth:
 
