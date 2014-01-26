@@ -1,3 +1,6 @@
+[![PyPi version](https://pypip.in/v/$REPO/badge.png)](https://crate.io/packages/$REPO/)
+[![PyPi downloads](https://pypip.in/d/$REPO/badge.png)](https://crate.io/packages/$REPO/)
+
 ![Alt Webalchemy](https://i.imgur.com/su7TdAd.png "Webalchemy")
 
 Modern web development with Python3, [MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/tornado). Some examples:
