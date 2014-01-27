@@ -28,8 +28,6 @@ init_communication = function() {
        if (overlay_shown)
             location.reload();
        message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name+': and my vendor prefix is:'+vendor_prefix);
-       var to = function () { message('heartbeat'); setInterval(to, Math.random()*9000+20000); }
-       to();
     };
     ws.onclose = function() {
       if (!overlay_shown) {
@@ -45,4 +43,11 @@ init_communication = function() {
        eval.apply(window, [evt.data]);
        message('done');
     };
+    (function loop() {
+        var rand = Math.round(Math.random() * 9000) + 20000;
+        setTimeout(function() {
+                message('heartbeat');
+                loop();
+        }, rand);
+    }());
 }
