@@ -44,6 +44,11 @@ class _MainHandler(tornado.web.RequestHandler):
         self.write(self.main_html)
 
 
+@gen.coroutine
+def async_delay(secs):
+    yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
+
+
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     @gen.coroutine
@@ -89,6 +94,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             if not isinstance(message, str):
                 log.info('binary data')
                 yield self.handle_binary_message(message)
+            elif message == 'heartbeat':
+                pass
             elif not self.local_doc_initialized:
                 log.info('Initializing local document...')
                 self.session_id = message.split(':')[1]
@@ -119,6 +126,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 if r is not None:
                     yield r
                 self.local_doc_initialized = True
+                yield self.send_heartbeat()
             else:
                 if message.startswith('rpc: '):
                     yield self.handle_js_to_py_rpc_message(message)
@@ -200,6 +208,15 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 yield r
 
     @gen.coroutine
+    def send_heartbeat(self):
+        while True:
+            if self.closed:
+                return
+            self.write_message(';')  # we hve to send something executable by JS, or else treat it on the other side...
+            log.info('sending heartbit...')
+            yield async_delay(random.random()*10+30)
+
+    @gen.coroutine
     def handle_js_to_py_rpc_message(self, msg):
         log.info('Handling message as js->py RPC call')
         pnum, *etc = msg[5:].split(',')
@@ -246,11 +263,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     yield h.flush_dom()
                 except:
                     log.exception('PY RPC call failed for target session: ' + k)
-
-
-@gen.coroutine
-def async_delay(secs):
-    yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
 
 
 def _dreload(module, dreload_blacklist_starting_with, just_visit=False):
