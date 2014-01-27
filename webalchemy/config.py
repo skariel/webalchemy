@@ -4,15 +4,14 @@ import importlib
 
 
 DEFAULT_SETTINGS = {
-        'SERVER_STATIC_PATH': 'static',
-        'SERVER_WS_ROUTE': 'websocket',
-        'SERVER_HOST': '127.0.0.1',
-        'SERVER_PORT': 8080,
-        'SERVER_SSL_CERT': None,
-        'SERVER_SSL_KEY': None,
-        'SERVER_MONITORED_FILES': None,
-        'SERVER_MAIN_ROUTE': None,
-        'FREEZE_OUTPUT': None,
+    'SERVER_STATIC_PATH': 'static',
+    'SERVER_WS_ROUTE': 'websocket',
+    'SERVER_PORT': 8080,
+    'SERVER_SSL_CERT': None,
+    'SERVER_SSL_KEY': None,
+    'SERVER_MONITORED_FILES': None,
+    'SERVER_MAIN_ROUTE': None,
+    'FREEZE_OUTPUT': None,
 }
 
 
@@ -21,6 +20,7 @@ def read_config_from_app(app):
     if hasattr(app, 'config'):
         settings.update(app.config)
     return settings
+
 
 def from_object(obj):
     if isinstance(obj, str):
@@ -31,6 +31,7 @@ def from_object(obj):
             cfg[key] = getattr(obj, key)
     return cfg
 
+
 def from_pyfile(filename, root=None):
     if not (root is None):
         filename = os.path.join(root, filename)
@@ -40,11 +41,13 @@ def from_pyfile(filename, root=None):
         exec(compile(config_file.read(), filename, 'exec'), mod.__dict__)
     return from_object(mod)
 
+
 def from_envvar(variable_name):
     value = os.environ.get(variable_name)
     if not value:
         return dict()
     return from_pyfile(value)
+
 
 def from_dict(d):
     cfg = Config()

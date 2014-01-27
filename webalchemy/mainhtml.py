@@ -72,7 +72,7 @@ def get_main_html_file_path(app):
     return os.path.join(main_dir, 'main.html')
 
 
-def generate_main_html_for_server(app, ws_explicit_route, port, host, ssl):
+def generate_main_html_for_server(app, ws_explicit_route, ssl):
     def main_html_translator(writer, app, tag, basedir):
         if tag == 'websocket':
             return
@@ -99,8 +99,6 @@ def generate_main_html_for_server(app, ws_explicit_route, port, host, ssl):
     template.translate(writer, main_html_translator)
     main_html = output.getvalue()
     main_html = main_html.replace('__WEBSOCKET__', ws_explicit_route)
-    main_html = main_html.replace('__PORT__', str(port))
-    main_html = main_html.replace('__HOST__', host)
     if ssl:
         main_html = main_html.replace('ws://', 'wss://')
     return main_html

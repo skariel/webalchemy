@@ -362,7 +362,6 @@ def run(app=None, **kwargs):
 
     settings = read_config_from_app(app)
 
-    host = settings['SERVER_HOST']
     port = settings['SERVER_PORT']
     static_path_from_local_doc_base = settings['SERVER_STATIC_PATH']
     shared_data_class = kwargs.get('shared_data_class', OrderedDict)
@@ -399,8 +398,7 @@ def run(app=None, **kwargs):
     tab_data_store = tab_data_store_class()
 
     # prepare main_html ...
-    main_html = generate_main_html_for_server(app, ws_explicit_route, port,
-            host, ssl)
+    main_html = generate_main_html_for_server(app, ws_explicit_route, ssl)
 
     # setting-up the tornado server
     application = tornado.web.Application([

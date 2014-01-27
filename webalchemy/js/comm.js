@@ -21,7 +21,7 @@ rpc= function () {
 }
 debug = true;
 init_communication = function() {
-    ws = new ReconnectingWebSocket('ws://__HOST__:__PORT__/__WEBSOCKET__/__ARGS__');
+    ws = new ReconnectingWebSocket('ws://'+location.host+'/__WEBSOCKET__/__ARGS__');
     ws.onopen = function() {
        if (overlay_shown)
             location.reload()
