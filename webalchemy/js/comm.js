@@ -28,7 +28,7 @@ init_communication = function() {
        if (overlay_shown)
             location.reload();
        message('hi, my ID is:'+get_cookie('webalchemy')+': and my tabid is:'+window.name+': and my vendor prefix is:'+vendor_prefix);
-       var to = function () { message('heartbeat'); setInterval(to, Math.random()*10000+30000); }
+       var to = function () { message('heartbeat'); setInterval(to, Math.random()*9000+20000); }
        to();
     };
     ws.onclose = function() {
