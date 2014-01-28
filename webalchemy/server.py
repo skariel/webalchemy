@@ -13,7 +13,8 @@ from collections import OrderedDict
 import tornado
 import tornado.web
 import tornado.ioloop
-import tornado.websocket
+
+from sockjs.tornado import SockJSRouter, SockJSConnection
 
 from tornado import gen
 
@@ -38,9 +39,6 @@ class _MainHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self, *varargs):
         self.add_header('X-UA-Compatible', 'IE=edge')
-        if not varargs:
-            varargs = ('',)
-        self.main_html = self.main_html.replace('__ARGS__', str(varargs[0]))
         self.write(self.main_html)
 
 
@@ -49,7 +47,7 @@ def async_delay(secs):
     yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
 
 
-class WebSocketHandler(tornado.websocket.WebSocketHandler):
+class WebSocketHandler(SockJSConnection):
 
     @gen.coroutine
     def initialize(self, **kwargs):
@@ -77,7 +75,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             log.exception('Initialization of websocket handler failed!')
 
     @gen.coroutine
-    def open(self, *varargs):
+    def on_open(self, *varargs):
         self.closed = False
         log.info('WebSocket opened')
         self.getargs = varargs
@@ -156,13 +154,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             log.info('FLUSHING DOM WITH FOLLOWING MESSAGE:\n' + code)
             # this is good to simulate latency
             #yield async_delay(2)
-            self.write_message(code)
+            self.send(code)
         else:
             log.info('FLUSHING DOM: **NOTHING TO FLUSH**')
 
     @gen.coroutine
     def please_reload(self):
-        self.write_message('location.reload();\n')
+        self.send('location.reload();\n')
         self.close()
 
     @gen.coroutine
@@ -212,7 +210,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         while True:
             if self.closed:
                 return
-            self.write_message(';')  # we hve to send something executable by JS, or else treat it on the other side...
+            self.send(';')  # we hve to send something executable by JS, or else treat it on the other side...
             log.info('sending heartbit...')
             yield async_delay(random.random()*10+30)
 
@@ -382,13 +380,11 @@ def run(app=None, **kwargs):
     ssl = not (settings['SERVER_SSL_CERT'] is None)
     ssl_cert_file = settings['SERVER_SSL_CERT']
     ssl_key_file = settings['SERVER_SSL_KEY']
-    ws_explicit_route = settings['SERVER_WS_ROUTE']
-    ws_route = r'/' + ws_explicit_route + r'/(.*)'
     main_explicit_route = settings['SERVER_MAIN_ROUTE']
     if not main_explicit_route:
-        main_route = r'/(.*)'
+        main_route = r'/'
     else:
-        main_route = r'/' + main_explicit_route + r'/(.*)'
+        main_route = r'/' + main_explicit_route
 
     if static_path_from_local_doc_base:
         mdl = sys.modules[app.__module__]
@@ -410,19 +406,20 @@ def run(app=None, **kwargs):
     tab_data_store = tab_data_store_class()
 
     # prepare main_html ...
-    main_html = generate_main_html_for_server(app, ws_explicit_route, ssl)
+    main_html = generate_main_html_for_server(app, ssl)
 
     # setting-up the tornado server
-    application = tornado.web.Application([
-        (ws_route, WebSocketHandler, dict(local_doc_class=app,
-                                          shared_wshandlers=shared_wshandlers,
-                                          shared_data=shared_data,
-                                          session_data_store=session_data_store,
-                                          tab_data_store=tab_data_store,
-                                          main_explicit_route=main_explicit_route,
-                                          main_html=main_html)),
-        (main_route, _MainHandler, dict(main_html=main_html)),
-    ], static_path=static_path)
+    router = SockJSRouter(WebSocketHandler,
+                          dict(handler_args=dict(local_doc_class=app,
+                                                 shared_wshandlers=shared_wshandlers,
+                                                 shared_data=shared_data,
+                                                 session_data_store=session_data_store,
+                                                 tab_data_store=tab_data_store,
+                                                 main_explicit_route=main_explicit_route,
+                                                 main_html=main_html)))
+
+    application = tornado.web.Application(router + [(main_route, _MainHandler, dict(main_html=main_html))],
+                                          static_path=static_path)
     dreload_blacklist_starting_with = ('webalchemy', 'tornado')
     additional_monitored_files = settings['SERVER_MONITORED_FILES']
     au = _AppUpdater(application, app, shared_wshandlers, hn, dreload_blacklist_starting_with,

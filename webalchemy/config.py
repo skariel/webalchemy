@@ -5,7 +5,6 @@ import importlib
 
 DEFAULT_SETTINGS = {
     'SERVER_STATIC_PATH': 'static',
-    'SERVER_WS_ROUTE': 'websocket',
     'SERVER_PORT': 8080,
     'SERVER_SSL_CERT': None,
     'SERVER_SSL_KEY': None,
