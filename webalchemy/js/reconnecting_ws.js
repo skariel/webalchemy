@@ -34,7 +34,7 @@ function ReconnectingWebSocket(url, protocols) {
     };
 
     function connect(reconnectAttempt) {
-        ws = new WebSocket(url, protocols);
+        ws = new SockJS(url);                    // WEBA diff from original: removed protocols parameter here
         
         self.onconnecting();
         if (self.debug || ReconnectingWebSocket.debugAll) {

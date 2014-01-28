@@ -50,7 +50,7 @@ def async_delay(secs):
 class WebSocketHandler(SockJSConnection):
 
     @gen.coroutine
-    def initialize(self, **kwargs):
+    def on_open(self, info):
         log.info('Initiallizing a websocket handler!')
         try:
             self.id = _generate_session_id()
@@ -59,26 +59,24 @@ class WebSocketHandler(SockJSConnection):
             self.session_id = None
             self.tab_id = None
             self.vendor_type = None
-            self.shared_data = kwargs['shared_data']
-            self.session_data_store = kwargs['session_data_store']
-            self.tab_data_store = kwargs['tab_data_store']
+            self.additional_args = self.session.server.settings['handler_args']
+            self.shared_data = self.additional_args['shared_data']
+            self.session_data_store = self.additional_args['session_data_store']
+            self.tab_data_store = self.additional_args['tab_data_store']
             self.session_data = None
             self.tab_data = None
-            self.local_doc = kwargs['local_doc_class']()
+            self.local_doc = self.additional_args['local_doc_class']()
             self.local_doc_initialized = False
-            self.sharedhandlers = kwargs['shared_wshandlers']
+            self.sharedhandlers = self.additional_args['shared_wshandlers']
             self.sharedhandlers[self.id] = self
             self.is_new_tab = None
             self.is_new_session = None
-            self.main_html = kwargs['main_html']
+            self.main_html = self.additional_args['main_html']
         except:
             log.exception('Initialization of websocket handler failed!')
 
-    @gen.coroutine
-    def on_open(self, *varargs):
         self.closed = False
         log.info('WebSocket opened')
-        self.getargs = varargs
 
     @gen.coroutine
     def handle_binary_message(self, message):
@@ -119,7 +117,6 @@ class WebSocketHandler(SockJSConnection):
                                               shared_data=self.shared_data, session_data=self.session_data,
                                               tab_data=self.tab_data, is_new_tab=self.is_new_tab,
                                               is_new_session=self.is_new_session,
-                                              getargs=self.getargs,
                                               main_html=self.main_html)
                 if r is not None:
                     yield r
@@ -409,7 +406,8 @@ def run(app=None, **kwargs):
     main_html = generate_main_html_for_server(app, ssl)
 
     # setting-up the tornado server
-    router = SockJSRouter(WebSocketHandler,
+    ws_route = main_route + '/app' if not main_route.endswith('/') else main_route + 'app'
+    router = SockJSRouter(WebSocketHandler, ws_route,
                           dict(handler_args=dict(local_doc_class=app,
                                                  shared_wshandlers=shared_wshandlers,
                                                  shared_data=shared_data,
@@ -418,7 +416,7 @@ def run(app=None, **kwargs):
                                                  main_explicit_route=main_explicit_route,
                                                  main_html=main_html)))
 
-    application = tornado.web.Application(router + [(main_route, _MainHandler, dict(main_html=main_html))],
+    application = tornado.web.Application(router.urls + [(main_route, _MainHandler, dict(main_html=main_html))],
                                           static_path=static_path)
     dreload_blacklist_starting_with = ('webalchemy', 'tornado')
     additional_monitored_files = settings['SERVER_MONITORED_FILES']
