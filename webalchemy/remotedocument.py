@@ -286,10 +286,7 @@ class Element:
     }
 
     def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, **kwargs):
-        if not customvarname:
-            self.varname = rdoc.get_new_uid()
-        else:
-            self.varname = customvarname
+        self.varname = customvarname if (customvarname) else rdoc.get_new_uid()
         self.rdoc = rdoc
         self.typ = typ
         self.parent = None
@@ -390,10 +387,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None, **kwargs):
     for item in _rec1_inline.findall(code):
         rep = eval(item.replace('this.', 'self.'), glo, loc)
         if not stringify:
-            if hasattr(rep, 'varname'):
-                rep = rep.varname
-            else:
-                rep = str(rep)
+            rep = rep.varname if hasattr(rep, 'varname') else str(rep)
         else:
             rep = stringify(rep, encapsulate_strings=kwargs.get('encapsulate_strings', True))
         code = code.replace('#{%s}' % item, rep)
@@ -445,11 +439,7 @@ class JSFunction:
             body = varargs[0]
             varargs = ()
         self.rdoc = rdoc
-        if not varname:
-            self.varname = rdoc.get_new_uid()
-        else:
-            self.varname = varname
-
+        self.varname = varname if (varname) else rdoc.get_new_uid()
         self.rdoc.jsfunctions_being_built.append(self)
 
         code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False, vars=varargs)
@@ -618,10 +608,7 @@ class RemoteDocument:
                 kwe = Element(self, i, t, app=app)
                 self.__varname_element_dict[kwe.varname] = kwe
                 elems.append(kwe)
-        if len(elems) > 1:
-            return elems
-        else:
-            return elems[0]
+        return elems if len(elems) > 1 else elems[0]
 
     def startinterval(self, ms, exp=None):
         return Interval(self, ms, exp, level=3)
@@ -678,25 +665,17 @@ class RemoteDocument:
 
     def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True, vars=None, translate=False):
         if type(val) is bool:
-            if val:
-                return 'true'
-            else:
-                return 'false'
+            return 'true' if val else 'false'
         if hasattr(val, 'varname'):
             return val.varname
         if type(val) is str:
-            if encapsulate_strings:
-                return '"' + str(val) + '"'
-            return val
+            return '"' + str(val) + '"' if encapsulate_strings else val
         if callable(val):
             if translate:
                 return vtranslate(dedent(getsource(val)))
             else:
                 self.begin_block()
-                if vars:
-                    tmp = val(*vars)
-                else:
-                    tmp = val()
+                tmp = val(*vars) if vars else val()
                 if tmp:
                     self.cancel_block()
                 else:
