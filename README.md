@@ -3,7 +3,7 @@
 
 ![Alt Webalchemy](https://i.imgur.com/su7TdAd.png "Webalchemy")
 
-Modern web development with Python3, [MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium) and [Tornado](https://github.com/facebook/tornado). Some examples:
+Modern web development with Python3, [MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium), [Tornado](https://github.com/facebook/tornado), and [SockJS](https://github.com/sockjs/sockjs-client). Some examples:
 
 - Angular style TodoMVC [demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
 - Meteor style realtime and live editing [video](https://vimeo.com/74150054) --  [Demo](http://weba-colors.herokuapp.com/) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor/colors_meteor_example.py)
@@ -166,7 +166,9 @@ This will produce the following html in your client:
 
 ####Hosting
 
-Live apps currently require the use of websockets (at least until the integration of SockJS). [Heroku](https://www.heroku.com/) and [OpenShift](https://www.openshift.com/) are two good options.
+Webalchemy uses SockJS so no need for a host supporting websockets. Howvever real websockets can still provide a
+benefit in terms of performance. If you are interested to support websockets try hosting with
+[Heroku](https://www.heroku.com/) or [OpenShift](https://www.openshift.com/) - these are two good options.
 
 ####Further help
 
