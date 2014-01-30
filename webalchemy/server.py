@@ -302,14 +302,13 @@ def _dreload(module, dreload_blacklist_starting_with, just_visit=False):
 
 
 class _AppUpdater:
-    def __init__(self, app, router, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data,
+    def __init__(self, app, router, cls, shared_wshandlers, dreload_blacklist_starting_with, shared_data,
                  additional_monitored_files):
         self.app = app
         self.router = router
         self.cls = cls
         self.shared_wshandlers = shared_wshandlers
         self.shared_data = shared_data
-        self.hn = hn
         self.dreload_blacklist_starting_with = dreload_blacklist_starting_with
         self.mdl = sys.modules[self.cls.__module__]
         self.mdl_fn = self.mdl.__file__
@@ -390,10 +389,8 @@ def run(app=None, **kwargs):
         static_path = os.path.dirname(static_path)
         static_path = os.path.join(static_path, static_path_from_local_doc_base)
         log.info('static_path: ' + static_path)
-        hn = 3
     else:
         static_path = None
-        hn = 0
 
     shared_wshandlers = {}
     shared_data = shared_data_class()
@@ -420,7 +417,7 @@ def run(app=None, **kwargs):
                                           static_path=static_path)
     dreload_blacklist_starting_with = ('webalchemy', 'tornado')
     additional_monitored_files = settings['SERVER_MONITORED_FILES']
-    au = _AppUpdater(application, router, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
+    au = _AppUpdater(application, router, app, shared_wshandlers, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     if not ssl:
