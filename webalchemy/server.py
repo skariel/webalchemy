@@ -30,7 +30,9 @@ from collections import OrderedDict
 import tornado
 import tornado.web
 import tornado.ioloop
-import tornado.websocket
+
+from sockjs.tornado import SockJSRouter, SockJSConnection
+
 from tornado import gen
 
 from .remotedocument import RemoteDocument
@@ -117,11 +119,16 @@ class _MainHandler(tornado.web.RequestHandler):
         self.write(self.main_html)
 
 
-class WebSocketHandler(tornado.websocket.WebSocketHandler):
+@gen.coroutine
+def async_delay(secs):
+    yield gen.Task(tornado.ioloop.IOLoop.instance().add_timeout, time.time() + secs)
+
+
+class WebSocketHandler(SockJSConnection):
     """Handless the websocket calls from the client."""
 
     @gen.coroutine
-    def initialize(self, **kwargs):
+    def on_open(self, info):
         log.info('Initiallizing a websocket handler!')
         try:
             self.id = _generate_session_id()
@@ -130,28 +137,30 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.session_id = None
             self.tab_id = None
             self.vendor_type = None
-            self.shared_data = kwargs['shared_data']
-            self.session_data_store = kwargs['session_data_store']
-            self.tab_data_store = kwargs['tab_data_store']
+            self.additional_args = self.session.server.settings['handler_args']
+            self.shared_data = self.additional_args['shared_data']
+            self.session_data_store = self.additional_args['session_data_store']
+            self.tab_data_store = self.additional_args['tab_data_store']
             self.session_data = None
             self.tab_data = None
-            self.local_doc = kwargs['local_doc_class']()
+            self.local_doc = self.additional_args['local_doc_class']()
             self.local_doc_initialized = False
-            self.sharedhandlers = kwargs['shared_wshandlers']
+            self.sharedhandlers = self.additional_args['shared_wshandlers']
             self.sharedhandlers[self.id] = self
             self.is_new_tab = None
             self.is_new_session = None
-            self.main_html = kwargs['main_html']
+            self.main_html = self.additional_args['main_html']
         except:
             log.exception('Initialization of websocket handler failed!')
 
-    @gen.coroutine
-    def open(self, *varargs):
-        """Opens the websocket. """
-        log.info('WebSocket opened')
         self.closed = False
-        self.getargs = varargs
-        
+        log.info('WebSocket opened')
+
+    @gen.coroutine
+    def handle_binary_message(self, message):
+        # TODO: implement this!
+        raise NotImplementedError
+    
     @gen.coroutine
     def on_close(self):
         """Removes all shared function handlers and prepares
@@ -213,14 +222,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         if code != '':
             log.info('FLUSHING DOM WITH FOLLOWING MESSAGE:\n' + code)
             #yield async_delay(2)  # this is good to simulate latency
-            self.write_message(code)
+            self.send(code)
         else:
             log.info('FLUSHING DOM: **NOTHING TO FLUSH**')
 
     @gen.coroutine
     def please_reload(self):
         """Sends a reload request through the websocket and closes."""
-        self.write_message('location.reload();\n')
+        self.send('location.reload();\n')
         self.close()
 
     @gen.coroutine
@@ -261,7 +270,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             if self.closed:
                 return
             # we have to send something executable by JS, or else treat it on the other side...
-            self.write_message(';')
+            self.send(';')
             log.info('sending heartbeat...')
             yield async_delay(random.random()*10 + 30)
             
@@ -293,7 +302,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                                         shared_data=self.shared_data, session_data=self.session_data,
                                         tab_data=self.tab_data, is_new_tab=self.is_new_tab,
                                         is_new_session=self.is_new_session,
-                                        getargs=self.getargs,
                                         main_html=self.main_html)
         if (res):
             yield res
@@ -357,13 +365,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 class _AppUpdater:
     """Tracks changes in local files and triggers reloads."""
 
-    def __init__(self, app, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data,
+    def __init__(self, app, router, cls, shared_wshandlers, dreload_blacklist_starting_with, shared_data,
                  additional_monitored_files):
         self.app = app
+        self.router = router
         self.cls = cls
         self.shared_wshandlers = shared_wshandlers
         self.shared_data = shared_data
-        self.hn = hn
         self.dreload_blacklist_starting_with = dreload_blacklist_starting_with
         self.mdl = sys.modules[self.cls.__module__]
         self.mdl_fn = self.mdl.__file__
@@ -398,9 +406,8 @@ class _AppUpdater:
         if hasattr(tmp_cls, 'initialize_shared_data'):
             tmp_cls.initialize_shared_data(self.shared_data)
 
-        self.app.handlers[0][1][self.hn].kwargs['local_doc_class'] = tmp_cls
-        log.info('wsh=' + str(self.shared_wshandlers))
-        for wsh in self.shared_wshandlers.values():
+        self.router.settings['handler_args']['local_doc_class'] = tmp_cls
+        for wsh in list(self.shared_wshandlers.values()):
             wsh.prepare_session_for_general_reload()
             wsh.please_reload()
 
@@ -418,7 +425,6 @@ class PrivateDataStore:
 
     def remove_store(self, uid):
         del self._dict[uid]
-
 
 
 # ================================ #
@@ -445,13 +451,11 @@ def run(app=None, **kwargs):
     ssl = not (settings['SERVER_SSL_CERT'] is None)
     ssl_cert_file = settings['SERVER_SSL_CERT']
     ssl_key_file = settings['SERVER_SSL_KEY']
-    ws_explicit_route = settings['SERVER_WS_ROUTE']
-    ws_route = r'/' + ws_explicit_route + r'/(.*)'
     main_explicit_route = settings['SERVER_MAIN_ROUTE']
     if not main_explicit_route:
-        main_route = r'/(.*)'
+        main_route = r'/'
     else:
-        main_route = r'/' + main_explicit_route + r'/(.*)'
+        main_route = r'/' + main_explicit_route
 
     # Configure local static path, if given
     if static_path_from_local_doc_base:
@@ -461,10 +465,8 @@ def run(app=None, **kwargs):
         static_path = os.path.dirname(static_path)
         static_path = os.path.join(static_path, static_path_from_local_doc_base)
         log.info('static_path: ' + static_path)
-        hn = 3
     else:
         static_path = None
-        hn = 0
 
     # Configure shared handlers
     shared_wshandlers = {}
@@ -475,26 +477,29 @@ def run(app=None, **kwargs):
     tab_data_store = tab_data_store_class()
 
     # Generate the main html for the client
-    main_html = generate_main_html_for_server(app, ws_explicit_route, ssl)
+    main_html = generate_main_html_for_server(app, ssl)
+
+    # setting-up the tornado server
+    ws_route = main_route + '/app' if not main_route.endswith('/') else main_route + 'app'
+    router = SockJSRouter(WebSocketHandler, ws_route,
+                          dict(handler_args=dict(local_doc_class=app,
+                                                 shared_wshandlers=shared_wshandlers,
+                                                 shared_data=shared_data,
+                                                 session_data_store=session_data_store,
+                                                 tab_data_store=tab_data_store,
+                                                 main_explicit_route=main_explicit_route,
+                                                 main_html=main_html)))
 
     # Set up the tornado wserver
     # We use the _MainHandler to serve the main html file and the
     # WebSocketHandler to handle subsequent websocket requests from the clients
-    application = tornado.web.Application([
-        (ws_route, WebSocketHandler, dict(local_doc_class=app,
-                                          shared_wshandlers=shared_wshandlers,
-                                          shared_data=shared_data,
-                                          session_data_store=session_data_store,
-                                          tab_data_store=tab_data_store,
-                                          main_explicit_route=main_explicit_route,
-                                          main_html=main_html)),
-        (main_route, _MainHandler, dict(main_html=main_html)),
-    ], static_path=static_path)
+    application = tornado.web.Application(router.urls + [(main_route, _MainHandler, dict(main_html=main_html))],
+                                          static_path=static_path)
     dreload_blacklist_starting_with = ('webalchemy', 'tornado')
     additional_monitored_files = settings['SERVER_MONITORED_FILES']
     
     # Set up the service to monitore changes in local files
-    au = _AppUpdater(application, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
+    au = _AppUpdater(application, router, app, shared_wshandlers, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     
