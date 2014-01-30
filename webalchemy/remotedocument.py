@@ -94,8 +94,11 @@ class StyleAtt:
 
     def __call__(self, d=None, **kwargs):
         if d:
-            for k, v in d.items():
-                self[k] = v
+            if isinstance(d, dict):
+                for k, v in d.items():
+                    self[k] = v
+            else:
+                self['d'] = d
         for k, v in kwargs.items():
             self[k] = v
 
@@ -135,6 +138,17 @@ class ClassAtt:
         self.remove(old_name)
         self.append(new_name)
 
+    def set(self, value):
+        '''Set classes from value
+        value is either list of strings or space separated string'''
+        if isinstance(value, str):
+            value = filter(None, value.split(" "))
+        js = self.varname + '.className = "'+ ' '.join(value)+'";'
+        self.rdoc.inline(js)
+        self.lst = value
+        
+
+
     def __delitem__(self, name):
         self.remove(name)
 
@@ -172,6 +186,9 @@ class SimpleAtt:
     def __call__(self, **kwargs):
         for k, v in kwargs.items():
             self[k] = v
+
+    def __contains__(self, item):
+        return item in self.d
 
 
 class EventListener:
@@ -285,7 +302,11 @@ class Element:
         'svg': {'xmlns': 'http://www.w3.org/2000/svg'},
     }
 
-    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, **kwargs):
+    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, 
+                    cls="", att={}, style={},
+                    **kwargs):
+        if not typ and len(kwargs) == 1:
+            typ, text = kwargs.popitem()
         self.varname = customvarname if (customvarname) else rdoc.get_new_uid()
         self.rdoc = rdoc
         self.typ = typ
@@ -296,6 +317,8 @@ class Element:
                 ns = Element._unique_ns[Element._ns_typ_dict[typ]]
                 js = 'var ' + self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
             else:
+                if not typ:
+                    print("Bla")
                 js = 'var ' + self.varname + '=document.createElement("' + typ + '");\n'
         else:
             js = 'var ' + self.varname + '=document.getElementById("' + fromid + '");\n'
@@ -307,8 +330,15 @@ class Element:
         rdoc.inline(js)
 
         self.cls = ClassAtt(rdoc, self.varname)
+        if cls:
+            self.cls.set(cls)
         self.att = SimpleAtt(rdoc, self.varname)
+        if att:
+            self.att(**att)
         self.style = StyleAtt(rdoc, self.varname)
+        if self.style:
+            self.style(**style)
+
         self.events = EventListener(rdoc, self.varname)
         if app:
             self.app = SimpleProp(rdoc, self.varname, 'app', create=True)
@@ -598,17 +628,8 @@ class RemoteDocument:
         return Element(self, fromid=fromid, app=app)
 
     def element(self, typ=None, text=None, app=True, **kwargs):
-        elems = []
-        if typ:
-            e = Element(self, typ, text, app=app)
-            self.__varname_element_dict[e.varname] = e
-            elems.append(e)
-        if kwargs:
-            for i, t in kwargs.items():
-                kwe = Element(self, i, t, app=app)
-                self.__varname_element_dict[kwe.varname] = kwe
-                elems.append(kwe)
-        return elems if len(elems) > 1 else elems[0]
+        kwargs["app"] = app
+        return Element(self, typ, text, **kwargs)
 
     def startinterval(self, ms, exp=None):
         return Interval(self, ms, exp, level=3)
