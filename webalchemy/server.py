@@ -270,7 +270,7 @@ class WebSocketHandler(SockJSConnection):
             if self.closed:
                 return
             # we have to send something executable by JS, or else treat it on the other side...
-            self.write_message(';')
+            self.send(';')
             log.info('sending heartbeat...')
             yield async_delay(random.random()*10 + 30)
             
@@ -302,7 +302,6 @@ class WebSocketHandler(SockJSConnection):
                                         shared_data=self.shared_data, session_data=self.session_data,
                                         tab_data=self.tab_data, is_new_tab=self.is_new_tab,
                                         is_new_session=self.is_new_session,
-                                        getargs=self.getargs,
                                         main_html=self.main_html)
         if (res):
             yield res
@@ -478,8 +477,6 @@ def run(app=None, **kwargs):
     tab_data_store = tab_data_store_class()
 
     # Generate the main html for the client
-    main_html = generate_main_html_for_server(app, ws_explicit_route, ssl)
-    # prepare main_html ...
     main_html = generate_main_html_for_server(app, ssl)
 
     # setting-up the tornado server
