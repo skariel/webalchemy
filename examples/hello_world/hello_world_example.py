@@ -3,7 +3,7 @@ from webalchemy import server
 class HellowWorldApp:
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
-        self.rdoc.body.element(h1='Hello World!!!').events.add(click=self.clicked, translate=True)
+        self.rdoc.body.element(h1='Hello SockJS!!!').events.add(click=self.clicked, translate=True)
         self.rdoc.body.element(h2='--------------')
         self.rdoc.stylesheet.rule('h1').style(
             color='#FF0000',
@@ -22,6 +22,8 @@ class HellowWorldApp:
 if __name__ == '__main__':
     # this import is necessary because of the live editing. Everything else works OK without it
     from hello_world_example import HellowWorldApp
+    from webalchemy import config
+    #HellowWorldApp.config = config.from_dict(dict(SERVER_STATIC_PATH=None))
     server.run(HellowWorldApp)
 
 

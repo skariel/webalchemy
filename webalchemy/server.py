@@ -302,9 +302,10 @@ def _dreload(module, dreload_blacklist_starting_with, just_visit=False):
 
 
 class _AppUpdater:
-    def __init__(self, app, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data,
+    def __init__(self, app, router, cls, shared_wshandlers, hn, dreload_blacklist_starting_with, shared_data,
                  additional_monitored_files):
         self.app = app
+        self.router = router
         self.cls = cls
         self.shared_wshandlers = shared_wshandlers
         self.shared_data = shared_data
@@ -342,9 +343,8 @@ class _AppUpdater:
         if hasattr(tmp_cls, 'initialize_shared_data'):
             tmp_cls.initialize_shared_data(self.shared_data)
 
-        self.app.handlers[0][1][self.hn].kwargs['local_doc_class'] = tmp_cls
-        log.info('wsh=' + str(self.shared_wshandlers))
-        for wsh in self.shared_wshandlers.values():
+        self.router.settings['handler_args']['local_doc_class'] = tmp_cls
+        for wsh in list(self.shared_wshandlers.values()):
             wsh.prepare_session_for_general_reload()
             wsh.please_reload()
 
@@ -420,7 +420,7 @@ def run(app=None, **kwargs):
                                           static_path=static_path)
     dreload_blacklist_starting_with = ('webalchemy', 'tornado')
     additional_monitored_files = settings['SERVER_MONITORED_FILES']
-    au = _AppUpdater(application, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
+    au = _AppUpdater(application, router, app, shared_wshandlers, hn, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     if not ssl:
