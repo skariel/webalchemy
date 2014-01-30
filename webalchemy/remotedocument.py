@@ -94,8 +94,11 @@ class StyleAtt:
 
     def __call__(self, d=None, **kwargs):
         if d:
-            for k, v in d.items():
-                self[k] = v
+            if isinstance(d, dict):
+                for k, v in d.items():
+                    self[k] = v
+            else:
+                self['d'] = d
         for k, v in kwargs.items():
             self[k] = v
 
@@ -135,6 +138,17 @@ class ClassAtt:
         self.remove(old_name)
         self.append(new_name)
 
+    def set(self, value):
+        '''Set classes from value
+        value is either list of strings or space separated string'''
+        if isinstance(value, str):
+            value = filter(None, value.split(" "))
+        js = self.varname + '.className = "'+ ' '.join(value)+'";'
+        self.rdoc.inline(js)
+        self.lst = value
+        
+
+
     def __delitem__(self, name):
         self.remove(name)
 
@@ -172,6 +186,9 @@ class SimpleAtt:
     def __call__(self, **kwargs):
         for k, v in kwargs.items():
             self[k] = v
+
+    def __contains__(self, item):
+        return item in self.d
 
 
 class EventListener:
@@ -285,11 +302,12 @@ class Element:
         'svg': {'xmlns': 'http://www.w3.org/2000/svg'},
     }
 
-    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, **kwargs):
-        if not customvarname:
-            self.varname = rdoc.get_new_uid()
-        else:
-            self.varname = customvarname
+    def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, 
+                    cls="", att={}, style={},
+                    **kwargs):
+        if not typ and len(kwargs) == 1:
+            typ, text = kwargs.popitem()
+        self.varname = customvarname if (customvarname) else rdoc.get_new_uid()
         self.rdoc = rdoc
         self.typ = typ
         self.parent = None
@@ -299,6 +317,8 @@ class Element:
                 ns = Element._unique_ns[Element._ns_typ_dict[typ]]
                 js = 'var ' + self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
             else:
+                if not typ:
+                    print("Bla")
                 js = 'var ' + self.varname + '=document.createElement("' + typ + '");\n'
         else:
             js = 'var ' + self.varname + '=document.getElementById("' + fromid + '");\n'
@@ -310,8 +330,15 @@ class Element:
         rdoc.inline(js)
 
         self.cls = ClassAtt(rdoc, self.varname)
+        if cls:
+            self.cls.set(cls)
         self.att = SimpleAtt(rdoc, self.varname)
+        if att:
+            self.att(**att)
         self.style = StyleAtt(rdoc, self.varname)
+        if self.style:
+            self.style(**style)
+
         self.events = EventListener(rdoc, self.varname)
         if app:
             self.app = SimpleProp(rdoc, self.varname, 'app', create=True)
@@ -390,10 +417,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None, **kwargs):
     for item in _rec1_inline.findall(code):
         rep = eval(item.replace('this.', 'self.'), glo, loc)
         if not stringify:
-            if hasattr(rep, 'varname'):
-                rep = rep.varname
-            else:
-                rep = str(rep)
+            rep = rep.varname if hasattr(rep, 'varname') else str(rep)
         else:
             rep = stringify(rep, encapsulate_strings=kwargs.get('encapsulate_strings', True))
         code = code.replace('#{%s}' % item, rep)
@@ -445,11 +469,7 @@ class JSFunction:
             body = varargs[0]
             varargs = ()
         self.rdoc = rdoc
-        if not varname:
-            self.varname = rdoc.get_new_uid()
-        else:
-            self.varname = varname
-
+        self.varname = varname if (varname) else rdoc.get_new_uid()
         self.rdoc.jsfunctions_being_built.append(self)
 
         code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False, vars=varargs)
@@ -608,20 +628,8 @@ class RemoteDocument:
         return Element(self, fromid=fromid, app=app)
 
     def element(self, typ=None, text=None, app=True, **kwargs):
-        elems = []
-        if typ:
-            e = Element(self, typ, text, app=app)
-            self.__varname_element_dict[e.varname] = e
-            elems.append(e)
-        if kwargs:
-            for i, t in kwargs.items():
-                kwe = Element(self, i, t, app=app)
-                self.__varname_element_dict[kwe.varname] = kwe
-                elems.append(kwe)
-        if len(elems) > 1:
-            return elems
-        else:
-            return elems[0]
+        kwargs["app"] = app
+        return Element(self, typ, text, **kwargs)
 
     def startinterval(self, ms, exp=None):
         return Interval(self, ms, exp, level=3)
@@ -678,25 +686,17 @@ class RemoteDocument:
 
     def stringify(self, val=None, custom_stringify=None, encapsulate_strings=True, pop_line=True, vars=None, translate=False):
         if type(val) is bool:
-            if val:
-                return 'true'
-            else:
-                return 'false'
+            return 'true' if val else 'false'
         if hasattr(val, 'varname'):
             return val.varname
         if type(val) is str:
-            if encapsulate_strings:
-                return '"' + str(val) + '"'
-            return val
+            return '"' + str(val) + '"' if encapsulate_strings else val
         if callable(val):
             if translate:
                 return vtranslate(dedent(getsource(val)))
             else:
                 self.begin_block()
-                if vars:
-                    tmp = val(*vars)
-                else:
-                    tmp = val()
+                tmp = val(*vars) if vars else val()
                 if tmp:
                     self.cancel_block()
                 else:
