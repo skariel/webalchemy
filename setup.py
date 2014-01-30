@@ -8,7 +8,7 @@ def readme():
 
 
 def version():
-    return '0.3.1'
+    return '0.3.2'
 
 setup(
     name='Webalchemy',
@@ -34,7 +34,8 @@ setup(
     author_email='skariel@gmail.com',
     install_requires=[
         "tornado>=3.2",
-        "pythonium>=0.6.2"
+        "pythonium>=0.6.2",
+        "sockjs-tornado>=1.0.0"
     ],
     license="MIT",
     packages=find_packages(),
