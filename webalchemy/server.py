@@ -27,6 +27,8 @@ import linecache
 from types import ModuleType
 from collections import OrderedDict
 
+from uuid import uuid1
+
 import tornado
 import tornado.web
 import tornado.ioloop
@@ -44,10 +46,9 @@ log = logging.getLogger(__name__)
 
 
 def _generate_session_id():
-    """Generate a random session id.
-    The id is not guaranteed to be unique."""
-    #TODO: Guarantee unique ids
-    return str(random.randint(0, 1e16))
+    """Generate a session id.
+    a Version 1 uuid as specified by RFC4122, see here: http://tools.ietf.org/html/rfc4122.html"""
+    return str(uuid1())
 
 @gen.coroutine
 def async_delay(secs):
