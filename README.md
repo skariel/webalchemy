@@ -118,7 +118,7 @@ class HellowWorldApp:
         self.rdoc.body.element(h1=m1+m2)
 ```
 
-This how you push and pull data to and from the client. 
+This how you push and pull data to and from the client. See this program live on [heroku](http://weba-hello.herokuapp.com/).
 
 Now you may wonder if it's dangerous for the client to be able to call any function on the server. Actually the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
 
