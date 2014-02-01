@@ -15,7 +15,7 @@ function ReconnectingWebSocket(url, protocols) {
     
     this.url = url;
     this.protocols = protocols;
-    this.readyState = WebSocket.CONNECTING;
+    this.readyState = SockJS.CONNECTING;
     this.URL = url; // Public API
 
     this.onopen = function(event) {
@@ -56,7 +56,7 @@ function ReconnectingWebSocket(url, protocols) {
             if (self.debug || ReconnectingWebSocket.debugAll) {
                 console.debug('ReconnectingWebSocket', 'onopen', url);
             }
-            self.readyState = WebSocket.OPEN;
+            self.readyState = SockJS.OPEN;
             reconnectAttempt = false;
             self.onopen(event);
         };
@@ -65,10 +65,10 @@ function ReconnectingWebSocket(url, protocols) {
             clearTimeout(timeout);
             ws = null;
             if (forcedClose) {
-                self.readyState = WebSocket.CLOSED;
+                self.readyState = SockJS.CLOSED;
                 self.onclose(event);
             } else {
-                self.readyState = WebSocket.CONNECTING;
+                self.readyState = SockJS.CONNECTING;
                 self.onconnecting();
                 if (!reconnectAttempt && !timedOut) {
                     if (self.debug || ReconnectingWebSocket.debugAll) {
