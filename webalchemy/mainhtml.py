@@ -77,6 +77,7 @@ def generate_main_html_for_server(app, ssl):
         if tag == 'websocket':
             return
         if tag == 'include':
+            writer.write_script_tag('http://cdn.sockjs.org/sockjs-0.3.min.js')
             if hasattr(app, 'include'):
                 for i in app.include:
                     writer.write_script_tag(i)
