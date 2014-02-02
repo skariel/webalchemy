@@ -361,9 +361,10 @@ class WebSocketHandler(SockJSConnection):
 class _AppUpdater:
     """Tracks changes in local files and triggers reloads."""
 
-    def __init__(self, app, router, cls, shared_wshandlers, dreload_blacklist_starting_with, shared_data,
+    def __init__(self, app, kwa, router, cls, shared_wshandlers, dreload_blacklist_starting_with, shared_data,
                  additional_monitored_files):
         self.app = app
+        self.kwa = kwa
         self.router = router
         self.cls = cls
         self.shared_wshandlers = shared_wshandlers
@@ -402,7 +403,19 @@ class _AppUpdater:
         if hasattr(tmp_cls, 'initialize_shared_data'):
             tmp_cls.initialize_shared_data(self.shared_data)
 
+
+        settings = read_config_from_app(tmp_cls)
+        settings.update(from_dict(self.kwa))
+        ssl = not (settings['SERVER_SSL_CERT'] is None)
+
+        # Generate the main html for the client
+        main_html = generate_main_html_for_server(tmp_cls, ssl)
+
         self.router.settings['handler_args']['local_doc_class'] = tmp_cls
+        self.router.settings['handler_args']['main_html'] = main_html
+        self.app.handlers[0][1][-1].kwargs['main_html'] = main_html
+
+
         for wsh in list(self.shared_wshandlers.values()):
             wsh.prepare_session_for_general_reload()
             wsh.please_reload()
@@ -496,7 +509,7 @@ def run(app=None, **kwargs):
     additional_monitored_files = settings['SERVER_MONITORED_FILES']
     
     # Set up the service to monitore changes in local files
-    au = _AppUpdater(application, router, app, shared_wshandlers, dreload_blacklist_starting_with,
+    au = _AppUpdater(application, kwargs, router, app, shared_wshandlers, dreload_blacklist_starting_with,
                      shared_data, additional_monitored_files=additional_monitored_files)
     tornado.ioloop.PeriodicCallback(au.update_app, 1000).start()
     
