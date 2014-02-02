@@ -1,15 +1,15 @@
 from webalchemy.Stacker import Stacker
-import sympy
+from sympy import *
 
 examples = [
-    ('Take the derivative of sin(x)ex.', 'diff(sin(x)*exp(x), x)'),
-    ('Compute ?(exsin(x)+excos(x))dx.', 'integrate(exp(x)*sin(x) + exp(x)*cos(x), x)'),
-    ('Compute ????sin(x2)dx.', 'integrate(sin(x**2), (x, -oo, oo))'),
-    ('Find limx?0sin(x)x.', 'limit(sin(x)/x, x, 0)'),
-    ('Solve x2?2=0.', 'solve(x**2 - 2, x)'),
-    ('Solve the differential equation y??y=et.', '''y = Function('y'); dsolve(Eq(y(t).diff(t, t) - y(t), exp(t)), y(t))'''),
-    ('Find the eigenvalues of [1222].', 'Matrix([[1, 2], [2, 2]]).eigenvals()'),
-    ('Rewrite the Bessel function J?(z) in terms of the spherical Bessel function j?(z).','besselj(nu, z).rewrite(jn)')
+    (r'Take the derivative of \(\sin{(x)}e^x\)', 'diff(sin(x)*exp(x), x)'),
+    (r'Compute \(\int(e^x\sin{(x)} + e^x\cos{(x)})\,dx\)', 'integrate(exp(x)*sin(x) + exp(x)*cos(x), x)'),
+    (r'Compute \(\int_{-\infty}^\infty \sin{(x^2)}\,dx\)', 'integrate(sin(x**2), (x, -oo, oo))'),
+    (r'Find \(\lim_{x\to 0}\frac{\sin{(x)}}{x}\)', 'limit(sin(x)/x, x, 0)'),
+    (r'Solve \(x^2 - 2 = 0\)', 'solve(x**2 - 2, x)'),
+    (r'Solve the differential equation \(y'' - y = e^t\)', '''y = Function('y'); dsolve(Eq(y(t).diff(t, t) - y(t), exp(t)), y(t))'''),
+    (r'Find the eigenvalues of \(\left[\begin{smallmatrix}1 & 2\\2 & 2\end{smallmatrix}\right]\)', 'Matrix([[1, 2], [2, 2]]).eigenvals()'),
+    (r'Rewrite the Bessel function \(J_{\nu}\left(z\right)\) in terms of the spherical Bessel function \(j_\nu(z)\)','besselj(nu, z).rewrite(jn)')
 ]
 
 functions = ['diff', 'integrate', 'limit', ]
@@ -33,7 +33,7 @@ class MathExplorer:
                 with s.div(cls='col-md-7'), s.div(cls='row'):
                     with s.div(cls='col-md-12 panel panel-default'):
                         self.pbody = s.div(cls='panel-body', style={'minHeight':'500px', 'overflowY':'auto'})
-                    with s.div(cls='row'), s.div(cls='col-md-12 well'):
+                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='well'):
                         self.inp = s.input(cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
                         self.inp.events.add(keydown=self.execute, translate=True)
                 # right column
@@ -44,7 +44,7 @@ class MathExplorer:
                         with s.div(customvarname='examples_body', cls='panel-body collapse in'):
                             with s.ul():
                                 for desc, codes in examples:
-                                    with s.li(text=desc):
+                                    with s.li(text=desc.replace('\\', '\\\\')):
                                         for code in codes.split(';'):
                                             s.br()
                                             c = s.code(text=code)
@@ -55,6 +55,7 @@ class MathExplorer:
                     with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-info'):
                         s.div(text="Functions:", cls='panel-heading')
                         s.div(text="bla bla", cls='panel-body')
+        self.rdoc.JS('MathJax.Hub.Queue(["Typeset",MathJax.Hub, "examples_body"]);')
 
     def execute(e):
         if e.keyCode == weba.KeyCode.ENTER:
