@@ -28,44 +28,46 @@ class MathExplorer:
         try:
             self.rdoc = kwargs['remote_document']
             s = Stacker(self.rdoc.body)
-            with s.element('div', cls='container'):
-                with s.element('div', cls='row'):
-                    with s.element('div', cls='col-md-12 page-header'):
-                        with s.element(h1="The Math Exploerer"):
-                            s.element(small=" use it for... uhm... exploring math?")
-                with s.element('div', cls='row'):
-                    with s.element('div', cls='col-md-7'):
-                        with s.element('div', cls='row'):
-                            with s.element('div', cls='col-md-12 panel panel-default'):
-                                s.element('div', cls='panel-body', style={'minHeight':'500px', 'overflowY':'auto'})
-                        with s.element('div', cls='row'):
-                            with s.element('div', cls='col-md-12 well'):
-                                with s.element('form'):
-                                    s.element('input', cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
-                    with s.element('div', cls='col-md-5'):
-                        with s.element('div', cls='row'):
-                            with s.element('div', cls='col-md-12'):
-                                with s.element('div', cls='panel panel-success'):
-                                    with s.element('div', text="Examples:", cls='panel-heading'):
-                                        s.element(button="toggle", att={'data-toggle':"collapse", 'data-target':"#examples_body"},  cls="btn btn-xs btn-default pull-right")
-                                    with s.element('div', customvarname='examples_body', cls='panel-body collapse in'):
+            with s.div(cls='container'):
+                with s.div(cls='row'):
+                    with s.div(cls='col-md-12 page-header'):
+                        with s.h1(text="The Math Exploerer"):
+                            s.small(text=" use it for... uhm... exploring math?")
+                with s.div(cls='row'):
+                    # left column
+                    with s.div(cls='col-md-7'):
+                        with s.div(cls='row'):
+                            with s.div(cls='col-md-12 panel panel-default'):
+                                s.div(cls='panel-body', style={'minHeight':'500px', 'overflowY':'auto'})
+                        with s.div(cls='row'):
+                            with s.div(cls='col-md-12 well'):
+                                with s.form():
+                                    s.input(cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
+                    # right column
+                    with s.div(cls='col-md-5'):
+                        with s.div(cls='row'):
+                            with s.div(cls='col-md-12'):
+                                with s.div(cls='panel panel-success'):
+                                    with s.div(text="Examples:", cls='panel-heading'):
+                                        s.button(text="toggle", att={'data-toggle':"collapse", 'data-target':"#examples_body"},  cls="btn btn-xs btn-default pull-right")
+                                    with s.div(customvarname='examples_body', cls='panel-body collapse in'):
                                         with s.element('ul'):
                                             for desc, codes in examples:
                                                 with s.element('li', text=desc):
                                                     for code in codes.split(';'):
-                                                        s.element('br')
-                                                        s.element('code', text=code)
-                        with s.element('div', cls='row'):
-                            with s.element('div', cls='col-md-12'):
-                                with s.element('div', cls='panel panel-info'):
-                                    s.element('div', text="Symbols:", cls='panel-heading')
-                                    s.element('div', text="x", cls='panel-body')
+                                                        s.br()
+                                                        s.code(text=code)
+                        with s.div(cls='row'):
+                            with s.div(cls='col-md-12'):
+                                with s.div(cls='panel panel-info'):
+                                    s.div(text="Symbols:", cls='panel-heading')
+                                    s.div(text="x", cls='panel-body')
                         
-                        with s.element('div', cls='row'):
-                            with s.element('div', cls='col-md-12'):
-                                with s.element('div', cls='panel panel-info'):
-                                    s.element('div', text="Functions:", cls='panel-heading')
-                                    s.element('div', text="bla bla", cls='panel-body')    
+                        with s.div(cls='row'):
+                            with s.div(cls='col-md-12'):
+                                with s.div(cls='panel panel-info'):
+                                    s.div(text="Functions:", cls='panel-heading')
+                                    s.div(text="bla bla", cls='panel-body')    
 
         except Exception:
             import traceback
