@@ -39,7 +39,7 @@ from tornado import gen
 
 from .remotedocument import RemoteDocument
 from .mainhtml import generate_main_html_for_server, generate_static_main_html
-from .config import read_config_from_app
+from .config import read_config_from_app, from_dict
 
 # logger for internal purposes
 log = logging.getLogger(__name__)
@@ -437,7 +437,8 @@ def run(app=None, **kwargs):
     
     """
     settings = read_config_from_app(app)
-    
+    settings.update(from_dict(kwargs))
+
     # Application settings
     port = settings['SERVER_PORT']
     static_path_from_local_doc_base = settings['SERVER_STATIC_PATH']
