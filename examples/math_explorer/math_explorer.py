@@ -25,46 +25,36 @@ class MathExplorer:
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
         s = Stacker(self.rdoc.body)
-        with s.div(cls='container'):
-            with s.div(cls='row'):
-                with s.div(cls='col-md-12 page-header'):
-                    with s.h1(text="The Math Exploerer"):
-                        s.small(text=" use it for... uhm... exploring math?")
+        with s.div(cls='container'), s.div(cls='row'), s.div(cls='col-md-12 page-header'):
+            with s.h1(text="The Math Exploerer"):
+                s.small(text=" use it for... uhm... exploring math?")
             with s.div(cls='row'):
                 # left column
-                with s.div(cls='col-md-7'):
-                    with s.div(cls='row'):
-                        with s.div(cls='col-md-12 panel panel-default'):
-                            self.pbody = s.div(cls='panel-body', style={'minHeight':'500px', 'overflowY':'auto'})
-                    with s.div(cls='row'):
-                        with s.div(cls='col-md-12 well'):
-                            self.inp = s.input(cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
-                            self.inp.events.add(keydown=self.execute, translate=True)
+                with s.div(cls='col-md-7'), s.div(cls='row'):
+                    with s.div(cls='col-md-12 panel panel-default'):
+                        self.pbody = s.div(cls='panel-body', style={'minHeight':'500px', 'overflowY':'auto'})
+                    with s.div(cls='row'), s.div(cls='col-md-12 well'):
+                        self.inp = s.input(cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
+                        self.inp.events.add(keydown=self.execute, translate=True)
                 # right column
                 with s.div(cls='col-md-5'):
-                    with s.div(cls='row'):
-                        with s.div(cls='col-md-12'):
-                            with s.div(cls='panel panel-success'):
-                                with s.div(text="Examples:", cls='panel-heading'):
-                                    s.button(text="toggle", att={'data-toggle':"collapse", 'data-target':"#examples_body"},  cls="btn btn-xs btn-default pull-right")
-                                with s.div(customvarname='examples_body', cls='panel-body collapse in'):
-                                    with s.ul():
-                                        for desc, codes in examples:
-                                            with s.li(text=desc):
-                                                for code in codes.split(';'):
-                                                    s.br()
-                                                    c = s.code(text=code)
-                                                    c.events.add(click=lambda: self.inp.prop(value=c.text))
-                    with s.div(cls='row'):
-                        with s.div(cls='col-md-12'):
-                            with s.div(cls='panel panel-info'):
-                                s.div(text="Symbols:", cls='panel-heading')
-                                s.div(text="x", cls='panel-body')
-                    with s.div(cls='row'):
-                        with s.div(cls='col-md-12'):
-                            with s.div(cls='panel panel-info'):
-                                s.div(text="Functions:", cls='panel-heading')
-                                s.div(text="bla bla", cls='panel-body')
+
+                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-success'), s.div(text="Examples:", cls='panel-heading'):
+                        s.button(text="toggle", att={'data-toggle':"collapse", 'data-target':"#examples_body"},  cls="btn btn-xs btn-default pull-right")
+                        with s.div(customvarname='examples_body', cls='panel-body collapse in'):
+                            with s.ul():
+                                for desc, codes in examples:
+                                    with s.li(text=desc):
+                                        for code in codes.split(';'):
+                                            s.br()
+                                            c = s.code(text=code)
+                                            c.events.add(click=lambda: self.inp.prop(value=c.text))
+                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-info'):
+                        s.div(text="Symbols:", cls='panel-heading')
+                        s.div(text="x", cls='panel-body')
+                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-info'):
+                        s.div(text="Functions:", cls='panel-heading')
+                        s.div(text="bla bla", cls='panel-body')
 
     def execute(e):
         if e.keyCode == weba.KeyCode.ENTER:
