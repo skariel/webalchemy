@@ -305,6 +305,20 @@ class Element:
     def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, 
                     cls="", att={}, style={},
                     **kwargs):
+        '''Initialize an Element - to be synced with client side
+        
+        rdoc:  remote document
+        typ:   type of element (eg. div, span, input, button, form, etc...)
+        text:  text to put inside element
+        customvarname:  becomes the id of the element (generated if None)
+        fromid:  id of existing element - None to generate id for new Element
+        app:  ?
+        cls:  space separated classes
+        att:  attributes  (eg.  colspan=3)
+        style:  style (eg. margin-top:50px)
+        
+        Alternate init (shortcut):     Element(h1="Hello")    -->  typ="h1"   text="Hello"
+        '''
         if not typ and len(kwargs) == 1:
             typ, text = kwargs.popitem()
         self.varname = customvarname if (customvarname) else rdoc.get_new_uid()
@@ -392,8 +406,8 @@ class Element:
     def __str__(self):
         return self.varname
 
-    def element(self, typ=None, txt=None, app=True, **kwargs):
-        es = self.rdoc.element(typ, txt, app=app, **kwargs)
+    def element(self, typ=None, text=None, app=True, **kwargs):
+        es = self.rdoc.element(typ, text, app=app, **kwargs)
         self.append(es)
         return es
 
