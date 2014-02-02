@@ -449,6 +449,8 @@ def run(app=None, **kwargs):
     the server, configures the function handlers and sets up the Tornado server.
     
     """
+
+
     settings = read_config_from_app(app)
     settings.update(from_dict(kwargs))
 

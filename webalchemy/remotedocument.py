@@ -14,12 +14,24 @@ from webalchemy.saferef import safeRef
 from webalchemy.htmlparser import get_element_ids
 
 
+
 def vtranslate(code):
     tree = parse(code)
     translator = Veloce()
     translator.visit(tree)
     return translator.writer.value()
 
+
+# js_for_clientside_fncs = {}
+#
+# def clientside(fnc):
+#     src = dedent(getsource(fnc))
+#     name = fnc.__name__ if hasattr(fnc,'__name__') else fnc.__class__
+#     js_for_clientside_fncs[(hash(src), name)] = vtranslate(src)
+#
+#
+# def get_clientside_code():
+#     for k, v
 
 # logger for internal purposes
 log = logging.getLogger(__name__)
