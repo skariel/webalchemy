@@ -1,18 +1,15 @@
 
 
-from .remotedocument import Element
-
-
 class Stacker:
     '''Allow stacking element creation with "with" statements
     
     eg.
     s = Stacker(self.rdoc.body)
-    with s.element('div', cls='panel') as panel:
-        s.element('div', text='Hello', cls='panel-heading')
-        with s.element('div', cls='panel-body'):
-            s.element(p="this is text inside body")
-        s.element('div', text="panel footer here", cls="panel-footer")
+    with s.stack('div', cls='panel') as panel:
+        s.stack('div', text='Hello', cls='panel-heading')
+        with s.stack('div', cls='panel-body'):
+            s.stack(p="this is text inside body")
+        s.stack('div', text="panel footer here", cls="panel-footer")
     '''
     def __init__(self, element, prev_stacker=None):
         # proxy everything to element - copy __dict__ and __class__
@@ -28,7 +25,7 @@ class Stacker:
         self._element = element
 
         
-    def element(self, *args, **kwargs):
+    def stack(self, *args, **kwargs):
         '''Create an element - parent is head of stack'''
         parent = self._stack[-1]
         e = parent.element(*args, **kwargs)
@@ -54,14 +51,14 @@ class Stacker:
           application. A section, in this context, is a thematic grouping of content,
           typically with a heading.
         '''
-        return self.element(typ="section", *args, **kwargs)
+        return self.stack(typ="section", *args, **kwargs)
 
     def nav(self, *args, **kwargs):
         '''
       The nav element represents a section of a page that links to other pages or
       to parts within the page: a section with navigation links.
       '''
-        return self.element(typ="nav", *args, **kwargs)
+        return self.stack(typ="nav", *args, **kwargs)
     
     def article(self, *args, **kwargs):
         '''
@@ -71,7 +68,7 @@ class Stacker:
       magazine or newspaper article, a blog entry, a user-submitted comment, an
       interactive widget or gadget, or any other independent item of content.
       '''
-        return self.element(typ="article", *args, **kwargs)
+        return self.stack(typ="article", *args, **kwargs)
     
     def aside(self, *args, **kwargs):
         '''
@@ -80,43 +77,43 @@ class Stacker:
       which could be considered separate from that content. Such sections are
       often represented as sidebars in printed typography.
       '''
-        return self.element(typ="aside", *args, **kwargs)
+        return self.stack(typ="aside", *args, **kwargs)
     
     def h1(self, *args, **kwargs):
         '''
       Represents the highest ranking heading.
       '''
-        return self.element(typ="h1", *args, **kwargs)
+        return self.stack(typ="h1", *args, **kwargs)
     
     def h2(self, *args, **kwargs):
         '''
       Represents the second-highest ranking heading.
       '''
-        return self.element(typ="h2", *args, **kwargs)
+        return self.stack(typ="h2", *args, **kwargs)
     
     def h3(self, *args, **kwargs):
         '''
       Represents the third-highest ranking heading.
       '''
-        return self.element(typ="h3", *args, **kwargs)
+        return self.stack(typ="h3", *args, **kwargs)
     
     def h4(self, *args, **kwargs):
         '''
       Represents the fourth-highest ranking heading.
       '''
-        return self.element(typ="h4", *args, **kwargs)
+        return self.stack(typ="h4", *args, **kwargs)
     
     def h5(self, *args, **kwargs):
         '''
       Represents the fifth-highest ranking heading.
       '''
-        return self.element(typ="h5", *args, **kwargs)
+        return self.stack(typ="h5", *args, **kwargs)
     
     def h6(self, *args, **kwargs):
         '''
       Represents the sixth-highest ranking heading.
       '''
-        return self.element(typ="h6", *args, **kwargs)
+        return self.stack(typ="h6", *args, **kwargs)
     
     def hgroup(self, *args, **kwargs):
         '''
@@ -124,13 +121,13 @@ class Stacker:
       to group a set of h1-h6 elements when the heading has multiple levels, such
       as subheadings, alternative titles, or taglines.
       '''
-        return self.element(typ="hgroup", *args, **kwargs)
+        return self.stack(typ="hgroup", *args, **kwargs)
     
     def header(self, *args, **kwargs):
         '''
       The header element represents a group of introductory or navigational aids.
       '''
-        return self.element(typ="header", *args, **kwargs)
+        return self.stack(typ="header", *args, **kwargs)
     
     def footer(self, *args, **kwargs):
         '''
@@ -139,7 +136,7 @@ class Stacker:
       about its section such as who wrote it, links to related documents,
       copyright data, and the like.
       '''
-        return self.element(typ="footer", *args, **kwargs)
+        return self.stack(typ="footer", *args, **kwargs)
     
     def address(self, *args, **kwargs):
         '''
@@ -147,7 +144,7 @@ class Stacker:
       article or body element ancestor. If that is the body element, then the
       contact information applies to the document as a whole.
       '''
-        return self.element(typ="address", *args, **kwargs)
+        return self.stack(typ="address", *args, **kwargs)
     
     
     # Grouping content
@@ -156,7 +153,7 @@ class Stacker:
         '''
       The p element represents a paragraph.
       '''
-        return self.element(typ="p", *args, **kwargs)
+        return self.stack(typ="p", *args, **kwargs)
     
     def hr(self, *args, **kwargs):
         '''
@@ -165,7 +162,7 @@ class Stacker:
       reference book.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="hr", *args, **kwargs)
+        return self.stack(typ="hr", *args, **kwargs)
     
     def pre(self, *args, **kwargs):
         '''
@@ -173,14 +170,14 @@ class Stacker:
       is represented by typographic conventions rather than by elements.
       '''
         kwargs["is_pretty"] = False
-        return self.element(typ="pre", *args, **kwargs)
+        return self.stack(typ="pre", *args, **kwargs)
     
     def blockquote(self, *args, **kwargs):
         '''
       The blockquote element represents a section that is quoted from another
       source.
       '''
-        return self.element(typ="blockquote", *args, **kwargs)
+        return self.stack(typ="blockquote", *args, **kwargs)
     
     def ol(self, *args, **kwargs):
         '''
@@ -188,7 +185,7 @@ class Stacker:
       intentionally ordered, such that changing the order would change the
       meaning of the document.
       '''
-        return self.element(typ="ol", *args, **kwargs)
+        return self.stack(typ="ol", *args, **kwargs)
     
     def ul(self, *args, **kwargs):
         '''
@@ -196,7 +193,7 @@ class Stacker:
       not important - that is, where changing the order would not materially change
       the meaning of the document.
       '''
-        return self.element(typ="ul", *args, **kwargs)
+        return self.stack(typ="ul", *args, **kwargs)
     
     def li(self, *args, **kwargs):
         '''
@@ -205,7 +202,7 @@ class Stacker:
       defined for those elements. Otherwise, the list item has no defined
       list-related relationship to any other li element.
       '''
-        return self.element(typ="li", *args, **kwargs)
+        return self.stack(typ="li", *args, **kwargs)
     
     def dl(self, *args, **kwargs):
         '''
@@ -215,21 +212,21 @@ class Stacker:
       Within a single dl element, there should not be more than one dt element for
       each name.
       '''
-        return self.element(typ="dl", *args, **kwargs)
+        return self.stack(typ="dl", *args, **kwargs)
     
     def dt(self, *args, **kwargs):
         '''
       The dt element represents the term, or name, part of a term-description group
       in a description list (dl element).
       '''
-        return self.element(typ="dt", *args, **kwargs)
+        return self.stack(typ="dt", *args, **kwargs)
     
     def dd(self, *args, **kwargs):
         '''
       The dd element represents the description, definition, or value, part of a
       term-description group in a description list (dl element).
       '''
-        return self.element(typ="dd", *args, **kwargs)
+        return self.stack(typ="dd", *args, **kwargs)
     
     def figure(self, *args, **kwargs):
         '''
@@ -237,14 +234,14 @@ class Stacker:
       that is self-contained and is typically referenced as a single unit from the
       main flow of the document.
       '''
-        return self.element(typ="figure", *args, **kwargs)
+        return self.stack(typ="figure", *args, **kwargs)
     
     def figcaption(self, *args, **kwargs):
         '''
       The figcaption element represents a caption or legend for the rest of the
       contents of the figcaption element's parent figure element, if any.
       '''
-        return self.element(typ="figcaption", *args, **kwargs)
+        return self.stack(typ="figcaption", *args, **kwargs)
     
     def div(self, *args, **kwargs):
         '''
@@ -252,7 +249,7 @@ class Stacker:
       can be used with the class, lang, and title attributes to mark up semantics
       common to a group of consecutive elements.
       '''
-        return self.element(typ="div", *args, **kwargs)
+        return self.stack(typ="div", *args, **kwargs)
     
     
     
@@ -267,32 +264,32 @@ class Stacker:
       placeholder for where a link might otherwise have been placed, if it had been
       relevant.
       '''
-        return self.element(typ="a", *args, **kwargs)
+        return self.stack(typ="a", *args, **kwargs)
     
     def em(self, *args, **kwargs):
         '''
       The em element represents stress emphasis of its contents.
       '''
-        return self.element(typ="em", *args, **kwargs)
+        return self.stack(typ="em", *args, **kwargs)
     
     def strong(self, *args, **kwargs):
         '''
       The strong element represents strong importance for its contents.
       '''
-        return self.element(typ="strong", *args, **kwargs)
+        return self.stack(typ="strong", *args, **kwargs)
     
     def small(self, *args, **kwargs):
         '''
       The small element represents side comments such as small print.
       '''
-        return self.element(typ="small", *args, **kwargs)
+        return self.stack(typ="small", *args, **kwargs)
     
     def s(self, *args, **kwargs):
         '''
       The s element represents contents that are no longer accurate or no longer
       relevant.
       '''
-        return self.element(typ="s", *args, **kwargs)
+        return self.stack(typ="s", *args, **kwargs)
     
     def cite(self, *args, **kwargs):
         '''
@@ -303,13 +300,13 @@ class Stacker:
       quoted or referenced in detail (i.e. a citation), or it can just be a work
       that is mentioned in passing.
       '''
-        return self.element(typ="cite", *args, **kwargs)
+        return self.stack(typ="cite", *args, **kwargs)
     
     def q(self, *args, **kwargs):
         '''
       The q element represents some phrasing content quoted from another source.
       '''
-        return self.element(typ="q", *args, **kwargs)
+        return self.stack(typ="q", *args, **kwargs)
     
     def dfn(self, *args, **kwargs):
         '''
@@ -318,7 +315,7 @@ class Stacker:
       element must also contain the definition(s) for the term given by the dfn
       element.
       '''
-        return self.element(typ="dfn", *args, **kwargs)
+        return self.stack(typ="dfn", *args, **kwargs)
     
     def abbr(self, *args, **kwargs):
         '''
@@ -327,7 +324,7 @@ class Stacker:
       abbreviation. The attribute, if specified, must contain an expansion of the
       abbreviation, and nothing else.
       '''
-        return self.element(typ="abbr", *args, **kwargs)
+        return self.stack(typ="abbr", *args, **kwargs)
     
     def time_(self, *args, **kwargs):
         '''
@@ -335,7 +332,7 @@ class Stacker:
       date in the proleptic Gregorian calendar, optionally with a time and a
       time-zone offset.
       '''
-        return self.element(typ="time_", *args, **kwargs)
+        return self.stack(typ="time_", *args, **kwargs)
     _time = time_
     
     def code(self, *args, **kwargs):
@@ -344,7 +341,7 @@ class Stacker:
       element name, a filename, a computer program, or any other string that a
       computer would recognize.
       '''
-        return self.element(typ="code", *args, **kwargs)
+        return self.stack(typ="code", *args, **kwargs)
     
     def var(self, *args, **kwargs):
         '''
@@ -353,33 +350,33 @@ class Stacker:
       constant, a function parameter, or just be a term used as a placeholder in
       prose.
       '''
-        return self.element(typ="var", *args, **kwargs)
+        return self.stack(typ="var", *args, **kwargs)
     
     def samp(self, *args, **kwargs):
         '''
       The samp element represents (sample) output from a program or computing
       system.
       '''
-        return self.element(typ="samp", *args, **kwargs)
+        return self.stack(typ="samp", *args, **kwargs)
     
     def kbd(self, *args, **kwargs):
         '''
       The kbd element represents user input (typically keyboard input, although it
       may also be used to represent other input, such as voice commands).
       '''
-        return self.element(typ="kbd", *args, **kwargs)
+        return self.stack(typ="kbd", *args, **kwargs)
     
     def sub(self, *args, **kwargs):
         '''
       The sub element represents a subscript.
       '''
-        return self.element(typ="sub", *args, **kwargs)
+        return self.stack(typ="sub", *args, **kwargs)
     
     def sup(self, *args, **kwargs):
         '''
       The sup element represents a superscript.
       '''
-        return self.element(typ="sup", *args, **kwargs)
+        return self.stack(typ="sup", *args, **kwargs)
     
     def i(self, *args, **kwargs):
         '''
@@ -389,7 +386,7 @@ class Stacker:
       idiomatic phrase from another language, a thought, or a ship name in Western
       texts.
       '''
-        return self.element(typ="i", *args, **kwargs)
+        return self.stack(typ="i", *args, **kwargs)
     
     def b(self, *args, **kwargs):
         '''
@@ -399,7 +396,7 @@ class Stacker:
       abstract, product names in a review, actionable words in interactive
       text-driven software, or an article lede.
       '''
-        return self.element(typ="b", *args, **kwargs)
+        return self.stack(typ="b", *args, **kwargs)
     
     def u(self, *args, **kwargs):
         '''
@@ -408,7 +405,7 @@ class Stacker:
       being a proper name in Chinese text (a Chinese proper name mark), or
       labeling the text as being misspelt.
       '''
-        return self.element(typ="u", *args, **kwargs)
+        return self.stack(typ="u", *args, **kwargs)
     
     def mark(self, *args, **kwargs):
         '''
@@ -423,7 +420,7 @@ class Stacker:
       document that has been highlighted due to its likely relevance to the user's
       current activity.
       '''
-        return self.element(typ="mark", *args, **kwargs)
+        return self.stack(typ="mark", *args, **kwargs)
     
     def ruby(self, *args, **kwargs):
         '''
@@ -433,13 +430,13 @@ class Stacker:
       pronunciation or to include other annotations. In Japanese, this form of
       typography is also known as furigana.
       '''
-        return self.element(typ="ruby", *args, **kwargs)
+        return self.stack(typ="ruby", *args, **kwargs)
     
     def rt(self, *args, **kwargs):
         '''
       The rt element marks the ruby text component of a ruby annotation.
       '''
-        return self.element(typ="rt", *args, **kwargs)
+        return self.stack(typ="rt", *args, **kwargs)
     
     def rp(self, *args, **kwargs):
         '''
@@ -447,14 +444,14 @@ class Stacker:
       component of a ruby annotation, to be shown by user agents that don't support
       ruby annotations.
       '''
-        return self.element(typ="rp", *args, **kwargs)
+        return self.stack(typ="rp", *args, **kwargs)
     
     def bdi(self, *args, **kwargs):
         '''
       The bdi element represents a span of text that is to be isolated from its
       surroundings for the purposes of bidirectional text formatting.
       '''
-        return self.element(typ="bdi", *args, **kwargs)
+        return self.stack(typ="bdi", *args, **kwargs)
     
     def bdo(self, *args, **kwargs):
         '''
@@ -462,7 +459,7 @@ class Stacker:
       for its children. It allows authors to override the Unicode bidirectional
       algorithm by explicitly specifying a direction override.
       '''
-        return self.element(typ="bdo", *args, **kwargs)
+        return self.stack(typ="bdo", *args, **kwargs)
     
     def span(self, *args, **kwargs):
         '''
@@ -470,21 +467,21 @@ class Stacker:
       used together with the global attributes, e.g. class, lang, or dir. It
       represents its children.
       '''
-        return self.element(typ="span", *args, **kwargs)
+        return self.stack(typ="span", *args, **kwargs)
     
     def br(self, *args, **kwargs):
       '''
       The br element represents a line break.
       '''
       kwargs["is_single"] = True # TODO
-      return self.element(typ="br", *args, **kwargs)
+      return self.stack(typ="br", *args, **kwargs)
     
     def wbr(self, *args, **kwargs):
       '''
       The wbr element represents a line break opportunity.
       '''
       kwargs["is_single"] = True # TODO
-      return self.element(typ="wbr", *args, **kwargs)
+      return self.stack(typ="wbr", *args, **kwargs)
     
     
     
@@ -494,13 +491,13 @@ class Stacker:
         '''
       The ins element represents an addition to the document.
       '''
-        return self.element(typ="ins", *args, **kwargs)
+        return self.stack(typ="ins", *args, **kwargs)
     
     def del_(self, *args, **kwargs):
         '''
       The del element represents a removal from the document.
       '''
-        return self.element(typ="del_", *args, **kwargs)
+        return self.stack(typ="del_", *args, **kwargs)
     
     
     # Embedded content
@@ -510,13 +507,13 @@ class Stacker:
       An img element represents an image.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="img", *args, **kwargs)
+        return self.stack(typ="img", *args, **kwargs)
     
     def iframe(self, *args, **kwargs):
         '''
       The iframe element represents a nested browsing context.
       '''
-        return self.element(typ="iframe", *args, **kwargs)
+        return self.stack(typ="iframe", *args, **kwargs)
     
     def embed(self, *args, **kwargs):
         '''
@@ -524,7 +521,7 @@ class Stacker:
       non-HTML) application or interactive content.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="embed", *args, **kwargs)
+        return self.stack(typ="embed", *args, **kwargs)
     
     def object_(self, *args, **kwargs):
         '''
@@ -532,7 +529,7 @@ class Stacker:
       the type of the resource, will either be treated as an image, as a nested
       browsing context, or as an external resource to be processed by a plugin.
       '''
-        return self.element(typ="object_", *args, **kwargs)
+        return self.stack(typ="object_", *args, **kwargs)
     _object = object_
     
     def param(self, *args, **kwargs):
@@ -541,20 +538,20 @@ class Stacker:
       It does not represent anything on its own.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="param", *args, **kwargs)
+        return self.stack(typ="param", *args, **kwargs)
     
     def video(self, *args, **kwargs):
         '''
       A video element is used for playing videos or movies, and audio files with
       captions.
       '''
-        return self.element(typ="video", *args, **kwargs)
+        return self.stack(typ="video", *args, **kwargs)
     
     def audio(self, *args, **kwargs):
         '''
       An audio element represents a sound or audio stream.
       '''
-        return self.element(typ="audio", *args, **kwargs)
+        return self.stack(typ="audio", *args, **kwargs)
     
     def source(self, *args, **kwargs):
         '''
@@ -562,7 +559,7 @@ class Stacker:
       resources for media elements. It does not represent anything on its own.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="source", *args, **kwargs)
+        return self.stack(typ="source", *args, **kwargs)
     
     def track(self, *args, **kwargs):
         '''
@@ -570,7 +567,7 @@ class Stacker:
       tracks for media elements. It does not represent anything on its own.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="track", *args, **kwargs)
+        return self.stack(typ="track", *args, **kwargs)
     
     def canvas(self, *args, **kwargs):
         '''
@@ -578,14 +575,14 @@ class Stacker:
       canvas, which can be used for rendering graphs, game graphics, or other
       visual images on the fly.
       '''
-        return self.element(typ="canvas", *args, **kwargs)
+        return self.stack(typ="canvas", *args, **kwargs)
     
     def map_(self, *args, **kwargs):
         '''
       The map element, in conjunction with any area element descendants, defines an
       image map. The element represents its children.
       '''
-        return self.element(typ="map_", *args, **kwargs)
+        return self.stack(typ="map_", *args, **kwargs)
     
     def area(self, *args, **kwargs):
         '''
@@ -593,7 +590,7 @@ class Stacker:
       corresponding area on an image map, or a dead area on an image map.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="area", *args, **kwargs)
+        return self.stack(typ="area", *args, **kwargs)
     
     
     # Tabular data
@@ -603,21 +600,21 @@ class Stacker:
       The table element represents data with more than one dimension, in the form
       of a table.
       '''
-        return self.element(typ="table", *args, **kwargs)
+        return self.stack(typ="table", *args, **kwargs)
     
     def caption(self, *args, **kwargs):
         '''
       The caption element represents the title of the table that is its parent, if
       it has a parent and that is a table element.
       '''
-        return self.element(typ="caption", *args, **kwargs)
+        return self.stack(typ="caption", *args, **kwargs)
     
     def colgroup(self, *args, **kwargs):
         '''
       The colgroup element represents a group of one or more columns in the table
       that is its parent, if it has a parent and that is a table element.
       '''
-        return self.element(typ="colgroup", *args, **kwargs)
+        return self.stack(typ="colgroup", *args, **kwargs)
     
     def col(self, *args, **kwargs):
         '''
@@ -626,7 +623,7 @@ class Stacker:
       columns in the column group represented by that colgroup.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="col", *args, **kwargs)
+        return self.stack(typ="col", *args, **kwargs)
     
     def tbody(self, *args, **kwargs):
         '''
@@ -634,7 +631,7 @@ class Stacker:
       for the parent table element, if the tbody element has a parent and it is a
       table.
       '''
-        return self.element(typ="tbody", *args, **kwargs)
+        return self.stack(typ="tbody", *args, **kwargs)
     
     def thead(self, *args, **kwargs):
         '''
@@ -642,7 +639,7 @@ class Stacker:
       labels (headers) for the parent table element, if the thead element has a
       parent and it is a table.
       '''
-        return self.element(typ="thead", *args, **kwargs)
+        return self.stack(typ="thead", *args, **kwargs)
     
     def tfoot(self, *args, **kwargs):
         '''
@@ -650,25 +647,25 @@ class Stacker:
       summaries (footers) for the parent table element, if the tfoot element has a
       parent and it is a table.
       '''
-        return self.element(typ="tfoot", *args, **kwargs)
+        return self.stack(typ="tfoot", *args, **kwargs)
     
     def tr(self, *args, **kwargs):
         '''
       The tr element represents a row of cells in a table.
       '''
-        return self.element(typ="tr", *args, **kwargs)
+        return self.stack(typ="tr", *args, **kwargs)
     
     def td(self, *args, **kwargs):
         '''
       The td element represents a data cell in a table.
       '''
-        return self.element(typ="td", *args, **kwargs)
+        return self.stack(typ="td", *args, **kwargs)
     
     def th(self, *args, **kwargs):
         '''
       The th element represents a header cell in a table.
       '''
-        return self.element(typ="th", *args, **kwargs)
+        return self.stack(typ="th", *args, **kwargs)
     
     
     
@@ -680,21 +677,21 @@ class Stacker:
       which can represent editable values that can be submitted to a server for
       processing.
       '''
-        return self.element(typ="form", *args, **kwargs)
+        return self.stack(typ="form", *args, **kwargs)
     
     def fieldset(self, *args, **kwargs):
         '''
       The fieldset element represents a set of form controls optionally grouped
       under a common name.
       '''
-        return self.element(typ="fieldset", *args, **kwargs)
+        return self.stack(typ="fieldset", *args, **kwargs)
     
     def legend(self, *args, **kwargs):
         '''
       The legend element represents a caption for the rest of the contents of the
       legend element's parent fieldset element, if any.
       '''
-        return self.element(typ="legend", *args, **kwargs)
+        return self.stack(typ="legend", *args, **kwargs)
     
     def label(self, *args, **kwargs):
         '''
@@ -703,7 +700,7 @@ class Stacker:
       control, either using for attribute, or by putting the form control inside
       the label element itself.
       '''
-        return self.element(typ="label", *args, **kwargs)
+        return self.stack(typ="label", *args, **kwargs)
     
     def input_(self, *args, **kwargs):
         '''
@@ -711,7 +708,7 @@ class Stacker:
       to allow the user to edit the data.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="input", *args, **kwargs)
+        return self.stack(typ="input", *args, **kwargs)
     input = _input = input_
     
     def button(self, *args, **kwargs):
@@ -719,14 +716,14 @@ class Stacker:
       The button element represents a button. If the element is not disabled, then
       the user agent should allow the user to activate the button.
       '''
-        return self.element(typ="button", *args, **kwargs)
+        return self.stack(typ="button", *args, **kwargs)
     
     def select(self, *args, **kwargs):
         '''
       The select element represents a control for selecting amongst a set of
       options.
       '''
-        return self.element(typ="select", *args, **kwargs)
+        return self.stack(typ="select", *args, **kwargs)
     
     def datalist(self, *args, **kwargs):
         '''
@@ -736,21 +733,21 @@ class Stacker:
       represent the predefined options. In the rendering, the datalist element
       represents nothing and it, along with its children, should be hidden.
       '''
-        return self.element(typ="datalist", *args, **kwargs)
+        return self.stack(typ="datalist", *args, **kwargs)
     
     def optgroup(self, *args, **kwargs):
         '''
       The optgroup element represents a group of option elements with a common
       label.
       '''
-        return self.element(typ="optgroup", *args, **kwargs)
+        return self.stack(typ="optgroup", *args, **kwargs)
     
     def option(self, *args, **kwargs):
         '''
       The option element represents an option in a select element or as part of a
       list of suggestions in a datalist element.
       '''
-        return self.element(typ="option", *args, **kwargs)
+        return self.stack(typ="option", *args, **kwargs)
     
     def textarea(self, *args, **kwargs):
         '''
@@ -758,7 +755,7 @@ class Stacker:
       element's raw value. The contents of the control represent the control's
       default value.
       '''
-        return self.element(typ="textarea", *args, **kwargs)
+        return self.stack(typ="textarea", *args, **kwargs)
     
     def keygen(self, *args, **kwargs):
         '''
@@ -767,13 +764,13 @@ class Stacker:
       and the public key is packaged and sent to the server.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="keygen", *args, **kwargs)
+        return self.stack(typ="keygen", *args, **kwargs)
     
     def output(self, *args, **kwargs):
         '''
       The output element represents the result of a calculation.
       '''
-        return self.element(typ="output", *args, **kwargs)
+        return self.stack(typ="output", *args, **kwargs)
     
     def progress(self, *args, **kwargs):
         '''
@@ -784,7 +781,7 @@ class Stacker:
       the progress is a number in the range zero to a maximum, giving the fraction
       of work that has so far been completed.
       '''
-        return self.element(typ="progress", *args, **kwargs)
+        return self.stack(typ="progress", *args, **kwargs)
     
     def meter(self, *args, **kwargs):
         '''
@@ -792,7 +789,7 @@ class Stacker:
       fractional value; for example disk usage, the relevance of a query result, or
       the fraction of a voting population to have selected a particular candidate.
       '''
-        return self.element(typ="meter", *args, **kwargs)
+        return self.stack(typ="meter", *args, **kwargs)
     
     
     # Interactive elements
@@ -802,24 +799,24 @@ class Stacker:
       The details element represents a disclosure widget from which the user can
       obtain additional information or controls.
       '''
-        return self.element(typ="details", *args, **kwargs)
+        return self.stack(typ="details", *args, **kwargs)
     
     def summary(self, *args, **kwargs):
         '''
       The summary element represents a summary, caption, or legend for the rest of
       the contents of the summary element's parent details element, if any.
       '''
-        return self.element(typ="summary", *args, **kwargs)
+        return self.stack(typ="summary", *args, **kwargs)
     
     def command(self, *args, **kwargs):
         '''
       The command element represents a command that the user can invoke.
       '''
         kwargs["is_single"] = True # TODO
-        return self.element(typ="command", *args, **kwargs)
+        return self.stack(typ="command", *args, **kwargs)
     
     def menu(self, *args, **kwargs):
         '''
       The menu element represents a list of commands.
       '''
-        return self.element(typ="menu", *args, **kwargs)
+        return self.stack(typ="menu", *args, **kwargs)

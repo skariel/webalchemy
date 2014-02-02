@@ -130,32 +130,27 @@ class WebSocketHandler(SockJSConnection):
 
     @gen.coroutine
     def on_open(self, info):
-        log.info('Initiallizing a websocket handler!')
-        try:
-            self.id = _generate_session_id()
-            self.remotedocument = RemoteDocument()
-            self.closed = True
-            self.session_id = None
-            self.tab_id = None
-            self.vendor_type = None
-            self.additional_args = self.session.server.settings['handler_args']
-            self.shared_data = self.additional_args['shared_data']
-            self.session_data_store = self.additional_args['session_data_store']
-            self.tab_data_store = self.additional_args['tab_data_store']
-            self.session_data = None
-            self.tab_data = None
-            self.local_doc = self.additional_args['local_doc_class']()
-            self.local_doc_initialized = False
-            self.sharedhandlers = self.additional_args['shared_wshandlers']
-            self.sharedhandlers[self.id] = self
-            self.is_new_tab = None
-            self.is_new_session = None
-            self.main_html = self.additional_args['main_html']
-        except:
-            log.exception('Initialization of websocket handler failed!')
-
+        log.info('Websocket opened. Initiallizing a websocket handler!')
+        self.id = _generate_session_id()
+        self.remotedocument = RemoteDocument()
+        self.closed = True
+        self.session_id = None
+        self.tab_id = None
+        self.vendor_type = None
+        self.additional_args = self.session.server.settings['handler_args']
+        self.shared_data = self.additional_args['shared_data']
+        self.session_data_store = self.additional_args['session_data_store']
+        self.tab_data_store = self.additional_args['tab_data_store']
+        self.session_data = None
+        self.tab_data = None
+        self.local_doc = self.additional_args['local_doc_class']()
+        self.local_doc_initialized = False
+        self.sharedhandlers = self.additional_args['shared_wshandlers']
+        self.sharedhandlers[self.id] = self
+        self.is_new_tab = None
+        self.is_new_session = None
+        self.main_html = self.additional_args['main_html']
         self.closed = False
-        log.info('WebSocket opened')
 
     @gen.coroutine
     def handle_binary_message(self, message):
@@ -193,7 +188,7 @@ class WebSocketHandler(SockJSConnection):
                 pass
             elif not self.local_doc_initialized:
                 log.info('Initializing local document...')
-                self.init_localdocument(message)
+                yield self.init_localdocument(message)
                 yield self.send_heartbeat()
             else:
                 if message.startswith('rpc: '):
@@ -273,7 +268,7 @@ class WebSocketHandler(SockJSConnection):
             # we have to send something executable by JS, or else treat it on the other side...
             self.send(';')
             log.info('sending heartbeat...')
-            yield async_delay(random.random()*10 + 30)
+            yield async_delay(random.random()*10 + 25)
             
     @gen.coroutine
     def init_localdocument(self, message):
