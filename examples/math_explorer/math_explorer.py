@@ -17,8 +17,7 @@ functions = ['diff', 'integrate', 'limit', ]
 class MathExplorer:
     """Application to explore math from the browser"""
 
-    include = ['//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
-               '//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js',
+    include = ['//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js',
                'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML']
     stylesheets = ['//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css']
 
@@ -33,12 +32,11 @@ class MathExplorer:
                 with s.div(cls='col-md-7'), s.div(cls='row'):
                     with s.div(cls='col-md-12 panel panel-default'):
                         self.pbody = s.div(cls='panel-body', style={'minHeight':'500px', 'overflowY':'auto'})
-                    with s.div(cls='row'), s.div(cls='col-md-12 well'):
+                    with s.div(cls='col-md-12 well'):
                         self.inp = s.input(cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
                         self.inp.events.add(keydown=self.execute, translate=True)
                 # right column
                 with s.div(cls='col-md-5'):
-
                     with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-success'), s.div(text="Examples:", cls='panel-heading'):
                         s.button(text="toggle", att={'data-toggle':"collapse", 'data-target':"#examples_body"},  cls="btn btn-xs btn-default pull-right")
                         with s.div(customvarname='examples_body', cls='panel-body collapse in'):
@@ -47,8 +45,7 @@ class MathExplorer:
                                     with s.li(text=desc):
                                         for code in codes.split(';'):
                                             s.br()
-                                            c = s.code(text=code)
-                                            c.events.add(click=lambda: self.inp.prop(value=c.text))
+                                            s.code(text=code).events.add(click=lambda: self.inp.prop(value=code))
                     with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-info'):
                         s.div(text="Symbols:", cls='panel-heading')
                         s.div(text="x", cls='panel-body')
