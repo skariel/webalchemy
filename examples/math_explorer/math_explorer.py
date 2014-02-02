@@ -17,7 +17,8 @@ functions = ['diff', 'integrate', 'limit', ]
 class MathExplorer:
     """Application to explore math from the browser"""
 
-    include = ['//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js',
+    include = ['//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
+               '//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js',
                'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML']
     stylesheets = ['//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css']
 
