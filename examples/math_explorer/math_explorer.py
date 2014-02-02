@@ -2,11 +2,6 @@
 
 from webalchemy.Stacker import Stacker
 
-def div(cont, *classes):
-    '''add div with classes'''
-    return cont.element('div', cls=classes)
-
-
 examples = [
     ('Take the derivative of sin(x)ex.', 'diff(sin(x)*exp(x), x)'),
     ('Compute ∫(exsin(x)+excos(x))dx.', 'integrate(exp(x)*sin(x) + exp(x)*cos(x), x)'),
