@@ -1,84 +1,103 @@
-<!doctype html>
+<!DOCTYPE doctype html>
 <html lang="en">
-
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>Template • TodoMVC</title>
-		<link rel="stylesheet" href="./static/template/bower_components/todomvc-common/base.css">
-	</head>
-
-<body>
-		<section id="todoapp">
-
-			<header id="header">
-				<h1>todos</h1>
-				<input id="new-todo" placeholder="What needs to be done?" autofocus
-                       onblur="this.value=''"
-                       onkeyup="this.app.vm.new_item_keyup(event)">
-			</header>
-
-			<section id="main" weba-style="'display'::'none':: m.itemlist.length==0">
-				<input id="toggle-all" type="checkbox"
-                       weba-property="'checked':: m.completed==m.itemlist.length"
-                       onclick="this.app.m.set_all_completed(this.checked)">
-
-				<label for="toggle-all">Mark all as complete</label>
-
-				<ul id="todo-list" weba-repeat="m.itemlist">
-
-                    <li weba-cls="'completed':: m.itemlist[i].completed"
-                        weba-cls="'editing':: vm.itembeingedited==i"
-                        weba-style="'display':: 'none':: vm.should_hide(e, i)">
-
-                            <div class="view">
-                                    <input class="toggle" type="checkbox"
-                                           weba-property="'checked':: m.itemlist[i].completed"
-                                           onclick="this.app.m.toggle_item_completed(this.app.i, this.checked)">
-                                    <label weba-property="'textContent':: m.itemlist[i].text"
-                                           ondblclick="this.app.vm.itembeingedited=this.app.i"></label>
-                                    <button class="destroy"
-                                            onclick="this.app.m.remove_item(this.app.i)"></button>
-                            </div>
-                            <input class="edit"
-                                   weba-code="'vm.editing_item_changed(e, i, newval)':: vm.itembeingedited==i"
-                                   onkeyup="this.app.vm.edit_keyup(event, this.app.i)"
-                                   onblur="this.app.vm.finish_editing(this.app.i)">
-                    </li>
-
-				</ul>
-			</section>
-			<footer id="footer" weba-style="'display':: 'none':: m.itemlist.length==0">
-				<span id="todo-count"><strong weba-property="'textContent':: m.remaining"></strong> <span weba-property="'textContent':: m.remaining==1?'item':'items'"></span> left</span>
-				<ul id="filters">
-					<li>
-						<a weba-cls="'selected':: location.hash=='#/'" href="#/">All</a>
-					</li>
-					<li>
-						<a weba-cls="'selected':: location.hash=='#/active'" href="#/active">Active</a>
-					</li>
-					<li>
-						<a weba-cls="'selected':: location.hash=='#/completed'" href="#/completed">Completed</a>
-					</li>
-				</ul>
-				<button id="clear-completed"
-                        weba-style="'display':: 'none':: m.completed==0"
-                        onclick="this.app.m.remove_completed()">Clear completed (<span weba-property="'textContent':: m.completed"></span>)</button>
-			</footer>
-		</section>
-		<footer id="info">
-			<p>Double-click to edit a todo</p>
-			<p>Created by Ariel Keselman, powered by <a href="https://github.com/skariel/webalchemy">webalchemy</a></p>
-			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-		</footer>
-		<script src="./static/template/bower_components/todomvc-common/base.js"></script>
-		</script>
-	</body>
-
-
-	<script>
-
-// from: http://classy.pocoo.org/
+ <head>
+  <meta charset="utf-8">
+   <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <title>
+     Template • TodoMVC
+    </title>
+    <link href="./static/template/bower_components/todomvc-common/base.css" rel="stylesheet">
+    </link>
+   </meta>
+  </meta>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
+  </script>
+ </head>
+ <body onload="init_communication()">
+  <section id="todoapp">
+   <header id="header">
+    <h1>
+     todos
+    </h1>
+    <input autofocus="" id="new-todo" onblur="this.value=''" onkeyup="this.app.vm.new_item_keyup(event)" placeholder="What needs to be done?">
+    </input>
+   </header>
+   <section id="main" weba-style="'display'::'none':: m.itemlist.length==0">
+    <input id="toggle-all" onclick="this.app.m.set_all_completed(this.checked)" type="checkbox" weba-property="'checked':: m.completed==m.itemlist.length">
+     <label for="toggle-all">
+      Mark all as complete
+     </label>
+     <ul id="todo-list" weba-repeat="m.itemlist">
+      <li weba-cls="'editing':: vm.itembeingedited==i" weba-style="'display':: 'none':: vm.should_hide(e, i)">
+       <div class="view">
+        <input class="toggle" onclick="this.app.m.toggle_item_completed(this.app.i, this.checked)" type="checkbox" weba-property="'checked':: m.itemlist[i].completed">
+         <label ondblclick="this.app.vm.itembeingedited=this.app.i" weba-property="'textContent':: m.itemlist[i].text">
+         </label>
+         <button class="destroy" onclick="this.app.m.remove_item(this.app.i)">
+         </button>
+        </input>
+       </div>
+       <input class="edit" onblur="this.app.vm.finish_editing(this.app.i)" onkeyup="this.app.vm.edit_keyup(event, this.app.i)" weba-code="'vm.editing_item_changed(e, i, newval)':: vm.itembeingedited==i">
+       </input>
+      </li>
+     </ul>
+    </input>
+   </section>
+   <footer id="footer" weba-style="'display':: 'none':: m.itemlist.length==0">
+    <span id="todo-count">
+     <strong weba-property="'textContent':: m.remaining">
+     </strong>
+     <span weba-property="'textContent':: m.remaining==1?'item':'items'">
+     </span>
+     left
+    </span>
+    <ul id="filters">
+     <li>
+      <a href="#/" weba-cls="'selected':: location.hash=='#/'">
+       All
+      </a>
+     </li>
+     <li>
+      <a href="#/active" weba-cls="'selected':: location.hash=='#/active'">
+       Active
+      </a>
+     </li>
+     <li>
+      <a href="#/completed" weba-cls="'selected':: location.hash=='#/completed'">
+       Completed
+      </a>
+     </li>
+    </ul>
+    <button id="clear-completed" onclick="this.app.m.remove_completed()" weba-style="'display':: 'none':: m.completed==0">
+     Clear completed (
+     <span weba-property="'textContent':: m.completed">
+     </span>
+     )
+    </button>
+   </footer>
+  </section>
+  <footer id="info">
+   <p>
+    Double-click to edit a todo
+   </p>
+   <p>
+    Created by Ariel Keselman, powered by
+    <a href="https://github.com/skariel/webalchemy">
+     webalchemy
+    </a>
+   </p>
+   <p>
+    Part of
+    <a href="http://todomvc.com">
+     TodoMVC
+    </a>
+   </p>
+  </footer>
+  <script src="./static/template/bower_components/todomvc-common/base.js">
+  </script>
+ </body>
+ <script>
+  // from: http://classy.pocoo.org/
 /**
  * Classy - classy classes for JavaScript
  *
@@ -237,15 +256,13 @@
   /* export the class */
   root.Class = Class;
 })();
-
-weba = {
+  weba = {
     KeyCode : {
         ESC : 27,
         ENTER : 13
     }
 }
-
-document.app= {};
+  document.app= {};
 var __v0=document.createElement("style");
 __v0.app= {};
 __v0.setAttribute("id","__v0");
@@ -493,184 +510,171 @@ __v15 = document.getElementsByTagName("link")[0]
                         __v15.app = {};
                     __v15.app.m = __v1;
                     __v15.app.vm = __v2;
-                var __v16=document.createElement("body");
+                var __v16=document.createElement("script");
 __v16.app= {};
 __v16.setAttribute("id","__v16");
-__v16 = document.getElementsByTagName("body")[0]
+__v16 = document.getElementsByTagName("script")[0]
                     if (typeof __v16.app=='undefined')
                         __v16.app = {};
                     __v16.app.m = __v1;
                     __v16.app.vm = __v2;
-                var __v17=document.createElement("section");
+                var __v17=document.createElement("body");
 __v17.app= {};
 __v17.setAttribute("id","__v17");
-__v17 = document.getElementsByTagName("section")[0]
+__v17 = document.getElementsByTagName("body")[0]
                     if (typeof __v17.app=='undefined')
                         __v17.app = {};
                     __v17.app.m = __v1;
                     __v17.app.vm = __v2;
-                var __v18=document.createElement("header");
+                var __v18=document.createElement("section");
 __v18.app= {};
 __v18.setAttribute("id","__v18");
-__v18 = document.getElementsByTagName("header")[0]
+__v18 = document.getElementsByTagName("section")[0]
                     if (typeof __v18.app=='undefined')
                         __v18.app = {};
                     __v18.app.m = __v1;
                     __v18.app.vm = __v2;
-                var __v19=document.createElement("h1");
+                var __v19=document.createElement("header");
 __v19.app= {};
 __v19.setAttribute("id","__v19");
-__v19 = document.getElementsByTagName("h1")[0]
+__v19 = document.getElementsByTagName("header")[0]
                     if (typeof __v19.app=='undefined')
                         __v19.app = {};
                     __v19.app.m = __v1;
                     __v19.app.vm = __v2;
-                var __v20=document.createElement("input");
+                var __v20=document.createElement("h1");
 __v20.app= {};
 __v20.setAttribute("id","__v20");
-__v20 = document.getElementsByTagName("input")[0]
+__v20 = document.getElementsByTagName("h1")[0]
                     if (typeof __v20.app=='undefined')
                         __v20.app = {};
                     __v20.app.m = __v1;
                     __v20.app.vm = __v2;
-                var __v21=document.createElement("section");
+                var __v21=document.createElement("input");
 __v21.app= {};
 __v21.setAttribute("id","__v21");
-__v21 = document.getElementsByTagName("section")[1]
+__v21 = document.getElementsByTagName("input")[0]
                     if (typeof __v21.app=='undefined')
                         __v21.app = {};
                     __v21.app.m = __v1;
                     __v21.app.vm = __v2;
-                var __v22=function(vm,m,e,i){
+                var __v22=document.createElement("section");
+__v22.app= {};
+__v22.setAttribute("id","__v22");
+__v22 = document.getElementsByTagName("section")[1]
+                    if (typeof __v22.app=='undefined')
+                        __v22.app = {};
+                    __v22.app.m = __v1;
+                    __v22.app.vm = __v2;
+                var __v23=function(vm,m,e,i){
 return  m.itemlist.length==0
 }
 
-            if (typeof __v21.app == 'undefined')
-                __v21.app = {};
-            if (typeof __v21.app.execute_controller == 'undefined')
-                __v21.app.execute_controller = [];
-            if (typeof __v21.app.oldval == 'undefined')
-                __v21.app.oldval = [];
-            __v21.app.oldval.push(undefined);
-            __v21.app.m = __v1;
-            __v21.app.vm = __v2;
-            __v21.app.execute_controller.push(
+            if (typeof __v22.app == 'undefined')
+                __v22.app = {};
+            if (typeof __v22.app.execute_controller == 'undefined')
+                __v22.app.execute_controller = [];
+            if (typeof __v22.app.oldval == 'undefined')
+                __v22.app.oldval = [];
+            __v22.app.oldval.push(undefined);
+            __v22.app.m = __v1;
+            __v22.app.vm = __v2;
+            __v22.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v22(vm, m, e, i);
+                    var newval = __v23(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v5(vm, m, e, newval, i,'display','none');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v23=document.createElement("input");
-__v23.app= {};
-__v23.setAttribute("id","__v23");
-__v23 = document.getElementsByTagName("input")[1]
-                    if (typeof __v23.app=='undefined')
-                        __v23.app = {};
-                    __v23.app.m = __v1;
-                    __v23.app.vm = __v2;
-                var __v24=function(vm,m,e,i){
+        var __v24=document.createElement("input");
+__v24.app= {};
+__v24.setAttribute("id","__v24");
+__v24 = document.getElementsByTagName("input")[1]
+                    if (typeof __v24.app=='undefined')
+                        __v24.app = {};
+                    __v24.app.m = __v1;
+                    __v24.app.vm = __v2;
+                var __v25=function(vm,m,e,i){
 return  m.completed==m.itemlist.length
 }
 
-            if (typeof __v23.app == 'undefined')
-                __v23.app = {};
-            if (typeof __v23.app.execute_controller == 'undefined')
-                __v23.app.execute_controller = [];
-            if (typeof __v23.app.oldval == 'undefined')
-                __v23.app.oldval = [];
-            __v23.app.oldval.push(undefined);
-            __v23.app.m = __v1;
-            __v23.app.vm = __v2;
-            __v23.app.execute_controller.push(
+            if (typeof __v24.app == 'undefined')
+                __v24.app = {};
+            if (typeof __v24.app.execute_controller == 'undefined')
+                __v24.app.execute_controller = [];
+            if (typeof __v24.app.oldval == 'undefined')
+                __v24.app.oldval = [];
+            __v24.app.oldval.push(undefined);
+            __v24.app.m = __v1;
+            __v24.app.vm = __v2;
+            __v24.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v24(vm, m, e, i);
+                    var newval = __v25(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v7(vm, m, e, newval, i,'checked');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v25=document.createElement("label");
-__v25.app= {};
-__v25.setAttribute("id","__v25");
-__v25 = document.getElementsByTagName("label")[0]
-                    if (typeof __v25.app=='undefined')
-                        __v25.app = {};
-                    __v25.app.m = __v1;
-                    __v25.app.vm = __v2;
-                var __v26=document.createElement("ul");
+        var __v26=document.createElement("label");
 __v26.app= {};
 __v26.setAttribute("id","__v26");
-__v26 = document.getElementsByTagName("ul")[0]
+__v26 = document.getElementsByTagName("label")[0]
                     if (typeof __v26.app=='undefined')
                         __v26.app = {};
                     __v26.app.m = __v1;
                     __v26.app.vm = __v2;
-                var __v27=function(vm,m,e,i){
+                var __v27=document.createElement("ul");
+__v27.app= {};
+__v27.setAttribute("id","__v27");
+__v27 = document.getElementsByTagName("ul")[0]
+                    if (typeof __v27.app=='undefined')
+                        __v27.app = {};
+                    __v27.app.m = __v1;
+                    __v27.app.vm = __v2;
+                var __v28=function(vm,m,e,i){
 return m.itemlist
 }
 
-            if (typeof __v26.app == 'undefined')
-                __v26.app = {};
-            if (typeof __v26.app.execute_controller == 'undefined')
-                __v26.app.execute_controller = [];
-            if (typeof __v26.app.oldval == 'undefined')
-                __v26.app.oldval = [];
-            __v26.app.oldval.push(undefined);
-            __v26.app.m = __v1;
-            __v26.app.vm = __v2;
-            __v26.app.execute_controller.push(
+            if (typeof __v27.app == 'undefined')
+                __v27.app = {};
+            if (typeof __v27.app.execute_controller == 'undefined')
+                __v27.app.execute_controller = [];
+            if (typeof __v27.app.oldval == 'undefined')
+                __v27.app.oldval = [];
+            __v27.app.oldval.push(undefined);
+            __v27.app.m = __v1;
+            __v27.app.vm = __v2;
+            __v27.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v27(vm, m, e, i);
+                    var newval = __v28(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v6(vm, m, e, newval, i);
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v28=document.createElement("li");
-__v28.app= {};
-__v28.setAttribute("id","__v28");
-__v28 = document.getElementsByTagName("li")[0]
-                    if (typeof __v28.app=='undefined')
-                        __v28.app = {};
-                    __v28.app.m = __v1;
-                    __v28.app.vm = __v2;
-                var __v29=function(vm,m,e,i){
-return  m.itemlist[i].completed
-}
-
-            if (typeof __v28.app == 'undefined')
-                __v28.app = {};
-            if (typeof __v28.app.execute_controller == 'undefined')
-                __v28.app.execute_controller = [];
-            if (typeof __v28.app.oldval == 'undefined')
-                __v28.app.oldval = [];
-            __v28.app.oldval.push(undefined);
-            __v28.app.m = __v1;
-            __v28.app.vm = __v2;
-            __v28.app.execute_controller.push(
-                function(vm, m, e, j, i) {
-                    var newval = __v29(vm, m, e, i);
-                    if ((__v9(newval)) || (newval != e.app.oldval[j])) {
-                        __v4(vm, m, e, newval, i,'completed');
-                        e.app.oldval[j] = newval;
-                    }
-                });
-        var __v30=function(vm,m,e,i){
+        var __v29=document.createElement("li");
+__v29.app= {};
+__v29.setAttribute("id","__v29");
+__v29 = document.getElementsByTagName("li")[0]
+                    if (typeof __v29.app=='undefined')
+                        __v29.app = {};
+                    __v29.app.m = __v1;
+                    __v29.app.vm = __v2;
+                var __v30=function(vm,m,e,i){
 return  vm.itembeingedited==i
 }
 
-            if (typeof __v28.app == 'undefined')
-                __v28.app = {};
-            if (typeof __v28.app.execute_controller == 'undefined')
-                __v28.app.execute_controller = [];
-            if (typeof __v28.app.oldval == 'undefined')
-                __v28.app.oldval = [];
-            __v28.app.oldval.push(undefined);
-            __v28.app.m = __v1;
-            __v28.app.vm = __v2;
-            __v28.app.execute_controller.push(
+            if (typeof __v29.app == 'undefined')
+                __v29.app = {};
+            if (typeof __v29.app.execute_controller == 'undefined')
+                __v29.app.execute_controller = [];
+            if (typeof __v29.app.oldval == 'undefined')
+                __v29.app.oldval = [];
+            __v29.app.oldval.push(undefined);
+            __v29.app.m = __v1;
+            __v29.app.vm = __v2;
+            __v29.app.execute_controller.push(
                 function(vm, m, e, j, i) {
                     var newval = __v30(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
@@ -682,16 +686,16 @@ return  vm.itembeingedited==i
 return  vm.should_hide(e, i)
 }
 
-            if (typeof __v28.app == 'undefined')
-                __v28.app = {};
-            if (typeof __v28.app.execute_controller == 'undefined')
-                __v28.app.execute_controller = [];
-            if (typeof __v28.app.oldval == 'undefined')
-                __v28.app.oldval = [];
-            __v28.app.oldval.push(undefined);
-            __v28.app.m = __v1;
-            __v28.app.vm = __v2;
-            __v28.app.execute_controller.push(
+            if (typeof __v29.app == 'undefined')
+                __v29.app = {};
+            if (typeof __v29.app.execute_controller == 'undefined')
+                __v29.app.execute_controller = [];
+            if (typeof __v29.app.oldval == 'undefined')
+                __v29.app.oldval = [];
+            __v29.app.oldval.push(undefined);
+            __v29.app.m = __v1;
+            __v29.app.vm = __v2;
+            __v29.app.execute_controller.push(
                 function(vm, m, e, j, i) {
                     var newval = __v31(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
@@ -1125,7 +1129,7 @@ __v66 = document.getElementsByTagName("a")[4]
                 var __v67=document.createElement("script");
 __v67.app= {};
 __v67.setAttribute("id","__v67");
-__v67 = document.getElementsByTagName("script")[0]
+__v67 = document.getElementsByTagName("script")[1]
                     if (typeof __v67.app=='undefined')
                         __v67.app = {};
                     __v67.app.m = __v1;
@@ -1133,7 +1137,7 @@ __v67 = document.getElementsByTagName("script")[0]
                 var __v68=document.createElement("script");
 __v68.app= {};
 __v68.setAttribute("id","__v68");
-__v68 = document.getElementsByTagName("script")[1]
+__v68 = document.getElementsByTagName("script")[2]
                     if (typeof __v68.app=='undefined')
                         __v68.app = {};
                     __v68.app.m = __v1;
@@ -1160,10 +1164,5 @@ __v1.calc_completed_and_remaining();
         
 }
 __v70();
-
-
-	</script>
-
-
+ </script>
 </html>
-
