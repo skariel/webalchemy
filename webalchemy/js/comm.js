@@ -23,7 +23,7 @@ rpc= function () {
     message('rpc: '+rpcfy.apply(this,arguments))
 }
 init_communication = function() {
-    ws = new ReconnectingWebSocket('http://'+location.host+'/app');
+    ws = new ReconnectingWebSocket(__SOCKET_URL__);
     ws.onopen = function() {
        if (overlay_shown)
             location.reload();

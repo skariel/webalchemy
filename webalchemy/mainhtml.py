@@ -1,66 +1,8 @@
-import io
 import os.path
 
+from bs4 import BeautifulSoup
+
 from .remotedocument import RemoteDocument
-
-
-class HtmlWriter:
-
-    def __init__(self, output):
-        self.output = output
-
-    def write(self, text):
-        self.output.write(text)
-
-    def writeline(self, line):
-        self.write(line + '\n')
-
-    def write_script_tag(self, source, type='text/javascript'):
-        line = '<script type="' + type + '" src="' + source + '"></script>'
-        self.writeline(line)
-
-    def write_meta_tag(self, attributes):
-        self.write('<meta')
-        for attr, value in attributes:
-            self.write(' ' + attr + '="' + value + '"')
-        self.writeline('>')
-        
-    def write_stylesheet_tag(self, source):
-        line = '<link rel="stylesheet" href="' + source + '">'
-        self.writeline(line)
-
-    def include(self, file_path):
-        with open(file_path, 'r') as f:
-            self.writeline(f.read())
-
-
-class MainHtml:
-
-    @staticmethod
-    def _default_translator(writer, app, tag, basedir):
-        return
-
-    def __init__(self, app, file_path):
-        self.app = app
-        self.file_path = file_path
-        self.basedir = os.path.dirname(__file__)
-
-    def translate(self, writer, translator=_default_translator,
-            line_processor=None):
-        with open(self.file_path, 'r') as input_file:
-            for line in input_file:
-                if not (line_processor is None):
-                    line = line_processor(line)
-                if line.lstrip().startswith('-->'):
-                    tag = line.split()[1].strip()
-                    translator(writer, self.app, tag, self.basedir)
-                else:
-                    writer.writeline(line.rstrip('\r\n'))
-
-
-def get_main_html_for_app(app):
-    main_html_file_path = get_main_html_file_path(app)
-    return MainHtml(app, main_html_file_path)
 
 
 def get_main_html_file_path(app):
@@ -71,77 +13,91 @@ def get_main_html_file_path(app):
     main_dir = os.path.dirname(main_dir)
     return os.path.join(main_dir, 'main.html')
 
+# js files to be injected to main html, in this order:
+js_files_to_inject_to_live_app = [
+    'js/reconnecting_ws.js'
+    'js/cookie.js'
+    'js/vendor.js'
+    'js/comm.js'
+    'js/reconnection_overlay.js'
+    'js/classy.js'
+    'js/weba.js'
+]
+
+js_files_to_inject_to_frozen_app = [
+    'js/classy.js'
+    'js/weba.js'
+]
+
+
+def get_soup_head_body_and_scripts(app):
+    with open(get_main_html_file_path(app), 'r') as f:
+        html = f.read()
+    s = BeautifulSoup(html)
+    if not s.html.head:
+        s.html.insert(0, s.new_tag('head'))
+    head = s.html.head
+    script = s.new_tag('script')
+    s.html.append(script)
+    if not s.html.body:
+        s.html.append(s.new_tag('body'))
+    body = s.html.body
+    return s, head, body, script
+
+
+def fill_head(app, s, head):
+    head.append(s.new_tag('script', src='http://cdn.sockjs.org/sockjs-0.3.min.js'))
+    if hasattr(app, 'include'):
+        for i in app.include:
+            head.append(s.new_tag('script', src=i))
+    if hasattr(app, 'meta'):
+        for m in app.meta:
+            head.append(s.new_tag('meta', **m))
+    if hasattr(app, 'stylesheets'):
+        for s in app.stylesheets:
+            head.append(s.new_tag('link', rel='stylesheet', href=s))
+
 
 def generate_main_html_for_server(app, ssl):
-    def main_html_translator(writer, app, tag, basedir):
-        if tag == 'websocket':
-            return
-        if tag == 'include':
-            writer.write_script_tag('http://cdn.sockjs.org/sockjs-0.3.min.js')
-            if hasattr(app, 'include'):
-                for i in app.include:
-                    writer.write_script_tag(i)
-            return
-        if tag == 'meta':
-            if hasattr(app, 'meta'):
-                for m in app.meta:
-                    writer.write_meta_tag(m.items())
-            return
-        if tag == 'stylesheets':
-            if hasattr(app, 'stylesheets'):
-                for s in app.stylesheets:
-                    writer.write_stylesheet_tag(s)
-            return
-        writer.include(os.path.join(basedir, tag))
+    s, head, body, script = get_soup_head_body_and_scripts(app)
 
-    template = get_main_html_for_app(app)
-    output = io.StringIO()
-    writer = HtmlWriter(output)
-    template.translate(writer, main_html_translator)
-    main_html = output.getvalue()
-    if ssl:
-        main_html = main_html.replace('ws://', 'wss://')
-    return main_html
+    # filling in the script tag with all contents from js files:
+    basedir = os.path.dirname(__file__)
+    for fn in js_files_to_inject_to_live_app:
+        full_fn = os.path.join(basedir, fn)
+        with open(full_fn, 'r') as f:
+            text = f.read()
+            if fn == 'js/comm.js':
+                # socket url...
+                if ssl:
+                    text = text.replace('__SOCKET_URL__', "'https://'+location.host+'/app'")
+                else:
+                    text = text.replace('__SOCKET_URL__', "'http://'+location.host+'/app'")
+            script.append(text+'\n')
+
+    fill_head(app, s, head)
+    body.attrs['onload'] = 'init_communication()'
+
+    return s.prettify()
 
 
-def generate_static_main_html(App):
-    def main_html_translator(writer, app, tag, basedir):
-        if tag == 'include':
-            if hasattr(app, 'include'):
-                for i in app.include:
-                    writer.write_script_tag(i)
-            return
-        if tag == 'meta':
-            if hasattr(app, 'meta'):
-                for m in app.meta:
-                    writer.write_meta_tag(m.items())
-            return
-        if tag in ['js/classy.js', 'js/weba.js']:
-            writer.include(os.path.join(basedir, tag))
-            return
-        if tag == 'websocket':
-            writer.writeline('--> ' + tag)
-            return
+def generate_static_main_html(app):
+    s, head, body, script = get_soup_head_body_and_scripts(app)
 
-    def line_processor(line):
-        if line.strip() == '<body onload="init_communication()">':
-            return '<body>'
-        return line
+    # filling in the script tag with all contents from js files:
+    basedir = os.path.dirname(__file__)
+    for fn in js_files_to_inject_to_frozen_app:
+        full_fn = os.path.join(basedir, fn)
+        with open(full_fn, 'r') as f:
+            script.append(f.read()+'\n')
 
-    template = get_main_html_for_app(App)
-    output = io.StringIO()
-    writer = HtmlWriter(output)
-    template.translate(writer, main_html_translator, line_processor)
-    main_html = output.getvalue()
-    lines = main_html.split('\n')
+    fill_head(app, s, head)
 
-    static_html = []
-    for l in lines:
-        if l.lstrip().startswith('-->'):
-            rdoc = RemoteDocument()
-            app = App()
-            app.initialize(remote_document=rdoc, main_html=main_html)
-            l = rdoc.pop_all_code()
-        static_html.append(l + '\n')
-    return ''.join(static_html)
+    rdoc = RemoteDocument()
+    app().initialize(remote_document=rdoc, main_html=s.prettify())
+    generated_scripts = rdoc.pop_all_code()
+    script.append('\n\n'+generated_scripts+'\n\n')
+
+    return s.prettify()
+
 
