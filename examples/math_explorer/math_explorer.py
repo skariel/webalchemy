@@ -62,7 +62,7 @@ class MathExplorer:
 
     def calc_with_sympy(self, sender_id, text):
         try:
-            self.pbody.element(p=str(sympy.N(text)))
+            self.pbody.element(p=str(sympify(text)))
         except Exception as e:
             self.pbody.element('p').prop.innerHTML = str(e).replace("\n", '<br>')
 
