@@ -343,8 +343,6 @@ class Element:
                 ns = Element._unique_ns[Element._ns_typ_dict[typ]]
                 js = 'var ' + self.varname + '=document.createElementNS("' + ns + '","' + typ + '");\n'
             else:
-                if not typ:
-                    print("Bla")
                 js = 'var ' + self.varname + '=document.createElement("' + typ + '");\n'
         else:
             js = 'var ' + self.varname + '=document.getElementById("' + fromid + '");\n'
