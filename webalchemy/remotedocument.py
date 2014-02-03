@@ -400,7 +400,6 @@ class Element:
             s = self.varname + '.appendChild(' + es.varname + ');\n'
             self.rdoc.inline(s)
 
-
     @property
     def text(self):
         return self._text

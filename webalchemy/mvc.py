@@ -170,11 +170,12 @@ class controller:
                         setattr(self.ctrl.e, eid.replace('-', '_').strip().replace(' ', '_'), e)
                     elif attr[0].startswith('weba-'):
                         at = attr[0][5:]
-                        v = attr[1]
-                        s = v.split('::')
-                        c = s[-1]
-                        v = [l.strip() for l in s[:-1]]
-                        self.ctrl.bind(at, e, c, *v)
+                        fv = attr[1]
+                        for v in fv.split(':&:'):
+                            s = v.split('::')
+                            c = s[-1]
+                            v = [l.strip() for l in s[:-1]]
+                            self.ctrl.bind(at, e, c, *v)
 
         parser = MyHTMLParser(self)
         parser.feed(html)
