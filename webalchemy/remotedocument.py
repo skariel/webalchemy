@@ -378,23 +378,25 @@ class Element:
         self.parent.childs.remove(self)
         self.parent = None
 
-    def append(self, es):
+    def append(self, es, track=False):
         handled = False
         if not hasattr(es, 'varname'):
             try:
                 for e in es:
-                    self.childs.append(e)
-                    if isinstance(e, Element):
-                        es.parent = self
+                    if track:
+                        self.childs.append(e)
+                        if isinstance(e, Element):
+                            es.parent = self
                     s = self.varname + '.appendChild(' + e.varname + ');\n'
                     self.rdoc.inline(s)
                 handled = True
             except:
                 pass
         if not handled:
-            self.childs.append(es)
-            if isinstance(es, Element):
-                es.parent = self
+            if track:
+                self.childs.append(es)
+                if isinstance(es, Element):
+                    es.parent = self
             s = self.varname + '.appendChild(' + es.varname + ');\n'
             self.rdoc.inline(s)
 
@@ -416,9 +418,9 @@ class Element:
     def __str__(self):
         return self.varname
 
-    def element(self, typ=None, text=None, app=True, **kwargs):
+    def element(self, typ=None, text=None, app=True, track=False, **kwargs):
         es = self.rdoc.element(typ, text, app=app, **kwargs)
-        self.append(es)
+        self.append(es, track)
         return es
 
 
