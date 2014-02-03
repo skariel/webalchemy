@@ -15,18 +15,18 @@ def get_main_html_file_path(app):
 
 # js files to be injected to main html, in this order:
 js_files_to_inject_to_live_app = [
-    'js/reconnecting_ws.js'
-    'js/cookie.js'
-    'js/vendor.js'
-    'js/comm.js'
-    'js/reconnection_overlay.js'
-    'js/classy.js'
-    'js/weba.js'
+    'js/reconnecting_ws.js',
+    'js/cookie.js',
+    'js/vendor.js',
+    'js/comm.js',
+    'js/reconnection_overlay.js',
+    'js/classy.js',
+    'js/weba.js',
 ]
 
 js_files_to_inject_to_frozen_app = [
-    'js/classy.js'
-    'js/weba.js'
+    'js/classy.js',
+    'js/weba.js',
 ]
 
 
@@ -54,8 +54,8 @@ def fill_head(app, s, head):
         for m in app.meta:
             head.append(s.new_tag('meta', **m))
     if hasattr(app, 'stylesheets'):
-        for s in app.stylesheets:
-            head.append(s.new_tag('link', rel='stylesheet', href=s))
+        for stl in app.stylesheets:
+            head.append(s.new_tag('link', rel='stylesheet', href=stl))
 
 
 def generate_main_html_for_server(app, ssl):
