@@ -6,7 +6,7 @@
 		<title>Template • TodoMVC</title>
 		<link rel="stylesheet" href="./static/template/bower_components/todomvc-common/base.css">
 	</head>
-	<body onload="init_communication()">
+	<body>
 		<section id="todoapp">
 
 			<header id="header">
@@ -43,7 +43,6 @@
                                    onkeyup="this.app.vm.edit_keyup(event, this.app.i)"
                                    onblur="this.app.vm.finish_editing(this.app.i)">
                     </li>
-
 				</ul>
 			</section>
 			<footer id="footer" weba-style="'display':: 'none':: m.itemlist.length==0">
