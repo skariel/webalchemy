@@ -445,13 +445,27 @@ _rec1_inline = re.compile(r'#\{([^}]*)\}')
 _rec2_rpc = re.compile(r'#rpc\{([^}]*)\}')
 
 
+def _evl(item, glo, loc):
+    sitem = item.split('.')
+    if sitem[0]=='this':
+        sitem[0]='self'
+    if sitem[0] in loc:
+        rep = loc[sitem[0]]
+    else:
+        rep = glo[sitem[0]]
+    if len(sitem) > 1:
+        for it in sitem[1:]:
+            rep = getattr(rep, it)
+    return rep
+
+
 def _inline(code, level=1, stringify=None, rpcweakrefs=None, **kwargs):
     # inline interpolation...
     prev_frame = inspect.getouterframes(inspect.currentframe())[level][0]
     loc = prev_frame.f_locals
     glo = prev_frame.f_globals
     for item in _rec1_inline.findall(code):
-        rep = eval(item.replace('this.', 'self.'), glo, loc)
+        rep = _evl(item, glo, loc)
         if not stringify:
             rep = rep.varname if hasattr(rep, 'varname') else str(rep)
         else:
@@ -463,7 +477,7 @@ def _inline(code, level=1, stringify=None, rpcweakrefs=None, **kwargs):
             sitem = item.split(',')
             litem = sitem[0].strip().replace('this.', 'self.')
             ritem = ','.join(sitem[1:])
-            fnc = eval(litem, glo, loc)
+            fnc = _evl(litem, glo, loc)
             rep = str(random.randint(0, 1e16))
 
             def ondelete(r):
@@ -497,7 +511,7 @@ class Interval:
 
 
 class JSFunction:
-    def __init__(self, rdoc, *varargs, body=None, level=2, varname=None, **kwargs):
+    def __init__(self, rdoc, *varargs, body=None, level=2, varname=None, recursive=False, **kwargs):
         if len(varargs) == 2 and not body:
             body = varargs[1]
             varargs = (varargs[0],)
@@ -506,12 +520,14 @@ class JSFunction:
             varargs = ()
         self.rdoc = rdoc
         self.varname = varname if (varname) else rdoc.get_new_uid()
-        self.rdoc.jsfunctions_being_built.append(self)
+
 
         code = self.rdoc.stringify(body, encapsulate_strings=False, pop_line=False, vars=varargs)
-        code = _inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs, encapsulate_strings=False)
 
-        self.rdoc.jsfunctions_being_built.pop()
+        if recursive:
+            code = code.replace('__recursive__', self.varname)
+
+        code = _inline(code, level=level, stringify=rdoc.stringify, rpcweakrefs=self.rdoc.jsrpcweakrefs, encapsulate_strings=False)
 
         code = code.rstrip(';\n')
         args = ','.join(varargs)
@@ -640,7 +656,6 @@ class RemoteDocument:
         self.vendor_prefix = None
         self.jsrpcweakrefs = {}
         self.window = Window(self)
-        self.jsfunctions_being_built = []
         self.KeyCode = KeyCode
 
     def parse_elements(self, html):

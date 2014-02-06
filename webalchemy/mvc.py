@@ -157,7 +157,7 @@ class controller:
                 else:
                     self.tagdict[tag] = 0
                 e = self.ctrl.rdoc.element(tag)
-                self.ctrl.rdoc.JS('#{e} = document.getElementsByTagName(#{tag})[#{self.tagdict[tag]}]')
+                self.ctrl.rdoc.JS('#{e} = document.getElementsByTagName(#{tag})['+str(self.tagdict[tag])+']')
                 self.ctrl.rdoc.JS('''
                     if (typeof #{e}.app=='undefined')
                         #{e}.app = {};
@@ -186,7 +186,7 @@ class controller:
             js = '#{self.prerender}();\n'
         js += '''
             #{js_execute}();
-            window.requestAnimationFrame(#{self.rdoc.jsfunctions_being_built[-1]});
+            window.requestAnimationFrame(__recursive__);
         '''
         js_execute = self.rdoc.jsfunction(self.execute)
-        fnc = self.rdoc.jsfunction(js, call=True)
+        fnc = self.rdoc.jsfunction(js, call=True, recursive=True)
