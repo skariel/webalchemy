@@ -33,12 +33,13 @@ if '--pythonjs' in sys.argv:
     js_files_to_inject_to_live_app.append( os.path.expanduser('~/PythonJS/pythonjs.js') )
     js_files_to_inject_to_frozen_app.append( os.path.expanduser('~/PythonJS/pythonjs.js') )
 
-    basedir = os.path.dirname(__file__)
-    for fn in js_files_to_inject_to_live_app:
-        if fn.startswith('/'): ## absolute path
-            assert os.path.isfile( fn )
-        else:
-            assert os.path.isfile( os.path.join(basedir,fn) )
+    ## just for testing ##
+    #basedir = os.path.dirname(__file__)
+    #for fn in js_files_to_inject_to_live_app:
+    #    if fn.startswith('/'): ## absolute path
+    #        assert os.path.isfile( fn )
+    #    else:
+    #        assert os.path.isfile( os.path.join(basedir,fn) )
 
 def get_soup_head_body_and_scripts(app):
     with open(get_main_html_file_path(app), 'r') as f:
@@ -75,7 +76,7 @@ def generate_main_html_for_server(app, ssl):
     basedir = os.path.dirname(__file__)
     for fn in js_files_to_inject_to_live_app:
         if fn.startswith('/'): ## absolute path
-            pass
+            full_fn = fn
         else:
             full_fn = os.path.join(basedir, fn)
         with open(full_fn, 'r') as f:
