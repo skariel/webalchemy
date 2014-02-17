@@ -1,3 +1,5 @@
+import sys
+import subprocess
 import re
 import random
 import inspect
@@ -8,7 +10,11 @@ from types import FunctionType
 from inspect import getsource
 from textwrap import dedent
 
-from pythonium.veloce.veloce import Veloce
+if '--pythonjs' in sys.argv:
+    PYTHONJS = True
+else:
+    PYTHONJS = False
+    from pythonium.veloce.veloce import Veloce
 
 from webalchemy.saferef import safeRef
 from webalchemy.htmlparser import get_element_ids
@@ -28,10 +34,22 @@ def rpc():
     pass
 
 def _vtranslate(code):
-    tree = parse(code)
-    translator = Veloce()
-    translator.visit(tree)
-    return translator.writer.value()
+    if PYTHONJS:
+        exe = os.path.expanduser('~/PythonJS/pythonjs/translate.py')
+        assert os.path.isfile(exe)
+        cmd = [exe]
+        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+        stdout, stderr = proc.communicate( data )
+        print(stdout)
+        if stderr:
+            print(stderr)
+        else:
+            return stdout
+    else:
+        tree = parse(code)
+        translator = Veloce()
+        translator.visit(tree)
+        return translator.writer.value()
 
 
 def _transchange(s, newname):

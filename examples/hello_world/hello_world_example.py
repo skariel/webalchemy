@@ -1,3 +1,12 @@
+#!/usr/bin/python3
+
+## allow basic testing without installing webalchemy ##
+import os, sys
+if '--pythonjs' in sys.argv:
+    _path = '../../'
+    assert os.path.isdir( os.path.join(_path,'webalchemy') )
+    sys.path.append( _path )
+
 from webalchemy import server
 
 class HellowWorldApp:
