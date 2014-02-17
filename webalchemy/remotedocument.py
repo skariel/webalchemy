@@ -35,14 +35,15 @@ def rpc():
 
 def _vtranslate(code):
     if PYTHONJS:
-        exe = os.path.expanduser('~/PythonJS/pythonjs/translate.py')
+        exe = os.path.expanduser('~/PythonJS/pythonjs/translator.py')
         assert os.path.isfile(exe)
         cmd = [exe]
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
-        stdout, stderr = proc.communicate( data )
+        stdout, stderr = proc.communicate( code )
         print(stdout)
         if stderr:
             print(stderr)
+            raise RuntimeError('pythonjs translation failed!')
         else:
             return stdout
     else:
