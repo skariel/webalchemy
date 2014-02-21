@@ -326,7 +326,7 @@ class Element:
     }
 
     def __init__(self, rdoc, typ=None, text=None, customvarname=None, fromid=None, app=True, 
-                    cls="", att={}, style={},
+                    cls="", att={}, style={}, innerHtml=None,
                     **kwargs):
         '''Initialize an Element - to be synced with client side
         
@@ -339,6 +339,7 @@ class Element:
         cls:  space separated classes
         att:  attributes  (eg.  colspan=3)
         style:  style (eg. margin-top:50px)
+        innerHtml: overrides text parameter.
         
         Alternate init (shortcut):     Element(h1="Hello")    -->  typ="h1"   text="Hello"
         '''
@@ -357,7 +358,10 @@ class Element:
                 js = 'var ' + self.varname + '=document.createElement("' + typ + '");\n'
         else:
             js = 'var ' + self.varname + '=document.getElementById("' + fromid + '");\n'
-        if text is not None:
+        if innerHtml is not None:
+            self._text = innerHtml
+            js += self.varname + '.innerHTML="'+innerHtml+'";\n'
+        elif text is not None:
             self._text = text
             js += self.varname + '.textContent="' + text + '";\n'
         else:

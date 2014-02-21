@@ -5,10 +5,11 @@ class Stacker:
     
     eg.
     s = Stacker(self.rdoc.body)
-    with s.stack('div', cls='panel') as panel:
+    with s.stack('div', cls='panel'):
         s.stack('div', text='Hello', cls='panel-heading')
         with s.stack('div', cls='panel-body'):
             s.stack(p="this is text inside body")
+            s.stack('button', cls='btn btn-primary')
         s.stack('div', text="panel footer here", cls="panel-footer")
     '''
     def __init__(self, element, prev_stacker=None):
@@ -29,7 +30,7 @@ class Stacker:
         '''Create an element - parent is head of stack'''
         parent = self._stack[-1]
         e = parent.element(*args, **kwargs)
-        se = Stacker(e, self)
+        se = self.__class__(e, self)
         return se
          
     def __enter__(self, **kwargs):
@@ -38,11 +39,38 @@ class Stacker:
     
     def __exit__(self, type, value, traceback):
         self._stack.pop()
-        
-        
-    ###############################################################################    
+
+
+
+class StackerWrapper:
+    '''Wrapper for stacker object
+    '''
+    def __init__(self, stacker):
+        self.stacker = stacker
+
+    def stack(self, *args, **kwargs):
+        return self.stacker.stack(*args, **kwargs)
+
+
+class HtmlShortcuts(StackerWrapper):
+    '''Wrapper for Stacker that provides Html entities shortcuts
+
+    eg.
+    h = HtmlShortcuts(Stacker(self.rdoc.body))
+
+    with h.div(cls='panel'):
+        h.div(text='hello', cls='panel-heading')
+        with h.div(cls='panel-body'):
+            h.p('this is text inside body')
+            h.button(cls='btn btn-primary')
+        h.div(text='panel footer here', cls=panel-footer')
+    '''
+
+
+
+    ###############################################################################
     # "Shortcut" methods for element types
-    
+
     # Sections
 
     def section(self, *args, **kwargs):
@@ -820,3 +848,7 @@ class Stacker:
       The menu element represents a list of commands.
       '''
         return self.stack(typ="menu", *args, **kwargs)
+
+
+
+

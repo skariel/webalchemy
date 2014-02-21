@@ -1,4 +1,5 @@
-from webalchemy.Stacker import Stacker
+from webalchemy.Stacker import Stacker, HtmlShortcuts
+from webalchemy.stacker_wrappers.bootstrap_3.bootstrap3_wrapper import BootstrapShortcuts
 from sympy import *
 
 examples = [
@@ -25,35 +26,43 @@ class MathExplorer:
     def initialize(self, **kwargs):
         self.rdoc = kwargs['remote_document']
         s = Stacker(self.rdoc.body)
-        with s.div(cls='container'), s.div(cls='row'), s.div(cls='col-md-12 page-header'):
-            with s.h1(text="The Math Exploerer"):
-                s.small(text=" use it for... uhm... exploring math?")
-            with s.div(cls='row'):
+        h = HtmlShortcuts(s)
+        b = BootstrapShortcuts(s)
+        with b.container(), b.row(), b.col(md=12):
+            with h.div(cls='page-header'):
+                with h.h1(text="The Math Exploerer"):
+                    h.small(text=" use it for... uhm... exploring math?")
+            with b.row(), b.col(md=12):
+                with b.alert(dismissable=True):
+                    h.h4(text="Warning:")
+                    h.p(innerHtml="This example uses SymPy's sympify to parse user input which is <strong>unsafe</strong> - use at your own risk and please consider before running it on a web server...")
+            with b.row():
                 # left column
-                with s.div(cls='col-md-7'), s.div(cls='row'):
-                    with s.div(cls='col-md-12 panel panel-default'):
-                        self.pbody = s.div(cls='panel-body', style={'minHeight':'500px', 'overflowY':'auto'})
-                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='well'):
-                        self.inp = s.input(cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
+                with b.col(md=7):
+                    with b.panel():
+                        self.pbody = b.panel_body(style={'minHeight':'500px', 'overflowY':'auto'})
+                    with h.div(cls='well'):
+                        self.inp = h.input(cls='form-control', att={'placeholder': "Enter Math here (see examples)"})
                         self.inp.events.add(keydown=self.execute, translate=True)
                 # right column
-                with s.div(cls='col-md-5'):
-
-                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-success'), s.div(text="Examples:", cls='panel-heading'):
-                        s.button(text="toggle", att={'data-toggle':"collapse", 'data-target':"#examples_body"},  cls="btn btn-xs btn-default pull-right")
-                        with s.div(customvarname='examples_body', cls='panel-body collapse in'):
-                            with s.ul():
-                                for desc, codes in examples:
-                                    with s.li(text=desc.replace('\\', '\\\\')):
-                                        for code in codes.split(';'):
-                                            s.br()
-                                            s.code(text=code).events.add(click=lambda: self.inp.prop(value=code))
-                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-info'):
-                        s.div(text="Symbols:", cls='panel-heading')
-                        s.div(text="x", cls='panel-body')
-                    with s.div(cls='row'), s.div(cls='col-md-12'), s.div(cls='panel panel-info'):
-                        s.div(text="Functions:", cls='panel-heading')
-                        s.div(text="bla bla", cls='panel-body')
+                with b.col(md=5):
+                    with b.panel(flavor='success'):
+                        with b.panel_heading(text="Examples:"):
+                            b.button(text="toggle", att={'data-toggle':"collapse", 'data-target':"#examples_body"},
+                                     size='xs',
+                                     cls="pull-right")
+                        with b.list_group(customvarname='examples_body', cls='collapse in'):
+                            for desc, codes in examples:
+                                with b.list_group_item(text=desc.replace('\\', '\\\\')):
+                                    for code in codes.split(';'):
+                                        h.br()
+                                        h.code(text=code).events.add(click=lambda: self.inp.prop(value=code))
+                    with b.panel(flavor='info'):
+                        b.panel_heading(text="Symbols:")
+                        b.panel_body(text="x")
+                    with b.panel(flavor='info'):
+                        b.panel_heading(text="Functions:")
+                        b.panel_body(text="bla bla")
         self.rdoc.JS('MathJax.Hub.Queue(["Typeset",MathJax.Hub, "examples_body"]);')
 
     def execute(e):
