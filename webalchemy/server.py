@@ -273,7 +273,10 @@ class WebSocketHandler(SockJSConnection):
     @gen.coroutine
     def init_localdocument(self, message):
         """ Procedure to initiate the local application. """
-        self.session_id = message.split(':')[1]
+        self.session_id = message.split(':')
+        if len(self.session_id) < 2:
+            return
+        self.session_id = self.session_id[1]
         self.is_new_session = False
         if self.session_id == 'null':
             log.info('initializing new session...')
