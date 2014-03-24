@@ -8,7 +8,7 @@ def readme():
 
 
 def version():
-    return '0.3.7'
+    return '0.3.8'
 
 setup(
     name='Webalchemy',
@@ -16,10 +16,11 @@ setup(
     description='Modern web development with Python',
     long_description=readme(),
     keywords='web development, websocket',
-    data_files=[
-        ('webalchemy', ['webalchemy/main.html']),
-        ('webalchemy/js', glob('webalchemy/js/*'))
-    ],
+    package_dir={'webalchemy': 'webalchemy'},
+    package_data={
+        'webalchemy':['webalchemy/*'],
+        'webalchemy/js':['webalchemy/js/*']
+    },
     classifiers=[
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',

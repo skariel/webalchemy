@@ -1,1 +1,1 @@
-recursive-include webalchemy *.js
+recursive-include webalchemy *
