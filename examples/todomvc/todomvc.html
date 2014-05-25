@@ -13,7 +13,7 @@
   <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
   </script>
  </head>
- <body onload="init_communication()">
+ <body>
   <section id="todoapp">
    <header id="header">
     <h1>
@@ -28,7 +28,8 @@
       Mark all as complete
      </label>
      <ul id="todo-list" weba-repeat="m.itemlist">
-      <li weba-cls="'editing':: vm.itembeingedited==i" weba-style="'display':: 'none':: vm.should_hide(e, i)">
+      <li weba-cls="'completed':: m.itemlist[i].completed :&amp;:
+                                  'editing':: vm.itembeingedited==i" weba-style="'display':: 'none':: vm.should_hide(e, i)">
        <div class="view">
         <input class="toggle" onclick="this.app.m.toggle_item_completed(this.app.i, this.checked)" type="checkbox" weba-property="'checked':: m.itemlist[i].completed">
          <label ondblclick="this.app.vm.itembeingedited=this.app.i" weba-property="'textContent':: m.itemlist[i].text">
@@ -662,7 +663,7 @@ __v29 = document.getElementsByTagName("li")[0]
                     __v29.app.m = __v1;
                     __v29.app.vm = __v2;
                 var __v30=function(vm,m,e,i){
-return  vm.itembeingedited==i
+return  m.itemlist[i].completed 
 }
 
             if (typeof __v29.app == 'undefined')
@@ -678,12 +679,12 @@ return  vm.itembeingedited==i
                 function(vm, m, e, j, i) {
                     var newval = __v30(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
-                        __v4(vm, m, e, newval, i,'editing');
+                        __v4(vm, m, e, newval, i,'completed');
                         e.app.oldval[j] = newval;
                     }
                 });
         var __v31=function(vm,m,e,i){
-return  vm.should_hide(e, i)
+return  vm.itembeingedited==i
 }
 
             if (typeof __v29.app == 'undefined')
@@ -699,397 +700,410 @@ return  vm.should_hide(e, i)
                 function(vm, m, e, j, i) {
                     var newval = __v31(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
+                        __v4(vm, m, e, newval, i,'editing');
+                        e.app.oldval[j] = newval;
+                    }
+                });
+        var __v32=function(vm,m,e,i){
+return  vm.should_hide(e, i)
+}
+
+            if (typeof __v29.app == 'undefined')
+                __v29.app = {};
+            if (typeof __v29.app.execute_controller == 'undefined')
+                __v29.app.execute_controller = [];
+            if (typeof __v29.app.oldval == 'undefined')
+                __v29.app.oldval = [];
+            __v29.app.oldval.push(undefined);
+            __v29.app.m = __v1;
+            __v29.app.vm = __v2;
+            __v29.app.execute_controller.push(
+                function(vm, m, e, j, i) {
+                    var newval = __v32(vm, m, e, i);
+                    if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v5(vm, m, e, newval, i,'display','none');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v32=document.createElement("div");
-__v32.app= {};
-__v32.setAttribute("id","__v32");
-__v32 = document.getElementsByTagName("div")[0]
-                    if (typeof __v32.app=='undefined')
-                        __v32.app = {};
-                    __v32.app.m = __v1;
-                    __v32.app.vm = __v2;
-                var __v33=document.createElement("input");
+        var __v33=document.createElement("div");
 __v33.app= {};
 __v33.setAttribute("id","__v33");
-__v33 = document.getElementsByTagName("input")[2]
+__v33 = document.getElementsByTagName("div")[0]
                     if (typeof __v33.app=='undefined')
                         __v33.app = {};
                     __v33.app.m = __v1;
                     __v33.app.vm = __v2;
-                var __v34=function(vm,m,e,i){
+                var __v34=document.createElement("input");
+__v34.app= {};
+__v34.setAttribute("id","__v34");
+__v34 = document.getElementsByTagName("input")[2]
+                    if (typeof __v34.app=='undefined')
+                        __v34.app = {};
+                    __v34.app.m = __v1;
+                    __v34.app.vm = __v2;
+                var __v35=function(vm,m,e,i){
 return  m.itemlist[i].completed
 }
 
-            if (typeof __v33.app == 'undefined')
-                __v33.app = {};
-            if (typeof __v33.app.execute_controller == 'undefined')
-                __v33.app.execute_controller = [];
-            if (typeof __v33.app.oldval == 'undefined')
-                __v33.app.oldval = [];
-            __v33.app.oldval.push(undefined);
-            __v33.app.m = __v1;
-            __v33.app.vm = __v2;
-            __v33.app.execute_controller.push(
+            if (typeof __v34.app == 'undefined')
+                __v34.app = {};
+            if (typeof __v34.app.execute_controller == 'undefined')
+                __v34.app.execute_controller = [];
+            if (typeof __v34.app.oldval == 'undefined')
+                __v34.app.oldval = [];
+            __v34.app.oldval.push(undefined);
+            __v34.app.m = __v1;
+            __v34.app.vm = __v2;
+            __v34.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v34(vm, m, e, i);
+                    var newval = __v35(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v7(vm, m, e, newval, i,'checked');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v35=document.createElement("label");
-__v35.app= {};
-__v35.setAttribute("id","__v35");
-__v35 = document.getElementsByTagName("label")[1]
-                    if (typeof __v35.app=='undefined')
-                        __v35.app = {};
-                    __v35.app.m = __v1;
-                    __v35.app.vm = __v2;
-                var __v36=function(vm,m,e,i){
+        var __v36=document.createElement("label");
+__v36.app= {};
+__v36.setAttribute("id","__v36");
+__v36 = document.getElementsByTagName("label")[1]
+                    if (typeof __v36.app=='undefined')
+                        __v36.app = {};
+                    __v36.app.m = __v1;
+                    __v36.app.vm = __v2;
+                var __v37=function(vm,m,e,i){
 return  m.itemlist[i].text
 }
 
-            if (typeof __v35.app == 'undefined')
-                __v35.app = {};
-            if (typeof __v35.app.execute_controller == 'undefined')
-                __v35.app.execute_controller = [];
-            if (typeof __v35.app.oldval == 'undefined')
-                __v35.app.oldval = [];
-            __v35.app.oldval.push(undefined);
-            __v35.app.m = __v1;
-            __v35.app.vm = __v2;
-            __v35.app.execute_controller.push(
+            if (typeof __v36.app == 'undefined')
+                __v36.app = {};
+            if (typeof __v36.app.execute_controller == 'undefined')
+                __v36.app.execute_controller = [];
+            if (typeof __v36.app.oldval == 'undefined')
+                __v36.app.oldval = [];
+            __v36.app.oldval.push(undefined);
+            __v36.app.m = __v1;
+            __v36.app.vm = __v2;
+            __v36.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v36(vm, m, e, i);
+                    var newval = __v37(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v7(vm, m, e, newval, i,'textContent');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v37=document.createElement("button");
-__v37.app= {};
-__v37.setAttribute("id","__v37");
-__v37 = document.getElementsByTagName("button")[0]
-                    if (typeof __v37.app=='undefined')
-                        __v37.app = {};
-                    __v37.app.m = __v1;
-                    __v37.app.vm = __v2;
-                var __v38=document.createElement("input");
+        var __v38=document.createElement("button");
 __v38.app= {};
 __v38.setAttribute("id","__v38");
-__v38 = document.getElementsByTagName("input")[3]
+__v38 = document.getElementsByTagName("button")[0]
                     if (typeof __v38.app=='undefined')
                         __v38.app = {};
                     __v38.app.m = __v1;
                     __v38.app.vm = __v2;
-                var __v39=function(vm,m,e,i){
+                var __v39=document.createElement("input");
+__v39.app= {};
+__v39.setAttribute("id","__v39");
+__v39 = document.getElementsByTagName("input")[3]
+                    if (typeof __v39.app=='undefined')
+                        __v39.app = {};
+                    __v39.app.m = __v1;
+                    __v39.app.vm = __v2;
+                var __v40=function(vm,m,e,i){
 return  vm.itembeingedited==i
 }
 
-            if (typeof __v38.app == 'undefined')
-                __v38.app = {};
-            if (typeof __v38.app.execute_controller == 'undefined')
-                __v38.app.execute_controller = [];
-            if (typeof __v38.app.oldval == 'undefined')
-                __v38.app.oldval = [];
-            __v38.app.oldval.push(undefined);
-            __v38.app.m = __v1;
-            __v38.app.vm = __v2;
-            __v38.app.execute_controller.push(
+            if (typeof __v39.app == 'undefined')
+                __v39.app = {};
+            if (typeof __v39.app.execute_controller == 'undefined')
+                __v39.app.execute_controller = [];
+            if (typeof __v39.app.oldval == 'undefined')
+                __v39.app.oldval = [];
+            __v39.app.oldval.push(undefined);
+            __v39.app.m = __v1;
+            __v39.app.vm = __v2;
+            __v39.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v39(vm, m, e, i);
+                    var newval = __v40(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v8(vm, m, e, newval, i,'vm.editing_item_changed(e, i, newval)');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v40=document.createElement("footer");
-__v40.app= {};
-__v40.setAttribute("id","__v40");
-__v40 = document.getElementsByTagName("footer")[0]
-                    if (typeof __v40.app=='undefined')
-                        __v40.app = {};
-                    __v40.app.m = __v1;
-                    __v40.app.vm = __v2;
-                var __v41=function(vm,m,e,i){
+        var __v41=document.createElement("footer");
+__v41.app= {};
+__v41.setAttribute("id","__v41");
+__v41 = document.getElementsByTagName("footer")[0]
+                    if (typeof __v41.app=='undefined')
+                        __v41.app = {};
+                    __v41.app.m = __v1;
+                    __v41.app.vm = __v2;
+                var __v42=function(vm,m,e,i){
 return  m.itemlist.length==0
 }
 
-            if (typeof __v40.app == 'undefined')
-                __v40.app = {};
-            if (typeof __v40.app.execute_controller == 'undefined')
-                __v40.app.execute_controller = [];
-            if (typeof __v40.app.oldval == 'undefined')
-                __v40.app.oldval = [];
-            __v40.app.oldval.push(undefined);
-            __v40.app.m = __v1;
-            __v40.app.vm = __v2;
-            __v40.app.execute_controller.push(
+            if (typeof __v41.app == 'undefined')
+                __v41.app = {};
+            if (typeof __v41.app.execute_controller == 'undefined')
+                __v41.app.execute_controller = [];
+            if (typeof __v41.app.oldval == 'undefined')
+                __v41.app.oldval = [];
+            __v41.app.oldval.push(undefined);
+            __v41.app.m = __v1;
+            __v41.app.vm = __v2;
+            __v41.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v41(vm, m, e, i);
+                    var newval = __v42(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v5(vm, m, e, newval, i,'display','none');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v42=document.createElement("span");
-__v42.app= {};
-__v42.setAttribute("id","__v42");
-__v42 = document.getElementsByTagName("span")[0]
-                    if (typeof __v42.app=='undefined')
-                        __v42.app = {};
-                    __v42.app.m = __v1;
-                    __v42.app.vm = __v2;
-                var __v43=document.createElement("strong");
+        var __v43=document.createElement("span");
 __v43.app= {};
 __v43.setAttribute("id","__v43");
-__v43 = document.getElementsByTagName("strong")[0]
+__v43 = document.getElementsByTagName("span")[0]
                     if (typeof __v43.app=='undefined')
                         __v43.app = {};
                     __v43.app.m = __v1;
                     __v43.app.vm = __v2;
-                var __v44=function(vm,m,e,i){
+                var __v44=document.createElement("strong");
+__v44.app= {};
+__v44.setAttribute("id","__v44");
+__v44 = document.getElementsByTagName("strong")[0]
+                    if (typeof __v44.app=='undefined')
+                        __v44.app = {};
+                    __v44.app.m = __v1;
+                    __v44.app.vm = __v2;
+                var __v45=function(vm,m,e,i){
 return  m.remaining
 }
 
-            if (typeof __v43.app == 'undefined')
-                __v43.app = {};
-            if (typeof __v43.app.execute_controller == 'undefined')
-                __v43.app.execute_controller = [];
-            if (typeof __v43.app.oldval == 'undefined')
-                __v43.app.oldval = [];
-            __v43.app.oldval.push(undefined);
-            __v43.app.m = __v1;
-            __v43.app.vm = __v2;
-            __v43.app.execute_controller.push(
+            if (typeof __v44.app == 'undefined')
+                __v44.app = {};
+            if (typeof __v44.app.execute_controller == 'undefined')
+                __v44.app.execute_controller = [];
+            if (typeof __v44.app.oldval == 'undefined')
+                __v44.app.oldval = [];
+            __v44.app.oldval.push(undefined);
+            __v44.app.m = __v1;
+            __v44.app.vm = __v2;
+            __v44.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v44(vm, m, e, i);
+                    var newval = __v45(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v7(vm, m, e, newval, i,'textContent');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v45=document.createElement("span");
-__v45.app= {};
-__v45.setAttribute("id","__v45");
-__v45 = document.getElementsByTagName("span")[1]
-                    if (typeof __v45.app=='undefined')
-                        __v45.app = {};
-                    __v45.app.m = __v1;
-                    __v45.app.vm = __v2;
-                var __v46=function(vm,m,e,i){
+        var __v46=document.createElement("span");
+__v46.app= {};
+__v46.setAttribute("id","__v46");
+__v46 = document.getElementsByTagName("span")[1]
+                    if (typeof __v46.app=='undefined')
+                        __v46.app = {};
+                    __v46.app.m = __v1;
+                    __v46.app.vm = __v2;
+                var __v47=function(vm,m,e,i){
 return  m.remaining==1?'item':'items'
 }
 
-            if (typeof __v45.app == 'undefined')
-                __v45.app = {};
-            if (typeof __v45.app.execute_controller == 'undefined')
-                __v45.app.execute_controller = [];
-            if (typeof __v45.app.oldval == 'undefined')
-                __v45.app.oldval = [];
-            __v45.app.oldval.push(undefined);
-            __v45.app.m = __v1;
-            __v45.app.vm = __v2;
-            __v45.app.execute_controller.push(
+            if (typeof __v46.app == 'undefined')
+                __v46.app = {};
+            if (typeof __v46.app.execute_controller == 'undefined')
+                __v46.app.execute_controller = [];
+            if (typeof __v46.app.oldval == 'undefined')
+                __v46.app.oldval = [];
+            __v46.app.oldval.push(undefined);
+            __v46.app.m = __v1;
+            __v46.app.vm = __v2;
+            __v46.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v46(vm, m, e, i);
+                    var newval = __v47(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v7(vm, m, e, newval, i,'textContent');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v47=document.createElement("ul");
-__v47.app= {};
-__v47.setAttribute("id","__v47");
-__v47 = document.getElementsByTagName("ul")[1]
-                    if (typeof __v47.app=='undefined')
-                        __v47.app = {};
-                    __v47.app.m = __v1;
-                    __v47.app.vm = __v2;
-                var __v48=document.createElement("li");
+        var __v48=document.createElement("ul");
 __v48.app= {};
 __v48.setAttribute("id","__v48");
-__v48 = document.getElementsByTagName("li")[1]
+__v48 = document.getElementsByTagName("ul")[1]
                     if (typeof __v48.app=='undefined')
                         __v48.app = {};
                     __v48.app.m = __v1;
                     __v48.app.vm = __v2;
-                var __v49=document.createElement("a");
+                var __v49=document.createElement("li");
 __v49.app= {};
 __v49.setAttribute("id","__v49");
-__v49 = document.getElementsByTagName("a")[0]
+__v49 = document.getElementsByTagName("li")[1]
                     if (typeof __v49.app=='undefined')
                         __v49.app = {};
                     __v49.app.m = __v1;
                     __v49.app.vm = __v2;
-                var __v50=function(vm,m,e,i){
+                var __v50=document.createElement("a");
+__v50.app= {};
+__v50.setAttribute("id","__v50");
+__v50 = document.getElementsByTagName("a")[0]
+                    if (typeof __v50.app=='undefined')
+                        __v50.app = {};
+                    __v50.app.m = __v1;
+                    __v50.app.vm = __v2;
+                var __v51=function(vm,m,e,i){
 return  location.hash=='#/'
 }
 
-            if (typeof __v49.app == 'undefined')
-                __v49.app = {};
-            if (typeof __v49.app.execute_controller == 'undefined')
-                __v49.app.execute_controller = [];
-            if (typeof __v49.app.oldval == 'undefined')
-                __v49.app.oldval = [];
-            __v49.app.oldval.push(undefined);
-            __v49.app.m = __v1;
-            __v49.app.vm = __v2;
-            __v49.app.execute_controller.push(
+            if (typeof __v50.app == 'undefined')
+                __v50.app = {};
+            if (typeof __v50.app.execute_controller == 'undefined')
+                __v50.app.execute_controller = [];
+            if (typeof __v50.app.oldval == 'undefined')
+                __v50.app.oldval = [];
+            __v50.app.oldval.push(undefined);
+            __v50.app.m = __v1;
+            __v50.app.vm = __v2;
+            __v50.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v50(vm, m, e, i);
+                    var newval = __v51(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v4(vm, m, e, newval, i,'selected');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v51=document.createElement("li");
-__v51.app= {};
-__v51.setAttribute("id","__v51");
-__v51 = document.getElementsByTagName("li")[2]
-                    if (typeof __v51.app=='undefined')
-                        __v51.app = {};
-                    __v51.app.m = __v1;
-                    __v51.app.vm = __v2;
-                var __v52=document.createElement("a");
+        var __v52=document.createElement("li");
 __v52.app= {};
 __v52.setAttribute("id","__v52");
-__v52 = document.getElementsByTagName("a")[1]
+__v52 = document.getElementsByTagName("li")[2]
                     if (typeof __v52.app=='undefined')
                         __v52.app = {};
                     __v52.app.m = __v1;
                     __v52.app.vm = __v2;
-                var __v53=function(vm,m,e,i){
+                var __v53=document.createElement("a");
+__v53.app= {};
+__v53.setAttribute("id","__v53");
+__v53 = document.getElementsByTagName("a")[1]
+                    if (typeof __v53.app=='undefined')
+                        __v53.app = {};
+                    __v53.app.m = __v1;
+                    __v53.app.vm = __v2;
+                var __v54=function(vm,m,e,i){
 return  location.hash=='#/active'
 }
 
-            if (typeof __v52.app == 'undefined')
-                __v52.app = {};
-            if (typeof __v52.app.execute_controller == 'undefined')
-                __v52.app.execute_controller = [];
-            if (typeof __v52.app.oldval == 'undefined')
-                __v52.app.oldval = [];
-            __v52.app.oldval.push(undefined);
-            __v52.app.m = __v1;
-            __v52.app.vm = __v2;
-            __v52.app.execute_controller.push(
+            if (typeof __v53.app == 'undefined')
+                __v53.app = {};
+            if (typeof __v53.app.execute_controller == 'undefined')
+                __v53.app.execute_controller = [];
+            if (typeof __v53.app.oldval == 'undefined')
+                __v53.app.oldval = [];
+            __v53.app.oldval.push(undefined);
+            __v53.app.m = __v1;
+            __v53.app.vm = __v2;
+            __v53.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v53(vm, m, e, i);
+                    var newval = __v54(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v4(vm, m, e, newval, i,'selected');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v54=document.createElement("li");
-__v54.app= {};
-__v54.setAttribute("id","__v54");
-__v54 = document.getElementsByTagName("li")[3]
-                    if (typeof __v54.app=='undefined')
-                        __v54.app = {};
-                    __v54.app.m = __v1;
-                    __v54.app.vm = __v2;
-                var __v55=document.createElement("a");
+        var __v55=document.createElement("li");
 __v55.app= {};
 __v55.setAttribute("id","__v55");
-__v55 = document.getElementsByTagName("a")[2]
+__v55 = document.getElementsByTagName("li")[3]
                     if (typeof __v55.app=='undefined')
                         __v55.app = {};
                     __v55.app.m = __v1;
                     __v55.app.vm = __v2;
-                var __v56=function(vm,m,e,i){
+                var __v56=document.createElement("a");
+__v56.app= {};
+__v56.setAttribute("id","__v56");
+__v56 = document.getElementsByTagName("a")[2]
+                    if (typeof __v56.app=='undefined')
+                        __v56.app = {};
+                    __v56.app.m = __v1;
+                    __v56.app.vm = __v2;
+                var __v57=function(vm,m,e,i){
 return  location.hash=='#/completed'
 }
 
-            if (typeof __v55.app == 'undefined')
-                __v55.app = {};
-            if (typeof __v55.app.execute_controller == 'undefined')
-                __v55.app.execute_controller = [];
-            if (typeof __v55.app.oldval == 'undefined')
-                __v55.app.oldval = [];
-            __v55.app.oldval.push(undefined);
-            __v55.app.m = __v1;
-            __v55.app.vm = __v2;
-            __v55.app.execute_controller.push(
+            if (typeof __v56.app == 'undefined')
+                __v56.app = {};
+            if (typeof __v56.app.execute_controller == 'undefined')
+                __v56.app.execute_controller = [];
+            if (typeof __v56.app.oldval == 'undefined')
+                __v56.app.oldval = [];
+            __v56.app.oldval.push(undefined);
+            __v56.app.m = __v1;
+            __v56.app.vm = __v2;
+            __v56.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v56(vm, m, e, i);
+                    var newval = __v57(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v4(vm, m, e, newval, i,'selected');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v57=document.createElement("button");
-__v57.app= {};
-__v57.setAttribute("id","__v57");
-__v57 = document.getElementsByTagName("button")[1]
-                    if (typeof __v57.app=='undefined')
-                        __v57.app = {};
-                    __v57.app.m = __v1;
-                    __v57.app.vm = __v2;
-                var __v58=function(vm,m,e,i){
+        var __v58=document.createElement("button");
+__v58.app= {};
+__v58.setAttribute("id","__v58");
+__v58 = document.getElementsByTagName("button")[1]
+                    if (typeof __v58.app=='undefined')
+                        __v58.app = {};
+                    __v58.app.m = __v1;
+                    __v58.app.vm = __v2;
+                var __v59=function(vm,m,e,i){
 return  m.completed==0
 }
 
-            if (typeof __v57.app == 'undefined')
-                __v57.app = {};
-            if (typeof __v57.app.execute_controller == 'undefined')
-                __v57.app.execute_controller = [];
-            if (typeof __v57.app.oldval == 'undefined')
-                __v57.app.oldval = [];
-            __v57.app.oldval.push(undefined);
-            __v57.app.m = __v1;
-            __v57.app.vm = __v2;
-            __v57.app.execute_controller.push(
+            if (typeof __v58.app == 'undefined')
+                __v58.app = {};
+            if (typeof __v58.app.execute_controller == 'undefined')
+                __v58.app.execute_controller = [];
+            if (typeof __v58.app.oldval == 'undefined')
+                __v58.app.oldval = [];
+            __v58.app.oldval.push(undefined);
+            __v58.app.m = __v1;
+            __v58.app.vm = __v2;
+            __v58.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v58(vm, m, e, i);
+                    var newval = __v59(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v5(vm, m, e, newval, i,'display','none');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v59=document.createElement("span");
-__v59.app= {};
-__v59.setAttribute("id","__v59");
-__v59 = document.getElementsByTagName("span")[2]
-                    if (typeof __v59.app=='undefined')
-                        __v59.app = {};
-                    __v59.app.m = __v1;
-                    __v59.app.vm = __v2;
-                var __v60=function(vm,m,e,i){
+        var __v60=document.createElement("span");
+__v60.app= {};
+__v60.setAttribute("id","__v60");
+__v60 = document.getElementsByTagName("span")[2]
+                    if (typeof __v60.app=='undefined')
+                        __v60.app = {};
+                    __v60.app.m = __v1;
+                    __v60.app.vm = __v2;
+                var __v61=function(vm,m,e,i){
 return  m.completed
 }
 
-            if (typeof __v59.app == 'undefined')
-                __v59.app = {};
-            if (typeof __v59.app.execute_controller == 'undefined')
-                __v59.app.execute_controller = [];
-            if (typeof __v59.app.oldval == 'undefined')
-                __v59.app.oldval = [];
-            __v59.app.oldval.push(undefined);
-            __v59.app.m = __v1;
-            __v59.app.vm = __v2;
-            __v59.app.execute_controller.push(
+            if (typeof __v60.app == 'undefined')
+                __v60.app = {};
+            if (typeof __v60.app.execute_controller == 'undefined')
+                __v60.app.execute_controller = [];
+            if (typeof __v60.app.oldval == 'undefined')
+                __v60.app.oldval = [];
+            __v60.app.oldval.push(undefined);
+            __v60.app.m = __v1;
+            __v60.app.vm = __v2;
+            __v60.app.execute_controller.push(
                 function(vm, m, e, j, i) {
-                    var newval = __v60(vm, m, e, i);
+                    var newval = __v61(vm, m, e, i);
                     if ((__v9(newval)) || (newval != e.app.oldval[j])) {
                         __v7(vm, m, e, newval, i,'textContent');
                         e.app.oldval[j] = newval;
                     }
                 });
-        var __v61=document.createElement("footer");
-__v61.app= {};
-__v61.setAttribute("id","__v61");
-__v61 = document.getElementsByTagName("footer")[1]
-                    if (typeof __v61.app=='undefined')
-                        __v61.app = {};
-                    __v61.app.m = __v1;
-                    __v61.app.vm = __v2;
-                var __v62=document.createElement("p");
+        var __v62=document.createElement("footer");
 __v62.app= {};
 __v62.setAttribute("id","__v62");
-__v62 = document.getElementsByTagName("p")[0]
+__v62 = document.getElementsByTagName("footer")[1]
                     if (typeof __v62.app=='undefined')
                         __v62.app = {};
                     __v62.app.m = __v1;
@@ -1097,39 +1111,39 @@ __v62 = document.getElementsByTagName("p")[0]
                 var __v63=document.createElement("p");
 __v63.app= {};
 __v63.setAttribute("id","__v63");
-__v63 = document.getElementsByTagName("p")[1]
+__v63 = document.getElementsByTagName("p")[0]
                     if (typeof __v63.app=='undefined')
                         __v63.app = {};
                     __v63.app.m = __v1;
                     __v63.app.vm = __v2;
-                var __v64=document.createElement("a");
+                var __v64=document.createElement("p");
 __v64.app= {};
 __v64.setAttribute("id","__v64");
-__v64 = document.getElementsByTagName("a")[3]
+__v64 = document.getElementsByTagName("p")[1]
                     if (typeof __v64.app=='undefined')
                         __v64.app = {};
                     __v64.app.m = __v1;
                     __v64.app.vm = __v2;
-                var __v65=document.createElement("p");
+                var __v65=document.createElement("a");
 __v65.app= {};
 __v65.setAttribute("id","__v65");
-__v65 = document.getElementsByTagName("p")[2]
+__v65 = document.getElementsByTagName("a")[3]
                     if (typeof __v65.app=='undefined')
                         __v65.app = {};
                     __v65.app.m = __v1;
                     __v65.app.vm = __v2;
-                var __v66=document.createElement("a");
+                var __v66=document.createElement("p");
 __v66.app= {};
 __v66.setAttribute("id","__v66");
-__v66 = document.getElementsByTagName("a")[4]
+__v66 = document.getElementsByTagName("p")[2]
                     if (typeof __v66.app=='undefined')
                         __v66.app = {};
                     __v66.app.m = __v1;
                     __v66.app.vm = __v2;
-                var __v67=document.createElement("script");
+                var __v67=document.createElement("a");
 __v67.app= {};
 __v67.setAttribute("id","__v67");
-__v67 = document.getElementsByTagName("script")[1]
+__v67 = document.getElementsByTagName("a")[4]
                     if (typeof __v67.app=='undefined')
                         __v67.app = {};
                     __v67.app.m = __v1;
@@ -1137,12 +1151,20 @@ __v67 = document.getElementsByTagName("script")[1]
                 var __v68=document.createElement("script");
 __v68.app= {};
 __v68.setAttribute("id","__v68");
-__v68 = document.getElementsByTagName("script")[2]
+__v68 = document.getElementsByTagName("script")[1]
                     if (typeof __v68.app=='undefined')
                         __v68.app = {};
                     __v68.app.m = __v1;
                     __v68.app.vm = __v2;
-                var __v69=function(){
+                var __v69=document.createElement("script");
+__v69.app= {};
+__v69.setAttribute("id","__v69");
+__v69 = document.getElementsByTagName("script")[2]
+                    if (typeof __v69.app=='undefined')
+                        __v69.app = {};
+                    __v69.app.m = __v1;
+                    __v69.app.vm = __v2;
+                var __v70=function(){
             function crawl_element(e) {
                 if ((typeof e!='undefined')&&(typeof e.app!='undefined')) {
                     e.app.m = __v1;
@@ -1156,13 +1178,13 @@ __v68 = document.getElementsByTagName("script")[2]
             }
             crawl_element(document.body);
         }
-var __v70=function(){
+var __v71=function(){
 __v1.calc_completed_and_remaining();
 
-            __v69();
-            window.requestAnimationFrame(__v70);
+            __v70();
+            window.requestAnimationFrame(__v71);
         
 }
-__v70();
+__v71();
  </script>
 </html>
