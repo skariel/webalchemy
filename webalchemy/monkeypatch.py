@@ -118,9 +118,19 @@ def monkeypatch_pythonium():
                 args.append(kwargs)
             return '{}({})'.format(name, ', '.join(args))
 
+    def weba_visit_NameConstant(self, node):
+        if node.value is None:
+            return 'undefined'
+        elif node.value is True:
+            return 'true'
+        elif node.value is False:
+            return 'false'
+        return str(node.value).replace('__DOLLAR__', '$')
+
     Veloce.visit_Lambda = fixed_visit_Lambda
     Veloce.visit_Subscript = fixed_visit_Subscript
     Veloce.visit_Call = weba_visit_Call
+    Veloce.visit_NameConstant = weba_visit_NameConstant
 
 
 def monkeypatch():
