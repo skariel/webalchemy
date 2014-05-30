@@ -120,7 +120,7 @@ def monkeypatch_pythonium():
 
     def weba_visit_NameConstant(self, node):
         if node.value is None:
-            return 'undefined'
+            return 'null'
         elif node.value is True:
             return 'true'
         elif node.value is False:
