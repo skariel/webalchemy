@@ -3,7 +3,7 @@
 
 ![Alt Webalchemy](https://i.imgur.com/su7TdAd.png "Webalchemy")
 
-Modern web development with Python3, [MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium), [Tornado](https://github.com/facebook/tornado), and [SockJS](https://github.com/sockjs/sockjs-client). Some examples:
+Modern web development with Python3, [MIT licensed](LICENSE.txt). Powered by [Pythonium](https://github.com/pythonium/pythonium) or [PythonJS](https://github.com/PythonJS/PythonJS), [Tornado](https://github.com/facebook/tornado), and [SockJS](https://github.com/sockjs/sockjs-client). Some examples:
 
 - Angular style TodoMVC [demo](http://skariel.org/webalchemy/todomvc.html) -- [Source](https://github.com/skariel/webalchemy/tree/master/examples/todomvc)
 - Meteor style realtime and live editing [video](https://vimeo.com/74150054) --  [Demo](http://weba-colors.herokuapp.com/) -- [Source](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor/colors_meteor_example.py)
