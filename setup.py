@@ -6,13 +6,10 @@ from glob import glob
 def readme():
     return '''Check the homepage for details'''
 
-
-def version():
-    return '0.3.8'
-
+exec(open('webalchemy/version.py').read())
 setup(
     name='Webalchemy',
-    version=version(),
+    version=__version__,
     description='Modern web development with Python',
     long_description=readme(),
     keywords='web development, websocket',
