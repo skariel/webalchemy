@@ -1,5 +1,5 @@
-[![PyPi version](https://pypip.in/v/Webalchemy/badge.png)](https://crate.io/packages/Webalchemy/)
-[![PyPi downloads](https://pypip.in/d/Webalchemy/badge.png)](https://crate.io/packages/Webalchemy/)
+[![PyPi version](https://img.shields.io/pypi/v/Webalchemy.svg)](https://crate.io/packages/Webalchemy/)
+[![PyPi downloads](https://img.shields.io/pypi/dm/Webalchemy.svg)](https://crate.io/packages/Webalchemy/)
 
 ![Alt Webalchemy](https://i.imgur.com/su7TdAd.png "Webalchemy")
 
