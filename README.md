@@ -11,13 +11,13 @@ Modern web development with Python3, [MIT licensed](LICENSE.txt). Powered by [Py
 
 Contributions are welcome! Open a pull request, open an issue, mail me code, or post in the [mailing list](https://groups.google.com/forum/#!forum/webalchemy).
 
-##Getting Started
+## Getting Started
 
-###Installation
+### Installation
 
 Make sure you are using Python3. Then`pip install webalchemy`. Note that this does not install the examples. You can download the examples from the [zip](https://github.com/skariel/webalchemy/archive/master.zip).
 
-###Tutorial and Documentation
+### Tutorial and Documentation
 
 A Webalchemy application is a regular Python class (no need to inherit anything) that provides relevant methods used by the Webalchemy server. The only required method is `initialize`, which is called when the client side is ready for automation. Here we create a header and append it to the document body:
 
@@ -122,7 +122,7 @@ This how you push and pull data to and from the client. See this program live on
 
 Now you may wonder if it's dangerous for the client to be able to call any function on the server. Actually the client can only call registered functions. In our case `handle_click_on_backend` got registered when we assigned it to the `rpc()` call on the client.
 
-####Including external scripts
+#### Including external scripts
 
 Use `include` to import external scripts into your project.
 
@@ -135,7 +135,7 @@ class ThreeDEarth:
         # do something cool here!
 ```
 
-####Including external stylesheets
+#### Including external stylesheets
 
 Use `stylesheets` to import external stylesheets.
 
@@ -164,13 +164,13 @@ This will produce the following html in your client:
        <script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js" type="text/javascript"></script>
 ```
 
-####Hosting
+#### Hosting
 
 Webalchemy uses SockJS so no need for a host supporting websockets. Howvever real websockets can still provide a
 benefit in terms of performance. If you are interested to support websockets try hosting with
 [Heroku](https://www.heroku.com/) or [OpenShift](https://www.openshift.com/) - these are two good options.
 
-####Further help
+#### Further help
 
 Join the [mailing list](https://groups.google.com/forum/#!forum/webalchemy).
 
@@ -178,7 +178,7 @@ Webalchemy supports the MVC pattern, usage of existing HTML, several configurati
 
 The examples below demonstrate a few more features.
 
-####Example 1: Realtime Meteor Colors:
+#### Example 1: Realtime Meteor Colors:
 
 We "translated" Meteor colors app to webalchemy. The app can be seen in action [here](https://vimeo.com/74150054) and the Meteor original [here](http://www.meteor.com/screencast). The source is in the examples directory ([here](https://github.com/skariel/webalchemy/blob/master/examples/colors_meteor/colors_meteor_example.py)), it can be executed like this:
 ```python
@@ -188,7 +188,7 @@ server.run(ColorsMeteorApp)
 ```
 A live version is [here](http://weba-colors.herokuapp.com/)
 
-####Example 2: TodoMVC:
+#### Example 2: TodoMVC:
 
 This is a client-only app. It can be served from a websocket like this:
 
@@ -208,7 +208,7 @@ server.generate_static(app)
 
 This will generate `todomvc.html` as defined in the configuration in `app`. Note the references to static files in the HTML, you have to place the file where these are accessible or just change the paths. More on this app [here](https://github.com/skariel/webalchemy/tree/master/examples/todomvc).
 
-####Example 3: WebGL Earth:
+#### Example 3: WebGL Earth:
 
 ```python
 from webalchemy import server
@@ -218,13 +218,13 @@ server.run(ThreeDEarth)
 
 See the frozen app [here](http://skariel.org/webalchemy/webglearth.html) and the source [here](https://github.com/skariel/webalchemy/blob/master/examples/three_d_earth/three_d_earth.py).
 
-##Philosophy
+## Philosophy
 
 The main idea is to write all server-side code and automate the client using proxy objects. This works well for all kinds of apps. For e.g. if you want 100% client side, just tell the server to generate or serve the client code. If you want 99% server then don't use any client code except for passing events to the server, which will decide what to do. This is like the opposite of what Meteor does, but seems to have several advantages. 
 
 The best advantage is that you get to enjoy all the Python ecosystem on the server. Want to do some number crunching, machine learning, natural language analysis, or cartography? No problem! Other advantages are server-side code and HTML generation, Python on client side, scaling with ZMQ, etc.
 
-##What to expect:
+## What to expect:
 
 - Documentation, tutorials :)
 - Major cleanup.
