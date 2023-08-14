@@ -34,7 +34,7 @@ setup(
         'docopt==0.6.1',
         'pythonium==0.6.2',
         'sockjs-tornado==1.0.0',
-        'tornado==3.2',
+        'tornado==6.3.3',
         'beautifulsoup4==4.3.2'
     ],
     license="MIT",
